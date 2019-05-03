@@ -1,0 +1,9 @@
+@extends("layouts.flayout")
+
+@section("title")
+  {{DB::table("frontmenu")->where("method","=","{{modelNameSingularLowerCase}}")->first()->nama}}
+@endsection
+
+@section("content")
+  {!! DB::table("frontmenu")->where("method","=","{{modelNameSingularLowerCase}}")->first()->content !!}
+@endsection

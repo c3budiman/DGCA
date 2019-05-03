@@ -1,0 +1,130 @@
+@extends("layouts.dlayout")
+
+@section("title")
+  Managing {{modelName}}
+@endsection
+
+@section("content")
+  <?php
+    $url = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+  ?>
+  <div class="row">
+      <div class="col-12">
+          <div class="card-box">
+              <h4 class="header-title m-t-0">Managing {{modelName}}</h4>
+              <p class="text-muted font-14 m-b-10">
+                  You can add, edit and delete {{modelName}} in here.
+              </p>
+
+              <form enctype="multipart/form-data" action="{{url(action("{{modelName}}Controller@store"))}}" method="post" class="form-horizontal ">
+                  {{ csrf_field() }}
+                  <div class="form-group row">
+                      <label class="col-3 col-form-label">Nama : </label>
+                      <div class="col-9">
+                          <input name="nama" type="text" required class="form-control">
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-3 col-form-label">Link : </label>
+                      <div class="col-9">
+                          <input name="link" type="text" required class="form-control">
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-3 col-form-label">Content : </label>
+                      <div class="col-9">
+                          <textarea cols="10" rows="10" id="my-editor" name="footer2" class="form-control"></textarea>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <div class="col-12">
+                          <div class="pull-right">
+                              <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                          </div>
+                      </div>
+                  </div>
+                  {{-- <input type="hidden" name="_method" value="PUT"> --}}
+              </form>
+          </div>
+      </div>
+  </div>
+  <!--  end row -->
+@endsection
+
+@section("jstambahan")
+
+  <script src="templateEditor/ckeditor/ckeditor.js"></script>
+  <script>
+    var options = {
+      filebrowserImageBrowseUrl: "{{$url}}/laravel-filemanager?type=Images",
+      filebrowserImageUploadUrl: "{{$url}}/laravel-filemanager/upload?type=Images&_token=",
+      filebrowserBrowseUrl: "{{$url}}/laravel-filemanager?type=Files",
+      filebrowserUploadUrl: "{{$url}}/laravel-filemanager/upload?type=Files&_token="
+    };
+  </script>
+  <script>
+    CKEDITOR.replace("my-editor", options);
+  </script>
+
+<!-- Bootstrap fileupload js -->
+<script src="{{$url}}/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+<!-- Sweet Alert Js  -->
+<script src="{{$url}}/plugins/sweet-alert/sweetalert2.min.js"></script>
+
+@if (session("status"))
+<script type="text/javascript">
+    !function ($) {
+        "use strict";
+        var SweetAlert = function () {
+        };
+        SweetAlert.prototype.init = function () {
+            $(document).ready(function () {
+                swal(
+                    {
+                        title: "Sukses!",
+                        text: "{{ session("status") }}",
+                        type: "success",
+                        confirmButtonClass: "btn btn-confirm mt-2"
+                    }
+                )
+            });
+          },
+       $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+            }(window.jQuery),
+              function ($) {
+                  "use strict";
+                  $.SweetAlert.init()
+              } (window.jQuery);
+</script>
+@endif
+
+@if($errors->any())
+<script type="text/javascript">
+    !function ($) {
+      "use strict";
+      var SweetAlert = function () {
+      };
+      SweetAlert.prototype.init = function () {
+          $(document).ready(function () {
+              swal(
+                  {
+                      title: "Error!",
+                      text: "{{$errors->first()}}",
+                      type: "error",
+                      confirmButtonClass: "btn btn-confirm mt-2"
+                  }
+              )
+          });
+        },
+     $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+          }(window.jQuery),
+            function ($) {
+                "use strict";
+                $.SweetAlert.init()
+            } (window.jQuery);
+</script>
+@endif
+@endsection
