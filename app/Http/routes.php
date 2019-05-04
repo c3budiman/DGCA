@@ -243,94 +243,6 @@ Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
 | Ini route generate an dari auto crud
 |
 */
-Route::resource('cars', 'carController');
-
-Route::resource('homes', 'homeController');
-Route::get('home', 'guestController@index');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('whoweares', 'whoweareController');
-Route::get('whoweare', 'whoweareController@getFront');
-Route::get('whoweare/json', 'whoweareController@dataTB');
-//tambahan dari klien, redirect langsung yg overview ke menu utama.
-Route::get('whoweare/overview', 'whoweareController@getFront');
-Route::get('whoweare/{method}', 'whoweareController@viewSubmenu');
-
-
-Route::resource('ourfocusas', 'ourfocusaController');
-Route::get('ourfocusa', 'ourfocusaController@getFront');
-Route::get('ourfocusa/json', 'ourfocusaController@dataTB');
-Route::get('ourfocusa/{method}', 'ourfocusaController@viewSubmenu');
-
-Route::resource('our_services', 'our_serviceController');
-Route::get('our_service', 'our_serviceController@getFront');
-Route::get('our_service/json', 'our_serviceController@dataTB');
-Route::get('our_service/{method}', 'our_serviceController@viewSubmenu');
-
-Route::resource('partners', 'partnerController');
-Route::get('partner', 'partnerController@getFront');
-Route::get('partner/json', 'partnerController@dataTB');
-Route::get('partner/{method}', 'partnerController@viewSubmenu');
-
-Route::resource('news_digests', 'news_digestController');
-Route::get('news_digest', 'news_digestController@getFront');
-Route::get('news_digest/json', 'news_digestController@dataTB');
-Route::get('news_digest/{method}', 'news_digestController@viewSubmenu');
-
-Route::resource('contacts', 'contactController');
-Route::get('contact', 'contactController@getFront');
-Route::get('contact/json', 'contactController@dataTB');
-Route::get('contact/{method}', 'contactController@viewSubmenu');
-Route::resource('tews', 'tewController');
-Route::get('tew', 'tewController@getFront');
-Route::get('tew/json', 'tewController@dataTB');
-Route::get('tew/{method}', 'tewController@viewSubmenu');
-Route::resource('our_teams', 'our_teamController');
-Route::get('our_team', 'our_teamController@getFront');
-Route::get('our_team/json', 'our_teamController@dataTB');
-Route::get('our_team/{method}', 'our_teamController@viewSubmenu');
-
-Route::resource('whowearepages', 'whowearepagesController');
-Route::get('whowearepages', 'whowearepagesController@getFront');
-Route::get('whowearepages/json', 'whowearepagesController@dataTB');
-Route::get('whowearepages/{method}', 'whowearepagesController@viewSubmenu');
-
-Route::resource('pageswhoweares', 'pageswhoweareController');
-Route::get('pageswhoweare', 'pageswhoweareController@getFront');
-Route::get('pageswhoweare/json', 'pageswhoweareController@dataTB');
-Route::get('pageswhoweare/{method}', 'pageswhoweareController@viewSubmenu');
-
-Route::resource('pagesourmissions', 'pagesourmissionController');
-Route::get('pagesourmission', 'pagesourmissionController@getFront');
-Route::get('pagesourmission/json', 'pagesourmissionController@dataTB');
-Route::get('pagesourmission/{method}', 'pagesourmissionController@viewSubmenu');
-
-Route::resource('pageshowwemakechanges', 'pageshowwemakechangesController');
-Route::get('pageshowwemakechanges', 'pageshowwemakechangesController@getFront');
-Route::get('pageshowwemakechanges/json', 'pageshowwemakechangesController@dataTB');
-Route::get('pageshowwemakechanges/{method}', 'pageshowwemakechangesController@viewSubmenu');
-
-Route::resource('pageshowwemakechanges', 'pageshowwemakechangeController');
-Route::get('pageshowwemakechange', 'pageshowwemakechangeController@getFront');
-Route::get('pageshowwemakechange/json', 'pageshowwemakechangeController@dataTB');
-Route::get('pageshowwemakechange/{method}', 'pageshowwemakechangeController@viewSubmenu');
-
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('berandas', 'berandaController');
-Route::get('beranda', 'berandaController@getFront');
-Route::get('beranda/json', 'berandaController@dataTB');
-Route::get('beranda/{method}', 'berandaController@viewSubmenu');
-
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');
@@ -346,10 +258,10 @@ Route::get('gallery', 'galleryController@getFront');
 Route::get('gallery/json', 'galleryController@dataTB');
 Route::get('gallery/{method}', 'galleryController@viewSubmenu');
 
-Route::resource('pelayanans', 'pelayananController');
-Route::get('pelayanan', 'pelayananController@getFront');
-Route::get('pelayanan/json', 'pelayananController@dataTB');
-Route::get('pelayanan/{method}', 'pelayananController@viewSubmenu');
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 
 Route::resource('kontaks', 'kontakController');
 Route::get('kontak', 'kontakController@getFront');

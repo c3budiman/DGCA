@@ -5,7 +5,8 @@
   $judul = DB::table('setting_situses')->where('id','=','1')->first()->namaSitus;
   $favicon =DB::table('setting_situses')->where('id','=','1')->first()->favicon;
   $footer =DB::table('setting_situses')->where('id','=','1')->first()->footer;
-  $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+  $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+  $desc = DB::table('setting_situses')->where('id','=','1')->first()->slogan;
 ?>
 <html>
     <head>
@@ -39,7 +40,7 @@
     </head>
     <body class="account-pages">
         <!-- Begin page -->
-        <div class="accountbg" style="background: url('../../images/cover.jpg');background-size: cover;"></div>
+        <div class="accountbg" style="background: url('../../storage/slider/a85f6f36d00b1210e3f26d61a2af181f.jpg');background-size: cover;"></div>
         <div class="wrapper-page account-page-full">
             <div class="card">
                 <div class="card-block">
@@ -47,11 +48,12 @@
                         <div class="card-box p-5">
                             <h2 class="text-uppercase text-center pb-4">
                                 <a href="{{$link}}" class="text-success">
-                                    <span><img src="{{$logo}}" alt="" width="300px"></span>
+                                    <span><img src="{{$logo}}" alt="" width="70px"></span>
                                 </a>
                             </h2>
                             <div class="pb-4">
                               <blockquote class="blockquote text-center">
+                                  {{$desc}}
                                   <footer class="blockquote-footer">{{$judul}}</footer>
                               </blockquote>
                               @if (count($errors) > 0)
@@ -68,7 +70,7 @@
                                 <div class="form-group m-b-20 row">
                                     <div class="col-12">
                                         <label for="emailaddress">Alamat Email</label>
-                                        <input required class="form-control" type="email" name="email" value="{{ old('email') }}">
+                                        <input required class="form-control" type="email" name="email" value="{{ old('email') }}" placeholder="someone@mail.com">
                                     </div>
                                 </div>
                                 <div class="form-group m-b-20 row">
@@ -96,7 +98,7 @@
             </div>
 
             <div class="m-t-40 text-center">
-                <p class="account-copyright"><?php echo date("Y"); ?> {{$footer}}</p>
+                <p class="account-copyright">{!!$footer!!}</p>
             </div>
         </div>
         <script src="{{ URL::asset('assets/js/popper.min.js') }}"></script>

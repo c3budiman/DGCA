@@ -31,14 +31,24 @@ class regisController extends Controller
     if (!empty($emailexist)) {
       return Redirect::back()->withErrors(['Email has been used!']);
     } else {
+      //register the user to db :
       $user = new User();
       $user->email = strip_tags(Input::get('email'));
       $user->nama = strip_tags(Input::get('nama'));
-      $user->avatar = strip_tags(Input::get('avatar'));
+      $user->avatar = "/gambar/avatar.png";
       $user->password = bcrypt(Input::get('password'));
-      $user->roles_id = 1;
+      $user->active = 0;
+      $user->verif_token = md5(strip_tags(Input::get('email')));
+      $user->roles_id = 3;
       $user->save();
-      return redirect('/')->with('status', 'You have successfuly registered!');
+
+      //send verification email :
+      Mail::send('emails.register', ['user' => $user], function ($m) use ($user) {
+          $m->to($user->email, $user->name)->subject('Konfirmasi Email');
+      });
+
+      //redirect home :
+      return redirect('/')->with('status', 'Kamu berhasil mendaftar, Silahkan cek email untuk konfirmasi pendaftaran!');
     }
   }
 }

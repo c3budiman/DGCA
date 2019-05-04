@@ -16,10 +16,16 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('nama');
             $table->string('email')->unique();
+            $table->string('company')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->unsignedInteger('roles_id')->nullable();
+            $table->unsignedInteger('uas_id')->nullable();
             $table->string('avatar');
-            $table->string('api_token')->nullable();
             $table->string('password', 60);
+            $table->string('active', 2);
+            $table->string('verif_token')->nullable();
+            $table->string('api_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -50,6 +56,8 @@ class CreateUsersTable extends Migration
               'roles_id' => 1,
               'avatar' => '/gambar/avatar.png',
               'password' => '$2y$10$31eYZUJ169CnT/tPGZFMGe5bMWezB5o8XNGKms4eI98o3M.pCvBZm',
+              'active' => '1',
+              'verif_token' => '',
               'api_token' => ''
           )
       );
