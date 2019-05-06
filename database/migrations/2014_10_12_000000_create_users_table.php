@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('nama');
             $table->string('email')->unique();
+            $table->string('active', 2);
             $table->string('company')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
@@ -23,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('uas_id')->nullable();
             $table->string('avatar');
             $table->string('password', 60);
-            $table->string('active', 2);
             $table->string('verif_token')->nullable();
             $table->string('api_token')->nullable();
             $table->rememberToken();

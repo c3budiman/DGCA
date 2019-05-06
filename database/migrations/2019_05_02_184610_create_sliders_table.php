@@ -19,6 +19,21 @@ class CreateSlidersTable extends Migration
             $table->text('description');
             //$table->timestamps();
         });
+
+        DB::table('slider')->insert(
+          array(
+              'title' => '',
+              'image' => '/gambar/bn1.jpg',
+              'description' => ''
+          )
+        );
+        DB::table('slider')->insert(
+          array(
+              'title' => '',
+              'image' => '/gambar/bn2.jpg',
+              'description' => ''
+          )
+        );
     }
 
     /**

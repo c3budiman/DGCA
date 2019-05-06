@@ -20,6 +20,10 @@ class CreateFrontmenusTable extends Migration
             $table->timestamps();
         });
 
+        $this->generatePage('home');
+        $this->generatePage('pendaftaran');
+
+        //insert content :
         DB::table('frontmenu')->insert([
             [
              'nama' => 'Beranda',
@@ -72,7 +76,7 @@ class CreateFrontmenusTable extends Migration
 
                             <div class='content-heading'><h3>Pendaftaran Sistem Pesawat Udara Kecil Tanpa Awak (Drone) &nbsp; </h3></div>
                             <p>Silahkan melakukan pendaftaran Drone pada menu pendaftaran untuk mendapatkan Sertifikat Drone anda.</p>
-                            <a class='cta-btn' href='/pelayanan'>Daftar</a>
+                            <a class='cta-btn' href='/pendaftaran'>Daftar</a>
                            </section>
 
 
@@ -180,6 +184,26 @@ class CreateFrontmenusTable extends Migration
             "
           ],
         ]);
+    }
+
+    public function generatePage($param) {
+      try {
+        //create new tabel for submenu :
+        Schema::create(strtolower($param), function($table)
+        {
+            $table->increments('id');
+            $table->unsignedInteger('parent')->nullable();
+            $table->string('nama');
+            $table->string('method');
+            $table->text('content');
+            $table->timestamps();
+        });
+
+        //generate code for crud backend, view for frontend
+        $exitCode = Artisan::call('crud:generator', ['name' => strtolower($param)]);
+      } catch (\Exception $e) {
+
+      }
     }
 
     /**

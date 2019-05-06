@@ -76,6 +76,10 @@ class CrudGenerator extends Command implements SelfHandling
         $this->request($name);
 
         File::append(base_path('Http/app/routes.php'), 'Route::resource(\'' . str_plural(strtolower($name)) . "', '{$name}Controller');");
-        File::append(base_path('Http/app/routes.php'), 'Route::get(\'' . str_plural(strtolower($name)) . "', '{$name}Controller@getIndex');");
+        if (strtolower($name) == 'home') {
+          File::append(base_path('Http/app/routes.php'), 'Route::get(\'' . str_plural(strtolower($name)) . "', 'guestController@index');");
+        } else {
+          File::append(base_path('Http/app/routes.php'), 'Route::get(\'' . str_plural(strtolower($name)) . "', '{$name}Controller@getIndex');");
+        }
     }
 }

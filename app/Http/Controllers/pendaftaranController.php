@@ -97,13 +97,17 @@ class pendaftaranController extends Controller
     }
 
     public function getFront() {
-      return view('auto.pendaftaran');
+      if ('pendaftaran' == 'home') {
+        return view('index');
+      } else {
+        return view('auto.pendaftaran');
+      }
     }
 
     public function dataTB() {
       return Datatables::of(pendaftaran::query())
       ->addColumn('action', function ($datatb) {
-          $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+          $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
           return
            '<a target="_blank" href="'.$link.'/pendaftaran/'.$datatb->method.'" class="show-modal btn btn-xs btn-success" ><i class="fa fa-eye"></i> View</a>'
            .'<div style="padding-top:10px"></div>'

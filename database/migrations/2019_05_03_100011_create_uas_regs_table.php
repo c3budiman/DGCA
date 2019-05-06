@@ -15,11 +15,16 @@ class CreateUasRegsTable extends Migration
         Schema::create('uas_regs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('id_ujian')->nullable();
-            $table->integer('nilai',3)->nullable();
-            $table->unsignedInteger('status',1);
-            $table->timestamps('tanggal_ujian');
+            $table->integer('nilai');
+            $table->integer('status');
+            $table->string('change_by')->nullable();
+            $table->text('backup_soal');
+            $table->text('backup_jawaban');
             $table->timestamps();
+        });
+
+        Schema::table('uas_regs', function(Blueprint $kolom){
+          $kolom->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

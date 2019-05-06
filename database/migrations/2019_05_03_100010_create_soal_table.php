@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSoalParentTable extends Migration
+class CreateSoalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateSoalParentTable extends Migration
      */
     public function up()
     {
-        Schema::create('soal_parent', function (Blueprint $table) {
+        Schema::create('soal', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('index');
             $table->integer('aktif')->nullable();
@@ -29,6 +29,6 @@ class CreateSoalParentTable extends Migration
      */
     public function down()
     {
-        Schema::drop('soal_parent');
+        Schema::drop('soal');
     }
 }

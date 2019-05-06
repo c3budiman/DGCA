@@ -248,22 +248,18 @@ Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');
 Route::get('home/{method}', 'homeController@viewSubmenu');
 
-Route::resource('faqs', 'faqController');
-Route::get('faq', 'faqController@getFront');
-Route::get('faq/json', 'faqController@dataTB');
-Route::get('faq/{method}', 'faqController@viewSubmenu');
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 
-Route::resource('galleries', 'galleryController');
-Route::get('gallery', 'galleryController@getFront');
-Route::get('gallery/json', 'galleryController@dataTB');
-Route::get('gallery/{method}', 'galleryController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
 
 Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 
-Route::resource('kontaks', 'kontakController');
-Route::get('kontak', 'kontakController@getFront');
-Route::get('kontak/json', 'kontakController@dataTB');
-Route::get('kontak/{method}', 'kontakController@viewSubmenu');
