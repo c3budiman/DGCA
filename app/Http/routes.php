@@ -105,6 +105,8 @@ Route::get('/', 'guestController@index');
 Route::get('dashboard', 'authController@getRoot');
 Route::get('daftar', 'regisController@getRegis');
 Route::post('daftar', 'regisController@postRegis');
+Route::get('verif/{token}','regisController@doverif');
+
 Route::get('login', ['as' => 'login', 'uses' => 'loginController@getlogin']);
 Route::post('login', 'loginController@postLogin');
 Route::get('logout', 'authController@logout');
@@ -262,4 +264,3 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-

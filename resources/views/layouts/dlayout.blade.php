@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset($favicon)}}">
-        <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
+        {{-- <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script> --}}
         <!-- App css -->
         <link href="{{URL::asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
         <link href="{{URL::asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -32,11 +32,15 @@
         <link href="{{URL::asset('plugins/sweet-alert/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- Bootstrap fileupload css -->
         <link href="{{URL::asset('plugins/bootstrap-fileupload/bootstrap-fileupload.css') }}" rel="stylesheet" />
+
+
+
         @yield('css')
         @yield('csstambahan')
+        <link href="{{URL::asset('plugins/jquery.steps/css/jquery.steps.css') }}" rel="stylesheet" />
         <!-- Table Responsive css -->
         <link href="{{URL::asset('plugins/responsive-table/css/rwd-table.min.css') }}" rel="stylesheet" type="text/css" media="screen">
-        <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+
         @yield('meta')
     </head>
     <body>
@@ -179,21 +183,27 @@
             </div>
 
         </div>
+        <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/metisMenu.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/waves.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/jquery.slimscroll.js') }}"></script>
+
         <script src="{{ URL::asset('assets/js/popper.min.js') }}"></script>
         <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ URL::asset('assets/js/jquery.slimscroll.js') }}"></script>
         <script src="{{ URL::asset('assets/js/metisMenu.min.js') }}"></script>
         <script src="{{ URL::asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
-        <!-- KNOB JS -->
-        <!--[if IE]>
-        <script type="text/javascript" src="../plugins/jquery-knob/excanvas.js') }}"></script>
-        <![endif]-->
+        <script src="{{ URL::asset('plugins/jquery.steps/js/jquery.steps.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/pages/jquery.wizard-init.js') }}"></script>
+
         <script src="{{ URL::asset('plugins/jquery-knob/jquery.knob.js') }}"></script>
         <!-- Required datatable js -->
         <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ URL::asset('plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
+        
+        <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
         @yield('js')
         <!-- Counter Up  -->
         <script src="{{ URL::asset('plugins/waypoints/lib/jquery.waypoints.min.js') }}"></script>

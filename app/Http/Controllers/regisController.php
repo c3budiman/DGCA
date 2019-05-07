@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use App\Transformers\UserTransformer;
 use Auth;
+use Mail;
+
+
 class regisController extends Controller
 {
   public function __construct()
@@ -21,6 +24,22 @@ class regisController extends Controller
   {
     return view('daftar');
   }
+
+  public function doverif($token) {
+    if (DB::table('users')->where('verif_token',$token)->count() > 0) {
+      $user = DB::table('users')->where('verif_token',$token)->update(
+        ['active' => '1','verif_token' => '']
+      );
+      if ($user) {
+        return redirect('login')->with('status', 'Selamat, akun mu telah terverifikasi, Kamu dapat login.');
+      } else {
+        return redirect('login')->withErrors(['Terdapat kesalahan saat verifikasi, silahkan coba lagi nanti']);
+      }
+    } else {
+      return redirect('register')->withErrors(['Invalid Verfication Token!']);
+    }
+  }
+
   public function postRegis()
   {
     //this one will be useless once an account has been created....
@@ -40,6 +59,11 @@ class regisController extends Controller
       $user->active = 0;
       $user->verif_token = md5(strip_tags(Input::get('email')));
       $user->roles_id = 3;
+      if (Input::get('tipe') == 'bisnis') {
+        $user->company = Input::get('perusahaan');
+      } else {
+        $user->company = 'n/a';
+      }
       $user->save();
 
       //send verification email :
@@ -47,8 +71,8 @@ class regisController extends Controller
           $m->to($user->email, $user->name)->subject('Konfirmasi Email');
       });
 
-      //redirect home :
-      return redirect('/')->with('status', 'Kamu berhasil mendaftar, Silahkan cek email untuk konfirmasi pendaftaran!');
+      //redirect with message sukses :
+      return Redirect::back()->with('status', 'Kamu berhasil mendaftar, Silahkan cek email untuk konfirmasi pendaftaran!');
     }
   }
 }

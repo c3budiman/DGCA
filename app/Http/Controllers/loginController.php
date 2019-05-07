@@ -18,13 +18,14 @@ class loginController extends Controller
   {
     if (Auth::attempt ([
         'email' => $request->email,
-        'password' => $request->password
+        'password' => $request->password,
+        'active' => '1'
       ]))
     {
       return redirect('/dashboard')->with('status', 'You have successfully login!');
     }
     else {
-      return Redirect::back()->withErrors(['wrong credential!']);
+      return Redirect::back()->withErrors(['wrong credential / account not active!']);
     }
   }
 }

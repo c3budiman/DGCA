@@ -8,13 +8,13 @@
 <p>Perihal : Verifikasi Akun </p>
 Silahkan
 <br>
-<a href="{{ url($link.'/password/reset/'.$user->verif_token) }}">Klik Disini</a>
+<a href="{{ url($link.'/verif/'.$user->verif_token) }}">Klik Disini</a>
 <br>
 Untuk Memverifikasi akun anda.
 <br>
 Jika Tidak Bekerja Silahkan Copy Link Dibawah :
 <br>
- {{ url($link.'/password/reset/'.$user->verif_token) }}
+ {{ url($link.'/verif/'.$user->verif_token) }}
 
  <br>
  <br>
