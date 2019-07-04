@@ -1,6 +1,6 @@
 <?php
 $logo = DB::table('setting_situses')->where('id','=','1')->first()->logo;
-$link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+$link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
  ?>
 
 @extends('layouts.dlayout')

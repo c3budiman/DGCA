@@ -40,6 +40,8 @@
         <link href="{{URL::asset('plugins/jquery.steps/css/jquery.steps.css') }}" rel="stylesheet" />
         <!-- Table Responsive css -->
         <link href="{{URL::asset('plugins/responsive-table/css/rwd-table.min.css') }}" rel="stylesheet" type="text/css" media="screen">
+        <link href="{{URL::asset('assets/css/smart_wizard.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{URL::asset('assets/css/smart_wizard_theme_dots.css') }}" rel="stylesheet" type="text/css" />
 
         @yield('meta')
     </head>
@@ -188,6 +190,7 @@
         <script src="{{ URL::asset('assets/js/metisMenu.min.js') }}"></script>
         <script src="{{ URL::asset('assets/js/waves.js') }}"></script>
         <script src="{{ URL::asset('assets/js/jquery.slimscroll.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('assets/js/jquery.smartWizard.js') }}"></script>
 
         <script src="{{ URL::asset('assets/js/popper.min.js') }}"></script>
         <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
@@ -202,7 +205,7 @@
         <!-- Required datatable js -->
         <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ URL::asset('plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        
+
         <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
         @yield('js')
         <!-- Counter Up  -->
@@ -215,6 +218,7 @@
         <!-- App js -->
         <script src="{{ URL::asset('assets/js/jquery.core.js') }}"></script>
         <script src="{{ URL::asset('assets/js/jquery.app.js') }}"></script>
+
 
         @yield('jstambahan')
 

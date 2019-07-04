@@ -11,6 +11,7 @@
 */
 use Carbon\Carbon;
 use App\tesmenu;
+use Illuminate\Http\Request;
 
 //Clear Cache facade value:
 Route::get('/clear-cache', function() {
@@ -75,6 +76,10 @@ Route::get('/link2', function() {
 
 Route::get('slide/json', 'AdminController@slideDataTB')->name('slide/json');
 Route::get('cars/add', 'authController@getCars');
+
+Route::post('tesform',function(Request $request){
+  dd($request->all());
+});
 
 Route::get('/tesgan22', function() {
   return Datatables::of(tesmenu::query())
@@ -239,6 +244,33 @@ Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
 
 /*
 |--------------------------------------------------------------------------
+| Api Wilayah
+|--------------------------------------------------------------------------
+|
+| Ini route buat api wilayah
+|
+*/
+
+Route::get('provinsi/{nama}', 'apiController@getProvinsi');
+Route::get('regency/{id}/{nama}', 'apiController@getRegency');
+Route::get('district/{id}/{nama}', 'apiController@getDistrict');
+Route::get('village/{id}/{nama}', 'apiController@getVillage');
+
+
+/*
+|--------------------------------------------------------------------------
+| Applicant Routes
+|--------------------------------------------------------------------------
+|
+| Ini route pengguna atau applicant atau pengaju
+|
+*/
+Route::get('identitas','applicantController@getIdentitas');
+
+
+
+/*
+|--------------------------------------------------------------------------
 | Auto Crud
 |--------------------------------------------------------------------------
 |
@@ -264,3 +296,13 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+

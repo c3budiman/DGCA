@@ -8,7 +8,7 @@
     $favicon =DB::table('setting_situses')->where('id','=','1')->first()->favicon;
     $footer =DB::table('setting_situses')->where('id','=','1')->first()->footer;
     $footer2 =DB::table('setting_situses')->where('id','=','1')->first()->footer2;
-    $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+    $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
   ?>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">

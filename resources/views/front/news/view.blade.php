@@ -117,7 +117,7 @@ border-bottom-right-radius: 3px
 }
 </style>
 
-  <?php $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url; ?>
+  <?php $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus; ?>
   <section id="" >
     <div class="container">
       <div class="row">

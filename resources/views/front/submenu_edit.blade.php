@@ -6,7 +6,7 @@
 
 @section('content')
   <?php
-  $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+  $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
    ?>
    <link rel="stylesheet"
          href="{!! asset('assets/textarea/codemirror.css') !!}">
@@ -150,7 +150,7 @@
 
 @section('jstambahan')
   <?php
-  $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+  $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
    ?>
   <script src="{!! asset('templateEditor/ckeditor/ckeditor.js') !!}"></script>
   <script>

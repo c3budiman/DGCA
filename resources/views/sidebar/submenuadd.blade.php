@@ -6,7 +6,7 @@
 
 @section('content')
   <?php
-    $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
+    $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
   ?>
   <div class="content">
       <div class="container-fluid">

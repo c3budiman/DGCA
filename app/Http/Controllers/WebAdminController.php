@@ -205,7 +205,7 @@ class WebAdminController extends Controller
             })
             ->addColumn('avatar_images', function($datatb) {
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
-              return '<img src="'.$link.'/'.$datatb->avatar.'" alt="" height="50px">';
+              return '<img src="'.$link.$datatb->avatar.'" alt="" height="50px">';
             })
              ->make(true);
     }

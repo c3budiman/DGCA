@@ -14,7 +14,7 @@
   <div class="row">
       <div class="col-12">
           <div class="card-box">
-              <h2>Change Priviledge for user_groups : "{{DB::table('users')->where('id','=',$id)->first()->nama}}"</h2>
+              <h3>Changing Priviledge for : "{{DB::table('users')->where('id','=',$id)->first()->nama}}"</h3>
               <p class="text-muted font-14 m-b-10">
                   In this menu you can change priviledge for managing the frontend`s menu
               </p>
@@ -26,23 +26,6 @@
                           <?php //dd($priviledge); ?>
                           <div class="form-group row">
                           @foreach ($priviledge as $prv => $hak_akses)
-                            {{-- @if ($prv == 's1')
-                                  <div class="col-4">
-                                    <label style="" for="">Disposition</label>
-                            @elseif ($prv == 's2')
-                                  <div class="col-4">
-                                    <label for="">Surat Rektor</label>
-                            @elseif ($prv == 's3')
-                                  <div class="col-4">
-                                    <label for="">SK Rektor</label>
-                            @elseif ($prv == 's4')
-                                  <div class="col-4">
-                                    <label for="">Surat Wakil Rektor</label>
-                            @elseif ($prv == 's5')
-                                  <div class="col-4">
-                                    <label for="">Surat Tugas Wakil Rektor</label>
-                            @endif --}}
-
                             @foreach ($dashmenu as $mn)
                               <?php //dd($mn); ?>
                                  @if ($mn->method == $prv)
