@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('company')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
+            $table->string('dokumen_identitas')->nullable();
             $table->unsignedInteger('roles_id')->nullable();
             $table->unsignedInteger('uas_id')->nullable();
             $table->string('avatar');

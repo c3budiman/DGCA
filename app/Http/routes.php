@@ -252,9 +252,9 @@ Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
 */
 
 Route::get('provinsi/{nama}', 'apiController@getProvinsi');
-Route::get('regency/{id}/{nama}', 'apiController@getRegency');
-Route::get('district/{id}/{nama}', 'apiController@getDistrict');
-Route::get('village/{id}/{nama}', 'apiController@getVillage');
+Route::get('regency/{id}', 'apiController@getRegency');
+Route::get('district/{id}', 'apiController@getDistrict');
+Route::get('village/{id}', 'apiController@getVillage');
 
 
 /*
@@ -266,7 +266,10 @@ Route::get('village/{id}/{nama}', 'apiController@getVillage');
 |
 */
 Route::get('identitas','applicantController@getIdentitas');
+Route::post('identitas','applicantController@postIdentitas');
 
+Route::get('drones','applicantController@getDrones');
+Route::post('drones','applicantController@postDrones');
 
 
 /*
@@ -286,23 +289,3 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('pendaftarans', 'pendaftaranController');
-Route::get('pendaftaran', 'pendaftaranController@getFront');
-Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
-Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('pendaftarans', 'pendaftaranController');
-Route::get('pendaftaran', 'pendaftaranController@getFront');
-Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
-Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-

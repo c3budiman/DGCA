@@ -10,101 +10,139 @@
   </style>
   <link href="plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
   <link href="plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-
-  <form data-parsley-validate id="example-advanced-form" action="/tesform" method="post">
-      {{ csrf_field() }}
-      <h3>Identitas Pemohon</h3>
-      <fieldset>
-        <?php //dd(Auth::User()) ?>
-      <legend>Pemohon (Applicant)</legend>
-          <div class="form-group">
-            <label for="name">Nama Pemohon (Applicant Name) <span class="text-danger">*</span></label>
-            <input value="{{ Auth::User()->nama }}" parsley-trigger="change" data-parsley-group="block1" type="text" name="nama" class="form-control" id="name" required>
-          </div>
-          <div class="form-group">
-            <label for="company">Nama Perusahaan (Company)<span class="text-danger">*</span></label>
-             <input type="text" name="company" parsley-trigger="change" data-parsley-group="block1" value="{{ Auth::User()->company }}" class="form-control" id="company" required>
-           </div>
-          <div class="form-group">
-            <label for="phone">No Telepon (Phone)<span class="text-danger">*</span></label>
-            <input id="pass1" type="text" parsley-trigger="change" data-parsley-group="block1" data-parsley-type="number" data-parsley-minlength="10" data-parsley-maxlength="13" placeholder="08xxxxxxxxxx" class="form-control" required>
-          </div>
-      <p>(*) Mandatory</p>
-      </fieldset>
-
-      <h3>Alamat Pemohon</h3>
-      <fieldset>
-          <div class="form-group">
-            <label for="address">Provinsi (Province)<span class="text-danger">*</span></label>
-            <div class="col-sm-10">
-              <select id="provinsi" class="form-control provinsi" name="provinsi" data-placeholder="Silahkan Pilih..." onchange="selectRegency()">
-                  <?php $table = DB::table('provinces')->get(); ?>
-                    <option value="">Silahkan Pilih...</option>
-                  @foreach ($table as $row)
-                    <option value="{{$row->id}}">{{$row->name}}</option>
-                  @endforeach
-              </select>
+  <?php
+    $status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
+   ?>
+  @if ($status == 2)
+    <form data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postIdentitas'))}}" method="post">
+        {{ csrf_field() }}
+        <h3>Identitas Pemohon</h3>
+        <fieldset>
+          <?php //dd(Auth::User()) ?>
+        <legend>Pemohon (Applicant)</legend>
+            <div class="form-group">
+              <label for="name">Nama Pemohon (Applicant Name) <span class="text-danger">*</span></label>
+              <input value="{{ Auth::User()->nama }}" parsley-trigger="change" data-parsley-group="block1" type="text" name="nama" class="form-control" id="name" required>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="address">Kabupaten/Kota (City)<span class="text-danger">*</span></label>
-            <div class="col-sm-10">
-              <select id="regency" class="form-control regency" name="regency" data-placeholder="Silahkan Pilih..." onchange="selectDistrict()">
-
-              </select>
+            <div class="form-group">
+              <label for="company">Nama Perusahaan (Company)<span class="text-danger">*</span></label>
+               <input type="text" name="company" parsley-trigger="change" data-parsley-group="block1" value="{{ Auth::User()->company }}" class="form-control" id="company" required>
+             </div>
+            <div class="form-group">
+              <label for="phone">No Telepon (Phone)<span class="text-danger">*</span></label>
+              <input name="phone" type="text" parsley-trigger="change" data-parsley-group="block1" data-parsley-type="number" data-parsley-minlength="10" data-parsley-maxlength="13" placeholder="08xxxxxxxxxx" class="form-control" required>
             </div>
-          </div>
-          {{-- <div class="form-group">
-            <label for="address">Kabupaten/Kota (City)<span class="text-danger">*</span></label>
-            <input type="text" data-parsley-group="block2" required placeholder="Depok" class="form-control" id="passWord2">
-          </div> --}}
-          <div class="form-group">
-            <label for="address">Kecamatan (sub-district)<span class="text-danger">*</span></label>
-            <input type="text" data-parsley-group="block2" required placeholder="Beji" class="form-control" id="passWord2">
-          </div>
-          <div class="form-group">
-            <label for="address">Jalan dan Kelurahan (Streets)<span class="text-danger">*</span></label>
-            <input type="text" data-parsley-group="block2" required placeholder="Kelurahan x Jalan x no x rt x rw x" class="form-control" id="passWord2">
-          </div>
+        <p>(*) Mandatory</p>
+        </fieldset>
 
-          <p>(*) Mandatory</p>
-      </fieldset>
-
-      <h3>Dokumen</h3>
-      <fieldset>
-        <div class="form-group row">
-            <label class="col-3 col-form-label">Tanda Pengenal (KTP/SIMP/Passport)</label>
-            <div class="col-9">
-                <div class="fileupload fileupload-new" data-provides="fileupload">
-                    <div class="fileupload-new thumbnail" style=" height: 128px;">
-                        @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                        <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                        <img src="/gambar/ktp.jpg" alt="image" /> @endif
-                    </div>
-                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                    <div>
-                        <button type="button" class="btn btn-custom btn-file">
-                         <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                         <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                         {{-- poto profil is here : --}}
-                         <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
-                       </button>
-                    </div>
-                </div>
+        <h3>Alamat Pemohon</h3>
+        <fieldset>
+            <div class="form-group">
+              <label for="address">Provinsi (Province)<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select id="provinsi" class="form-control provinsi" name="provinsi" data-placeholder="Silahkan Pilih..." onchange="selectRegency()">
+                    <?php $table = DB::table('provinces')->get(); ?>
+                      <option value="">Silahkan Pilih...</option>
+                    @foreach ($table as $row)
+                      <option value="{{$row->id}}">{{$row->name}}</option>
+                    @endforeach
+                </select>
+              </div>
             </div>
+
+            <div class="form-group">
+              <label for="address">Kabupaten/Kota(City)<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select id="regency" class="form-control regency" name="regency" data-placeholder="Silahkan Pilih..." onchange="selectDistrict()">
+                  <option value="">Silahkan pilih provinsi terlebih dahulu...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Kecamatan(district)<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select id="district" class="form-control district" name="district" data-placeholder="Silahkan Pilih..." onchange="selectVillage()">
+                  <option value="">Silahkan pilih Kabupaten/Kota terlebih dahulu...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Desa/Kelurahan(villages)<span class="text-danger">*</span></label>
+              <div class="col-sm-10">
+                <select id="village" class="form-control village" name="village" data-placeholder="Silahkan Pilih...">
+                  <option value="">Silahkan pilih Kecamatan terlebih dahulu...</option>
+                </select>
+              </div>
+            </div>
+
+            <p>(*) Mandatory</p>
+        </fieldset>
+
+        <h3>Dokumen</h3>
+        <fieldset>
+          <div class="form-group row">
+              <label class="col-3 col-form-label">Tanda Pengenal (KTP/SIMP/Passport)</label>
+              <div class="col-9">
+
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
+                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                          <button type="button" class="btn btn-custom btn-file">
+                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           {{-- poto profil is here : --}}
+                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
+                         </button>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+        </fieldset>
+
+        <h3>Finish</h3>
+        <fieldset>
+            <legend>Terms and Conditions</legend>
+
+            <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class="required"> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
+        </fieldset>
+    </form>
+
+    @elseif ($status == 1)
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-box">
+              <center> <h1 class="display-4">Silahkan Memverifikasi Email Terlebih Dahulu!</h1> </center>
+          </div>
         </div>
-      </fieldset>
+      </div>
+    @else
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-box">
+            <center> <h1 class="display-4">Anda Telah Mendaftarkan Identitas Anda</h1> </center>
 
-      <h3>Finish</h3>
-      <fieldset>
-          <legend>Terms and Conditions</legend>
+          </div>
+        </div>
+      </div>
 
-          <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class="required"> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
-      </fieldset>
-  </form>
+  @endif
+
+
+
 @endsection
 
 @section('js')
+
+  <!-- Bootstrap fileupload js -->
+  <script src="plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
   <script src="plugins/select2/js/select2.min.js"></script>
   <script src="plugins/bootstrap-select/js/bootstrap-select.js"></script>
   <script src="plugins/parsleyjs/parsley.min.js"></script>
@@ -122,11 +160,69 @@
 
   function selectRegency() {
     if ($('#provinsi').val() != "") {
-      console.log($('#provinsi').val());
-      $(document).ready(function() {
-          $('.provinsi').select2(
+      $('#regency').select2({
+        ajax: {
+          url: '{{url('/')."/regency/"}}'+$('#provinsi').val(),
+          data: function (params) {
+            var query = {
+              search: params.term,
+            }
+            return query;
+          },
+          processResults: function (data) {
+             return {
+               results: data.map((e)=> {
+                 return {text:e.name, id:e.id};
+               })
+             };
+          }
+        }
+      });
+    }
+  }
 
-          );
+  function selectDistrict() {
+    if ($('#regency').val() != "") {
+      $('#district').select2({
+        ajax: {
+          url: '{{url('/')."/district/"}}'+$('#regency').val(),
+          data: function (params) {
+            var query = {
+              search: params.term,
+            }
+            return query;
+          },
+          processResults: function (data) {
+             return {
+               results: data.map((e)=> {
+                 return {text:e.name, id:e.id};
+               })
+             };
+          }
+        }
+      });
+    }
+  }
+
+  function selectVillage() {
+    if ($('#district').val() != "") {
+      $('#village').select2({
+        ajax: {
+          url: '{{url('/')."/village/"}}'+$('#district').val(),
+          data: function (params) {
+            var query = {
+              search: params.term,
+            }
+            return query;
+          },
+          processResults: function (data) {
+             return {
+               results: data.map((e)=> {
+                 return {text:e.name, id:e.id};
+               })
+             };
+          }
+        }
       });
     }
   }
@@ -187,13 +283,6 @@
       onFinished: function (event, currentIndex)
       {
           alert("Submitted!");
-      }
-  }).validate({
-      errorPlacement: function errorPlacement(error, element) { element.before(error); },
-      rules: {
-          confirm: {
-              equalTo: "#password-2"
-          }
       }
   });
   </script>

@@ -30,8 +30,12 @@ class Sidebar extends Migration
           ['kepunyaan' => 1, 'class_css' => 'dripicons-lock', 'nama' => 'Roles', 'link' => '/roles'],
           ['kepunyaan' => 1, 'class_css' => 'dripicons-user-group', 'nama' => 'Pengguna', 'link' => '/manageuser'],
           ['kepunyaan' => 1, 'class_css' => 'dripicons-device-desktop', 'nama' => 'Website', 'link' => '/manageweb'],
-          ['kepunyaan' => 2, 'class_css' => 'dripicons-home', 'nama' => 'Home', 'link' => '/'],
-          ['kepunyaan' => 2, 'class_css' => 'dripicons-browser', 'nama' => 'Frontend`s Menu', 'link' => '/front']
+          ['kepunyaan' => 2, 'class_css' => 'dripicons-home', 'nama' => 'Home', 'link' => '/dashboard'],
+          ['kepunyaan' => 2, 'class_css' => 'dripicons-browser', 'nama' => 'Frontend`s Menu', 'link' => '/front'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-home', 'nama' => 'Home', 'link' => '/dashboard'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-user', 'nama' => 'Identitas', 'link' => '/identitas'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket', 'nama' => 'Drone', 'link' => '/drones'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-clipboard', 'nama' => 'UAS Assesment', 'link' => '/uas_assesment'],
       ]);
     }
 
