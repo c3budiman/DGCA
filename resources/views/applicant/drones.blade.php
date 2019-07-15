@@ -14,8 +14,120 @@
     $status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
    ?>
   @if ($status == 3)
-    <form data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postIdentitas'))}}" method="post">
+    <form enctype="multipart/form-data" data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postDrones'))}}" method="post">
         {{ csrf_field() }}
+        <h3>Dokumen Registrasi (DGCA Registration Documents)</h3>
+        <fieldset>
+          <div class="form-group row">
+              <div class="col-2">
+                <label>Copy Bukti Kepemilikan</label>
+                <i id="CheckList_proof_of_ownership" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+              </div>
+              <div class="col-4">
+
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
+                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          <img src="/gambar/ownership.png" alt="image" /> @endif
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                          <button type="button" class="btn btn-custom btn-file">
+                           <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           {{-- poto profil is here : --}}
+                           <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="exampleInputFile">
+                         </button>
+
+                         <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                      </div>
+                  </div>
+
+              </div>
+
+              <div class="col-2">
+                <label>Foto Nomor Seri Pesawat Tanpa Awak</label>
+                <i id="CheckList_pic_of_drones_with_sn" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+              </div>
+
+              <div class="col-4">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
+                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          <img src="/gambar/dronesn.jpeg" alt="image" /> @endif
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                          <button type="button" class="btn btn-custom btn-file">
+                           <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           {{-- poto profil is here : --}}
+                           <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="exampleInputFile">
+                         </button>
+                         <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <div class="col-2">
+                <label>Foto Pesawat Tanpa Awak</label>
+                <i id="CheckList_pic_of_drones" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+              </div>
+
+              <div class="col-4">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
+                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          <img src="/gambar/drone.png" alt="image" /> @endif
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                          <button type="button" class="btn btn-custom btn-file">
+                           <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           {{-- poto profil is here : --}}
+                           <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="exampleInputFile">
+                         </button>
+                         <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                      </div>
+                  </div>
+
+              </div>
+
+              <div class="col-2">
+                <label>Copy Bukti Penguasaan Pesawat Udara Tanpa Awak</label>
+                <i id="CheckList_scan_proof_of_ownership" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+              </div>
+
+              <div class="col-4">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
+                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          <img src="/gambar/ownership.png" alt="image" /> @endif
+                      </div>
+                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                      <div>
+                          <button type="button" class="btn btn-custom btn-file">
+                           <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           {{-- poto profil is here : --}}
+                           <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="exampleInputFile">
+                         </button>
+                         <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </fieldset>
+
         <h3>Pesawat Udara Tanpa Awak (Unmanned Aircraft System)</h3>
         <fieldset>
         <div class="row">
@@ -25,7 +137,7 @@
             </div>
             <div class="col-md-6 form-group">
               <label for="company">Model<span class="text-danger">*</span></label>
-              <select id="model" class="form-control provinsi" name="model" data-placeholder="Silahkan Pilih...">
+              <select required id="model" class="form-control provinsi" name="model" data-placeholder="Silahkan Pilih...">
                 <option value="">Silahkan Pilih...</option>
                 <option value="Pesawat Terbang (Aeroplane)">Pesawat Terbang (Aeroplane)</option>
                 <option value="Helikopter (Rotorcraft)">Helikopter (Rotorcraft)</option>
@@ -137,102 +249,6 @@
           <p>(*) Mandatory</p>
         </fieldset>
 
-        <h3>Dokumen Registrasi (DGCA Registration Documents)</h3>
-        <fieldset>
-          <div class="form-group row">
-              <label class="col-3 col-form-label">Copy Bukti Kepemilikan</label>
-              <div class="col-3">
-
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
-                      </div>
-                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                      <div>
-                          <button type="button" class="btn btn-custom btn-file">
-                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
-                         </button>
-                      </div>
-                  </div>
-
-              </div>
-
-              <label class="col-3 col-form-label">Foto Nomor Seri Pesawat Tanpa Awak</label>
-              <div class="col-3">
-
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
-                      </div>
-                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                      <div>
-                          <button type="button" class="btn btn-custom btn-file">
-                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
-                         </button>
-                      </div>
-                  </div>
-
-              </div>
-          </div>
-
-          <div class="form-group row">
-              <label class="col-3 col-form-label">Foto Pesawat Tanpa Awak</label>
-              <div class="col-3">
-
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
-                      </div>
-                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                      <div>
-                          <button type="button" class="btn btn-custom btn-file">
-                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
-                         </button>
-                      </div>
-                  </div>
-
-              </div>
-
-              <label class="col-3 col-form-label">Copy Bukti Penguasaan Pesawat Udara Tanpa Awak</label>
-              <div class="col-3">
-
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
-                      </div>
-                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                      <div>
-                          <button type="button" class="btn btn-custom btn-file">
-                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
-                         </button>
-                      </div>
-                  </div>
-
-              </div>
-          </div>
-
-        </fieldset>
-
         <h3>Pernyataan (Aggreements)</h3>
         <fieldset>
             <legend>Terms and Conditions</legend>
@@ -251,7 +267,7 @@
           </div>
         </div>
       </div>
-    @elseif ($status == 1)
+    @elseif ($status == 2)
       <div class="row">
         <div class="col-md-12">
           <div class="card-box">
@@ -364,6 +380,30 @@
 
   $(document).ready(function() {
       $('.provinsi').select2();
+
+      $("#btn_proof_of_ownership").click(function(e){
+        $('#CheckList_proof_of_ownership').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('bukti_kepemilikan', upload_doc.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        uploadedFile.append('nameofFile', $('proof_of_ownership').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadDokumenUAS'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckList_proof_of_ownership').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
+
   });
 
   form.steps({

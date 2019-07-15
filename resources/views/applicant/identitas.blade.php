@@ -14,7 +14,7 @@
     $status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
    ?>
   @if ($status == 2)
-    <form data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postIdentitas'))}}" method="post">
+    <form enctype="application/x-www-form-urlencoded" data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postIdentitas'))}}" method="post">
         {{ csrf_field() }}
         <h3>Identitas Pemohon</h3>
         <fieldset>
@@ -84,25 +84,25 @@
         <fieldset>
           <div class="form-group row">
               <label class="col-3 col-form-label">Tanda Pengenal (KTP/SIMP/Passport)</label>
-              <div class="col-9">
-
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="col-3">
+                  <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
                       <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ktp.jpg" alt="image" /> @endif
+                        <img src="/gambar/ktp.jpg" alt="image">
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="tes" id="exampleInputFile">
+                           <input accept="image/*" type="file" class="btn-light" name="upload_doc" id="upload_doc">
                          </button>
-                      </div>
+                         <br>
+                         <br>
+                      <input id="uploadImage" type="button" value="Upload Image" name="upload"></div>
                   </div>
-
+              </div>
+              <div class="col-3">
+              	<i id="CheckListIdentitas" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
               </div>
           </div>
         </fieldset>
@@ -229,6 +229,28 @@
 
   $(document).ready(function() {
       $('.provinsi').select2();
+
+      $("#uploadImage").click(function(e){
+        $('#CheckListIdentitas').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('upload_doc', upload_doc.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadIdentitas'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckListIdentitas').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
   });
 
   form.steps({
@@ -346,5 +368,28 @@
       $(document).ready(function() {
           $('form').parsley();
       });
+  </script>
+
+  <script type="text/javascript">
+
+  </script>
+
+  <script type="text/javascript">
+    // jQuery.noConflict();
+    // jQuery('#uploadImage').on("click", function (e) {
+    //       var uploadedFile = new FormData();
+    //       uploadedFile.append('upload_doc', upload_doc.files[0]);
+    //       jQuery.ajax({
+    //         url: '{{url(action('applicantController@uploadIdentitas'))}}',
+    //         type: 'POST',
+    //         processData: false, // important
+    //         contentType: false, // important
+    //         dataType : 'json',
+    //         data: {
+    //           'upload_doc' : uploadedFile,
+    //           '_token'     : $('input[name=_token]').val()
+    //         }
+    //       });
+    // });
   </script>
 @endsection

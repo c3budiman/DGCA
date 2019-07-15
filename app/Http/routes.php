@@ -267,6 +267,8 @@ Route::get('village/{id}', 'apiController@getVillage');
 */
 Route::get('identitas','applicantController@getIdentitas');
 Route::post('identitas','applicantController@postIdentitas');
+Route::post('uploadIdentitas', 'applicantController@uploadIdentitas');
+Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
 
 Route::get('drones','applicantController@getDrones');
 Route::post('drones','applicantController@postDrones');
@@ -280,6 +282,15 @@ Route::post('drones','applicantController@postDrones');
 | Ini route generate an dari auto crud
 |
 */
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');
