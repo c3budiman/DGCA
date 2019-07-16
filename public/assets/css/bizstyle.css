@@ -1543,7 +1543,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   #header #logo {
     padding-left: 60px;
   }
@@ -1562,7 +1562,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1024px) {
   .back-to-top {
     bottom: 15px;
   }

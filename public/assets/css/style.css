@@ -678,7 +678,7 @@ body.enlarged.bg-transparent {
   width: 20px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .button-menu-mobile.disable-btn {
     display: inline-block;
   }
