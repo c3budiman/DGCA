@@ -272,6 +272,10 @@ Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
 
 Route::get('drones','applicantController@getDrones');
 Route::post('drones','applicantController@postDrones');
+Route::post('uploadDokumenUAS', 'applicantController@uploadDokumenUAS');
+Route::post('uploadPesawatSn', 'applicantController@uploadPesawatSn');
+Route::post('uploadPesawat', 'applicantController@uploadPesawat');
+Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 
 
 /*
@@ -282,6 +286,15 @@ Route::post('drones','applicantController@postDrones');
 | Ini route generate an dari auto crud
 |
 */
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');

@@ -37,7 +37,7 @@
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="exampleInputFile">
+                           <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="bukti_kepemilikan">
                          </button>
 
                          <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
@@ -64,7 +64,7 @@
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="exampleInputFile">
+                           <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="nomorseripesawat">
                          </button>
                          <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -92,7 +92,7 @@
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="exampleInputFile">
+                           <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="fotopesawat">
                          </button>
                          <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -118,7 +118,7 @@
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="exampleInputFile">
+                           <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="buktipenguasaan">
                          </button>
                          <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -211,7 +211,7 @@
           <div class="row">
             <div class="col-md-6 form-group">
                 <label for="termofowenership">Dasar Penguasaan (Term Of Possession) <span class="text-danger">*</span></label>
-                <select required id="termofposession" class="form-control provinsi" name="termofposession" data-placeholder="Silahkan Pilih...">
+                <select required id="termofposession" class="form-control provinsi" name="dateownership" data-placeholder="Silahkan Pilih...">
                   <option value="">Silahkan Pilih...</option>
                   <option value="Sewa Guna Usaha (Leasing)">Sewa Guna Usaha (Leasing)</option>
                   <option value="Pembelian Bersyarat">Pembelian Bersyarat (Conditional Sale)</option>
@@ -384,9 +384,9 @@
       $("#btn_proof_of_ownership").click(function(e){
         $('#CheckList_proof_of_ownership').hide()
         var uploadedFile = new FormData();
-        uploadedFile.append('bukti_kepemilikan', upload_doc.files[0]);
+        uploadedFile.append('bukti_kepemilikan', bukti_kepemilikan.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
-        uploadedFile.append('nameofFile', $('proof_of_ownership').val());
+        // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
         $.ajax({
             type: "POST",
             url: '{{url(action('applicantController@uploadDokumenUAS'))}}',
@@ -396,6 +396,90 @@
             data: uploadedFile,
             success: function (data, status) {
               $('#CheckList_proof_of_ownership').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
+
+  });
+
+  $(document).ready(function() {
+      $('.provinsi').select2();
+
+      $("#btn_pic_of_drones_with_sn").click(function(e){
+        $('#CheckList_pic_of_drones_with_sn').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('nomorseripesawat', nomorseripesawat.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadPesawatSn'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckList_pic_of_drones_with_sn').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
+
+  });
+
+  $(document).ready(function() {
+      $('.provinsi').select2();
+
+      $("#btn_pic_of_drones").click(function(e){
+        $('#CheckList_pic_of_drones').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('fotopesawat', fotopesawat.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadPesawat'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckList_pic_of_drones').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
+
+  });
+
+  $(document).ready(function() {
+      $('.provinsi').select2();
+
+      $("#btn_scan_proof_of_ownership").click(function(e){
+        $('#CheckList_scan_proof_of_ownership').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('buktipenguasaan', buktipenguasaan.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadPenguasaan'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckList_scan_proof_of_ownership').show()
             },
             error: function (error) {
                 alert('Kesalahan Saat Upload')
@@ -418,14 +502,14 @@
               return true;
           }
           // Forbid next action if the users has wrong input!
-          if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
-          {
-              return false;
-          }
-          if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
-          {
-              return false;
-          }
+          // if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
+          // {
+          //     return false;
+          // }
+          // if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
+          // {
+          //     return false;
+          // }
           // Needed in some cases if the user went back (clean up)
           if (currentIndex < newIndex)
           {
