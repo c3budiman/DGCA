@@ -211,7 +211,7 @@
           <div class="row">
             <div class="col-md-6 form-group">
                 <label for="termofowenership">Dasar Penguasaan (Term Of Possession) <span class="text-danger">*</span></label>
-                <select required id="termofposession" class="form-control provinsi" name="dateownership" data-placeholder="Silahkan Pilih...">
+                <select required id="termofposession" class="form-control provinsi" name="termofposession" data-placeholder="Silahkan Pilih...">
                   <option value="">Silahkan Pilih...</option>
                   <option value="Sewa Guna Usaha (Leasing)">Sewa Guna Usaha (Leasing)</option>
                   <option value="Pembelian Bersyarat">Pembelian Bersyarat (Conditional Sale)</option>
@@ -220,7 +220,7 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="name">Referensi</label>
-                <input name="owner" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
+                <input name="reference" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
 
               <div class="col-md-12">

@@ -79,33 +79,53 @@
 
             <p>(*) Mandatory</p>
         </fieldset>
-
         <h3>Dokumen</h3>
         <fieldset>
           <div class="form-group row">
-              <label class="col-3 col-form-label">Tanda Pengenal (KTP/SIMP/Passport)</label>
+            <label class="col-3 col-form-label">Tanda Pengenal (KTP/SIMP/Passport)</label>
+            <div class="col-3">
+              <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
+                <div class="fileupload-new thumbnail" style=" height: 120px;">
+                  <img src="/gambar/ktp.jpg" alt="image">
+                </div>
+                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                <div>
+                  <button type="button" class="btn btn-custom btn-file mb-2" >
+                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
+                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                    <input accept="image/*" type="file" class="btn-light" name="upload_doc" id="upload_doc">
+                  </button>
+
+                  <input id="uploadImage" type="button" value="Upload Image" name="upload" class="btn btn-success"></div>
+                </div>
+              </div>
               <div class="col-3">
-                  <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                        <img src="/gambar/ktp.jpg" alt="image">
-                      </div>
-                      <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                      <div>
-                          <button type="button" class="btn btn-custom btn-file">
-                           <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                           <input accept="image/*" type="file" class="btn-light" name="upload_doc" id="upload_doc">
-                         </button>
-                         <br>
-                         <br>
-                      <input id="uploadImage" type="button" value="Upload Image" name="upload"></div>
+                <i id="CheckListIdentitas" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-3 col-form-label">Sertifikat Pelatihan APDI(sertifikasi pilot)</label>
+              <div class="col-3">
+                <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
+                  <div class="fileupload-new thumbnail" style=" height: 120px;">
+                    <img src="/gambar/ktp.jpg" alt="image">
                   </div>
+                  <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                  <div>
+                    <button type="button" class="btn btn-custom btn-file mb-2">
+                      <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Choose Picture</span>
+                      <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                      <input accept="image/*" type="file" class="btn-light" name="upload_doc2" id="upload_doc2">
+                    </button>
+                    <input id="uploadImage2" type="button" value="Upload Image" name="upload" class="btn btn-success"></div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <i id="CheckListIdentitas2" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
+                </div>
               </div>
-              <div class="col-3">
-              	<i id="CheckListIdentitas" style="color:green; font-size:30px; display:none;" class="fa fa-check"> </i>
-              </div>
-          </div>
-        </fieldset>
+            </fieldset>
+
 
         <h3>Finish</h3>
         <fieldset>
@@ -134,7 +154,6 @@
       </div>
 
   @endif
-
 
 
 @endsection
@@ -244,6 +263,32 @@
             data: uploadedFile,
             success: function (data, status) {
               $('#CheckListIdentitas').show()
+            },
+            error: function (error) {
+                alert('Kesalahan Saat Upload')
+                console.log(error);
+            }
+        });
+      });
+  });
+
+  $(document).ready(function() {
+      $('.provinsi').select2();
+
+      $("#uploadImage2").click(function(e){
+        $('#CheckListIdentitas2').hide()
+        var uploadedFile = new FormData();
+        uploadedFile.append('upload_doc2', upload_doc2.files[0]);
+        uploadedFile.append('_token', $('input[name=_token]').val());
+        $.ajax({
+            type: "POST",
+            url: '{{url(action('applicantController@uploadIdentitas2'))}}',
+            dataType: "json",
+            processData: false, // important
+            contentType: false, // important
+            data: uploadedFile,
+            success: function (data, status) {
+              $('#CheckListIdentitas2').show()
             },
             error: function (error) {
                 alert('Kesalahan Saat Upload')

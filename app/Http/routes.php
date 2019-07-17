@@ -268,6 +268,7 @@ Route::get('village/{id}', 'apiController@getVillage');
 Route::get('identitas','applicantController@getIdentitas');
 Route::post('identitas','applicantController@postIdentitas');
 Route::post('uploadIdentitas', 'applicantController@uploadIdentitas');
+Route::post('uploadIdentitas2', 'applicantController@uploadIdentitas2');
 Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
 
 Route::get('drones','applicantController@getDrones');
@@ -304,6 +305,45 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');

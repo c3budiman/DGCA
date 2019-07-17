@@ -76,6 +76,37 @@ class applicantController extends Controller
       }
     }
 
+    public function uploadIdentitas2(Request $request) {
+      $file = $request->file('upload_doc2');
+      $user = User::find(Auth::User()->id);
+
+      if ($file) {
+          $tujuan_upload = public_path().'/dokumen/sertifikasi/'.Auth::User()->id;
+          $nama_file = 'FotoSertifikasi_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
+          //upload :
+          if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
+            //store the fotoktp :
+            $stored = [
+              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+            ];
+            $user->dokumen_sertifikasi = json_encode($stored);
+            $user->save();
+
+            //Success :
+            return response()->json(['Success' => true, 'data' => $stored], 200);
+          } else {
+            $error = ['fotoktp' => 'fail because of not an image file!'];
+            return response()->json(['Success' => false, 'error' => $error], 401);
+          }
+      } else {
+        // upload fail because the file is not exist / request is half way through
+        $error = ['fotoktp' => 'upload fail!'];
+        return response()->json(['Success' => false, 'error' => $error], 401);
+      }
+    }
+
 
     //isi identitas :
     public function postIdentitas(Request $request) {
@@ -375,7 +406,8 @@ class applicantController extends Controller
 
     public function postDrones(Request $request) {
       DB::table('drones')->where('user_id', Auth::User()->id)->update(
-        ['manufacturer' => $request->manufacturer,
+        [//drone bio
+         'manufacturer' => $request->manufacturer,
          'model' => $request->model,
          'specific_model' => $request->modelspesific,
          'model_year' => $request->yearmake,
@@ -383,19 +415,20 @@ class applicantController extends Controller
          'condition' => $request->condition,
          'max_weight_take_off' => $request->weighttakeoff,
 
-         'term_possession' => $request->termofowenership,
-         //owner
-         'lessee_address' => $request->address,
-         'aggreement_on_possession' => $request->termofowenership,
-         // evidenceofowenership
-         'date_of_proof' => $request->dateownership,
+         //kepemilikan UAS
+         'termofowenership' => $request->termofowenership,
+         'owner' => $request->owner,
+         'address' => $request->address,
+         'evidenceofowenership' => $request->evidenceofowenership,
+         'dateownership' => $request->dateownership,
 
-         'term_possession' => $request->dateownership,
-         //owner
-         'leaser_name' => $request->namapemberisewa,
-         'leaser_address' => $request->alamatpemberisewa,
-         'leaser_email' => $request->emailpemberisewa,
-         'leaser_phone' => $request->nomorteleponpemberisewa
+         //penguasaan UAS
+         'termofposession' => $request->termofposession,
+         'reference' => $request->reference,
+         'namapemberisewa' => $request->namapemberisewa,
+         'alamatpemberisewa' => $request->alamatpemberisewa,
+         'emailpemberisewa' => $request->emailpemberisewa,
+         'nomorteleponpemberisewa' => $request->nomorteleponpemberisewa
        ]);
 
        $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
