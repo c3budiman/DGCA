@@ -797,11 +797,12 @@ class WebAdminController extends Controller
     public function postAddSoal(Request $request){
       $soal = new Soal;
       $index = DB::table('soal')->select('index')->orderBy('id')->first();
-      $a = $index->index;
+      // dd($index);
 
       if($index == null){
         $soal->index = 1;
       }else{
+        $a = $index->index;
         $soal->index = $a + 1;
       }
       $soal->aktif = $request->status;
