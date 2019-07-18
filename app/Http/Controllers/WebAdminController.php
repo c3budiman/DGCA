@@ -797,6 +797,7 @@ class WebAdminController extends Controller
     public function postAddSoal(Request $request){
       $soal = new Soal;
       $index = DB::table('soal')->select('index')->orderBy('id')->first();
+
       // dd($index);
 
       if($index == null){
@@ -807,6 +808,7 @@ class WebAdminController extends Controller
       }
       $soal->aktif = $request->status;
       $soal->soal = $request->soal;
+      $soal->change_by = Auth::User()->nama;
       // dd($soal);
       $soal->save();
       return redirect('/parameter/addsoal')->with('status', 'Data successfuly added');;
