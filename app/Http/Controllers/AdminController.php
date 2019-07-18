@@ -11,6 +11,7 @@ use App\hak_akses_user;
 use Excel;
 use Datatables;
 use App\User;
+use App\Soal;
 use App\Role;
 use App\email;
 use App\slider;
@@ -343,7 +344,5 @@ class AdminController extends Controller
         return response()->json($response,501);
       }
     }
-
-
 
 }

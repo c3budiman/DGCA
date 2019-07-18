@@ -172,6 +172,8 @@
                 <div class="content">
                     <div class="container-fluid">
                       @yield('content')
+                      @yield('soal')
+                      @yield('addsoal')
 
                                 </div>
                             </div>

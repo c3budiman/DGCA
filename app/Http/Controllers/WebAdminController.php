@@ -11,6 +11,7 @@ use App\hak_akses_user;
 use Excel;
 use Datatables;
 use App\User;
+use App\Soal;
 use App\Role;
 use App\email;
 use App\slide;
@@ -772,5 +773,41 @@ class WebAdminController extends Controller
 
       return redirect($method.'/editsub/'.$request->id)->with('status', 'Submenu '.$request->nama.' has been updated!');
     }
+    public function soaltb(){
+      return Datatables::of(Soal::query())
+      ->addColumn('action', function ($datatb) {
+        $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+          return
+           '<a href="'.$link.'/edit/slide/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           .'<div style="padding-top:10px"></div>'
+          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
 
+    public function soal(){
+      return view ('soal.soal');
+    }
+
+    public function addsoal(){
+      return view ('soal.addsoal');
+    }
+
+    public function postAddSoal(Request $request){
+      $soal = new Soal;
+      $index = DB::table('soal')->select('index')->orderBy('id')->first();
+      $a = $index->index;
+
+      if($index == null){
+        $soal->index = 1;
+      }else{
+        $soal->index = $a + 1;
+      }
+      $soal->aktif = $request->status;
+      $soal->soal = $request->soal;
+      // dd($soal);
+      $soal->save();
+      return redirect('/parameter/addsoal')->with('status', 'Data successfuly added');;
+    }
 }
