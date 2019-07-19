@@ -4,20 +4,21 @@
   Adding Soal UAS Assessment
 @endsection
 
-@section('addsoal')
+@section('editsoal')
   <div class="row">
       <div class="col-12">
           <div class="card-box">
-              <h4 class="header-title m-t-0">Adding new question</h4>
+              <h4 class="header-title m-t-0">Editing question</h4>
               <p class="text-muted font-14 m-b-10">
-                  You can add new question
+                  You can edit question
               </p>
-              <form enctype="multipart/form-data" action="{{url(action("WebAdminController@postAddSoal"))}}" method="post" class="form-horizontal ">
+              <form enctype="multipart/form-data" action="/parameter/edited/{{$manages->id}}" method="post" class="form-horizontal ">
+                <input type="hidden" name="_method" value="put">
                   {{ csrf_field() }}
                   <div class="form-group row">
                       <label class="col-3 col-form-label">Soal : </label>
                       <div class="col-9">
-                      <textarea cols="10" rows="10" id="my-editor" name="soal"></textarea>
+                      <textarea cols="10" rows="10" id="my-editor" name="soal">{{ $manages-> soal}}</textarea>
                     </div>
                   </div>
 

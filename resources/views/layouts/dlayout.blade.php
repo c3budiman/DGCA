@@ -174,6 +174,7 @@
                       @yield('content')
                       @yield('soal')
                       @yield('addsoal')
+                      @yield('editsoal')
 
                                 </div>
                             </div>

@@ -778,7 +778,7 @@ class WebAdminController extends Controller
       ->addColumn('action', function ($datatb) {
         $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
           return
-           '<a href="'.$link.'/edit/slide/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           '<a href="'.$link.'/parameter/editsoal/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
            .'<div style="padding-top:10px"></div>'
           .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
       })
@@ -791,7 +791,8 @@ class WebAdminController extends Controller
     }
 
     public function addsoal(){
-      return view ('soal.addsoal');
+      $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+      return view ('soal.addsoal')->with(compact('link'));
     }
 
     public function postAddSoal(Request $request){
@@ -808,6 +809,29 @@ class WebAdminController extends Controller
       $soal->soal = $request->soal;
       // dd($soal);
       $soal->save();
-      return redirect('/parameter/addsoal')->with('status', 'Data successfuly added');;
+      return redirect('/parameter/addsoal')->with('status', 'Data successfuly added');
+    }
+    public function editsoal($id){
+      $manages = Soal::find($id);
+      $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+      return view ('soal.editsoal')->with(compact('link','manages'));
+    }
+    public function updatesoal(Request $request,$id)
+    {
+        // dd($manage);
+        $soal=Soal::find($id);
+        $index = DB::table('soal')->select('index')->orderBy('id')->first();
+        $a = $index->index;
+
+        if($index == null){
+          $soal->index = 1;
+        }else{
+          $soal->index = $a + 1;
+        }
+        $soal->aktif = $request->status;
+        $soal->soal = $request->soal;
+        // dd($soal);
+        $soal->save();
+        return redirect('/parameter/soal')->with('status', 'Data successfuly added');
     }
 }
