@@ -226,6 +226,8 @@ Route::post('slider/delete','AdminController@deleteSlider');
 Route::get('soal/json', 'WebAdminController@soaltb')->name('soal/json');
 Route::get('parameter/soal', 'WebAdminController@soal');
 Route::get('parameter/addsoal', 'WebAdminController@addsoal');
+Route::get('parameter/editsoal/{id}', 'WebAdminController@editsoal');
+Route::put('parameter/edited/{id}','WebAdminController@updatesoal');
 Route::post('parameter/postAddSoal', 'WebAdminController@postAddSoal');
 
 
@@ -364,6 +366,7 @@ Route::resource('cars', 'carController');
 Route::get('car', 'carController@getFront');
 Route::get('car/json', 'carController@dataTB');
 Route::get('car/{method}', 'carController@viewSubmenu');
+<<<<<<< HEAD
 Route::resource('tes', 'tesController');
 Route::get('tes', 'tesController@getFront');
 Route::get('tes/json', 'tesController@dataTB');
@@ -382,3 +385,14 @@ Route::get('approveidentitas/json', 'AdminController@approveidentitasTB')->name(
 Route::get('approveidentitas', 'AdminController@approveidentitas');
 Route::get('detail/identitas/{id}', 'AdminController@getidentitas');
 Route::put('approvalidentitas/{id}', 'AdminController@approvedidentitas');
+=======
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+>>>>>>> 5a76f1fe8cc43ab454c4c2345d44ad045f5452cc
