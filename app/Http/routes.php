@@ -247,6 +247,8 @@ Route::post('known-email/doedit', 'WebAdminController@doEditKnownEmail');
 Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Api Wilayah
@@ -362,3 +364,21 @@ Route::resource('cars', 'carController');
 Route::get('car', 'carController@getFront');
 Route::get('car/json', 'carController@dataTB');
 Route::get('car/{method}', 'carController@viewSubmenu');
+Route::resource('tes', 'tesController');
+Route::get('tes', 'tesController@getFront');
+Route::get('tes/json', 'tesController@dataTB');
+Route::get('tes/{method}', 'tesController@viewSubmenu');
+
+
+/*
+|--------------------------------------------------------------------------
+| Tambahan Daniel
+|--------------------------------------------------------------------------
+|
+| Ini route approval
+|
+*/
+Route::get('approveidentitas/json', 'AdminController@approveidentitasTB')->name('approveidentitas/json');
+Route::get('approveidentitas', 'AdminController@approveidentitas');
+Route::get('detail/identitas/{id}', 'AdminController@getidentitas');
+Route::put('approvalidentitas/{id}', 'AdminController@approvedidentitas');
