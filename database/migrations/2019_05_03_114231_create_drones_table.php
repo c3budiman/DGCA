@@ -62,7 +62,7 @@ class CreateDronesTable extends Migration
             // $table->string('lessee_address')->nullable();
             // $table->string('lessee_email')->nullable();
             // $table->string('lessee_phone')->nullable();
-            $table->string('approval')->default(0);
+            $table->string('approved')->default(0);
             $table->boolean('softdelete')->default(0);
             $table->softDeletes();
             $table->timestamps();

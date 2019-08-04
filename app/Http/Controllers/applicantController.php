@@ -153,7 +153,7 @@ class applicantController extends Controller
     }
 
     public function nadronesTB() {
-      return Datatables::of(Drones::query()->where('approval','=','0'))
+      return Datatables::of(Drones::query()->where('approved','=','0'))
             ->addColumn('action', function ($datatb) {
               $tambah_button='';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
@@ -168,7 +168,7 @@ class applicantController extends Controller
     }
 
     public function appdronesTB() {
-      return Datatables::of(Drones::query()->where('approval','=','1'))
+      return Datatables::of(Drones::query()->where('approved','=','1'))
             ->addColumn('action', function ($datatb) {
               $tambah_button='';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
