@@ -345,4 +345,34 @@ class AdminController extends Controller
       }
     }
 
+    public function approveidentitasTB(){
+      return Datatables::of(User::query()->where('id','=','3')->where('approved','=','0')->get())
+      ->addColumn('action', function ($datatb) {
+
+          return
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           .'<div style="padding-top:10px"></div>'
+          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function approveidentitas(){
+      return view('approval.index');
+    }
+
+    public function getidentitas(Request $request,$id){
+      $user = User::find($id);
+      return view('approval.identitas')->with(compact('user'));
+    }
+
+    public function approvedidentitas(Request $request,$id){
+      $user = User::find($id);
+      $user->approved = 1;
+      $user->save();
+      return redirect('approveidentitas')->with('succes', 'User successfuly approved!');
+    }
+
+
 }

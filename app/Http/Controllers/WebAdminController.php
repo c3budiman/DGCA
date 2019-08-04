@@ -36,10 +36,15 @@ class WebAdminController extends Controller
       return $rolesyangberhak;
     }
 
+    public function getRoleAdmin2() {
+      $rolesyangberhak = DB::table('roles')->where('id','=','2')->first()->namaRule;
+      return $rolesyangberhak;
+    }
+
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('rule:'.$this->getRoleAdmin().',nothingelse');
+        $this->middleware('rule:'.$this->getRoleAdmin().','.$this->getRoleAdmin2());
     }
 
 
@@ -836,4 +841,5 @@ class WebAdminController extends Controller
         $soal->save();
         return redirect('/parameter/soal')->with('status', 'Data successfuly added');
     }
+
 }
