@@ -143,6 +143,54 @@ class applicantController extends Controller
       return view('applicant.drones');
     }
 
+    public function addDrones() {
+      return view('applicant.add_drones');
+    }
+
+    public function editDrones($id) {
+      $manages = Drones::find($id);
+      return view('applicant.edit_drones')->with(compact('manages'));
+    }
+
+    public function nadronesTB() {
+      return Datatables::of(Drones::query()->where('approved','=','0'))
+            ->addColumn('action', function ($datatb) {
+              $tambah_button='';
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+                $tambah_button = '<a href="'.$link.'/editDrones/'.$datatb->id.'" class="btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Edit </a>'
+                .'<div style="padding-top:10px"></div>';
+                return
+                 $tambah_button
+                .'<button data-id="'.$datatb->id.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+            })
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function appdronesTB() {
+      return Datatables::of(Drones::query()->where('approved','=','1'))
+            ->addColumn('action', function ($datatb) {
+              $tambah_button='';
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+                return
+                 $tambah_button
+                .'<button data-id="'.$datatb->id.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+            })
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function deleteDrones(Request $request, Drones $drones){
+      $drones = Drones::find($request->id);
+      $drones->softdelete = 1;
+      $drones->save();
+      $drones->delete();
+      //membuat response array, untuk di tampilkan menjadi json nantinya
+      $response = array("success"=>"Drone Deleted");
+
+      return response()->json($response,200);
+    }
+
     public function uploadDokumenUAS(Request $request) {
       $file = $request->file('bukti_kepemilikan');
       // $namaoriginal = $request->file('bukti_kepemilikan')->getClientOriginalName();
@@ -405,7 +453,7 @@ class applicantController extends Controller
       }
 
     public function postDrones(Request $request) {
-      DB::table('drones')->where('user_id', Auth::User()->id)->update(
+      DB::table('drones')->where('user_id', Auth::User()->id)->insert(
         [//drone bio
          'manufacturer' => $request->manufacturer,
          'model' => $request->model,
@@ -431,11 +479,47 @@ class applicantController extends Controller
          'nomorteleponpemberisewa' => $request->nomorteleponpemberisewa
        ]);
 
-       $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
-         ['kode_status' => '4','status' => DB::table('status_list')->where('kode_status','4')->first()->keterangan]
-       );
+       // $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
+       //   ['kode_status' => '4','status' => DB::table('status_list')->where('kode_status','4')->first()->keterangan]
+       // );
 
-       return redirect('dashboard')->with('status', 'Kamu berhasil mendaftarkan identitas, Silahkan tambahkan drone yang akan di terbangkan di menu Drone!');
+       return redirect('dashboard')->with('status', 'Kamu berhasil menambahkan drone!');
+      // dd($request->all());
+    }
+
+    public function updateDrones(Request $request,$id) {
+        $drones=Drones::find($id);
+        //drone bio
+         $drones->manufacturer = $request->manufacturer;
+         $drones->model = $request->model;
+         $drones->specific_model = $request->modelspesific;
+         $drones->model_year = $request->yearmake;
+         $drones->serial_number = $request->nomorseri;
+         $drones->condition = $request->condition;
+         $drones->max_weight_take_off = $request->weighttakeoff;
+
+         //kepemilikan UAS
+         $drones->termofowenership = $request->termofowenership;
+         $drones->owner = $request->owner;
+         $drones->address = $request->address;
+         $drones->evidenceofowenership = $request->evidenceofowenership;
+         $drones->dateownership = $request->dateownership;
+
+         //penguasaan UAS
+         $drones->termofposession = $request->termofposession;
+         $drones->reference = $request->reference;
+         $drones->namapemberisewa = $request->namapemberisewa;
+         $drones->alamatpemberisewa = $request->alamatpemberisewa;
+         $drones->emailpemberisewa = $request->emailpemberisewa;
+         $drones->nomorteleponpemberisewa = $request->nomorteleponpemberisewa;
+
+
+       // $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
+       //   ['kode_status' => '4','status' => DB::table('status_list')->where('kode_status','4')->first()->keterangan]
+       // );
+       // dd($drones);
+       $drones->save();
+       return redirect('dashboard')->with('status', 'Data telah terupdate!');
       // dd($request->all());
     }
 

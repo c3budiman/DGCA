@@ -192,7 +192,6 @@ class WebAdminController extends Controller
     // .
     // .
     public function userDataTB() {
-
       return Datatables::of(User::query())
             ->addColumn('action', function ($datatb) {
               $tambah_button='';

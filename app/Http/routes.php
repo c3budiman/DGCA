@@ -280,8 +280,14 @@ Route::post('uploadIdentitas', 'applicantController@uploadIdentitas');
 Route::post('uploadIdentitas2', 'applicantController@uploadIdentitas2');
 Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
 
+Route::get('nadrones/json', 'applicantController@nadronesTB')->name('nadrones/json');
+Route::get('appdrones/json', 'applicantController@appdronesTB')->name('appdrones/json');
 Route::get('drones','applicantController@getDrones');
+Route::get('addDrones','applicantController@addDrones');
+Route::get('editDrones/{id}','applicantController@editDrones');
+Route::put('drones/{id}','applicantController@updateDrones');
 Route::post('drones','applicantController@postDrones');
+Route::post('drones/delete','applicantController@deleteDrones');
 Route::post('uploadDokumenUAS', 'applicantController@uploadDokumenUAS');
 Route::post('uploadPesawatSn', 'applicantController@uploadPesawatSn');
 Route::post('uploadPesawat', 'applicantController@uploadPesawat');
@@ -389,6 +395,25 @@ Route::get('approvedrones/json', 'AdminController@approvedronesTB')->name('appro
 Route::get('approvedrones', 'AdminController@approvedrones');
 Route::get('detail/drones/{id}', 'AdminController@getdrones');
 Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
+
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
