@@ -15,6 +15,7 @@ use App\Soal;
 use App\Role;
 use App\email;
 use App\slider;
+use App\drones;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -346,7 +347,7 @@ class AdminController extends Controller
     }
 
     public function approveidentitasTB(){
-      return Datatables::of(User::query()->where('id','=','3')->where('approved','=','0')->get())
+      return Datatables::of(User::query()->where('id','=','3')->get())
       ->addColumn('action', function ($datatb) {
 
           return
@@ -372,6 +373,38 @@ class AdminController extends Controller
       $user->approved = 1;
       $user->save();
       return redirect('approveidentitas')->with('succes', 'User successfuly approved!');
+    }
+
+    public function approvedronesTB(){
+      return Datatables::of(drones::query()->orderBy('id','desc')->get())
+      ->addColumn('action', function ($datatb) {
+
+          return
+           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           .'<div style="padding-top:10px"></div>'
+          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+      })
+      ->addColumn('nama', function($datatb) {
+        return DB::table('users')->where('id','=',$datatb->user_id)->first()->nama;
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function approvedrones(){
+      return view('approval.index2');
+    }
+
+    public function getdrones(Request $request,$id){
+      $drones = drones::find($id);
+      return view('approval.drones')->with(compact('drones'));
+    }
+
+    public function approveddrones(Request $request,$id){
+      $drones = drones::find($id);
+      $drones->approved = 1;
+      $drones->save();
+      return redirect('approvedrones')->with('succes', 'User successfuly approved!');
     }
 
 

@@ -385,6 +385,10 @@ Route::get('approveidentitas/json', 'AdminController@approveidentitasTB')->name(
 Route::get('approveidentitas', 'AdminController@approveidentitas');
 Route::get('detail/identitas/{id}', 'AdminController@getidentitas');
 Route::put('approvalidentitas/{id}', 'AdminController@approvedidentitas');
+Route::get('approvedrones/json', 'AdminController@approvedronesTB')->name('approvedrones/json');
+Route::get('approvedrones', 'AdminController@approvedrones');
+Route::get('detail/drones/{id}', 'AdminController@getdrones');
+Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');

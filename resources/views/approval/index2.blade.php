@@ -30,8 +30,9 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>Nama</th>
-                                  <th>Email</th>
+                                  <th>Nama Pemilik</th>
+                                  <th>Manufacturer</th>
+                                  <th>Model</th>
                                   <th>Status</th>
                                   <th colspan="10%">Action</th>
                               </tr>
@@ -140,11 +141,12 @@
     $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('approveidentitas/json') }}',
+        ajax: '{{ route('approvedrones/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
-            {data: 'email', name: 'email'},
+            {data: 'manufacturer', name: 'manufacturer'},
+            {data: 'model', name: 'model'},
             {data: 'approved', name: 'approved'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
