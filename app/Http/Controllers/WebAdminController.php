@@ -343,8 +343,9 @@ class WebAdminController extends Controller
       $createuser = $user->create([
         'nama'      => $request->nama,
         'email'     => $request->email,
-        'avatar'     => $request->avatar,
-        'roles_id'     => $request->roles_id,
+        'avatar'    => $request->avatar,
+        'roles_id'  => $request->roles_id,
+        'active'    => '1',
         'password'  => bcrypt($request->password),
       ]);
 
@@ -406,10 +407,6 @@ class WebAdminController extends Controller
             ->make(true);
     }
 
-    public function UploadImage() {
-
-    }
-
     public function editRoles(Request $request, Role $role) {
       //validasi request
       $this->validate($request, [
@@ -430,7 +427,6 @@ class WebAdminController extends Controller
     public function logoweb(){
       return view('situs.logo');
     }
-
 
     public function postImageLogo(Request $request) {
       if ($request->hasFile('tes')) {
@@ -566,47 +562,6 @@ class WebAdminController extends Controller
       return response()->json($response,200);
     }
 
-    public function getKnownEmail() {
-      $email = DB::table('known_email')->get();
-      return view('known_email.index', ['email'=>$email]);
-    }
-
-    public function doAddKnownEmail(Request $request) {
-      $tabel = new email;
-      $tabel->email = $request->email;
-      $tabel->nama = $request->nama;
-      $tabel->save();
-      $response = array("success"=>"Known Email Added");
-      return response()->json($response,200);
-    }
-
-    public function doEditKnownEmail(Request $request) {
-      $data = email::find($request->id);
-      $data->email = $request->email;
-      $data->nama = $request->nama;
-      $data->save();
-      $response = array("success"=>"Known Email Edited");
-      return response()->json($response,200);
-    }
-
-    public function deleteKnownEmail(Request $request) {
-      $data = email::find($request->id);
-      $data->delete();
-      $response = array("success"=>"Known Email Deleted");
-      return response()->json($response,200);
-    }
-
-    public function knownEmailDataTB() {
-    return Datatables::of(email::query())
-          ->addColumn('action', function ($datatb) {
-              return
-               '<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->email.'"  class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</button>'
-               .'<div style="padding-top:10px"></div>'
-              .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->email.'"  class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
-          })
-          ->make(true);
-    }
-
     public function slideDataTB() {
       return Datatables::of(slide::query())
       ->addColumn('action', function ($datatb) {
@@ -683,7 +638,6 @@ class WebAdminController extends Controller
       ->addIndexColumn()
       ->make(true);
     }
-
 
     public function postFront(Request $request) {
         try {
@@ -777,6 +731,7 @@ class WebAdminController extends Controller
 
       return redirect($method.'/editsub/'.$request->id)->with('status', 'Submenu '.$request->nama.' has been updated!');
     }
+
     public function soaltb(){
       return Datatables::of(Soal::query())
       ->addColumn('action', function ($datatb) {
@@ -799,7 +754,7 @@ class WebAdminController extends Controller
       return view ('soal.addsoal')->with(compact('link'));
     }
 
-    public function postAddSoal(Request $request){
+    public function postAddSoal(Request $request) {
       $soal = new Soal;
       $index = DB::table('soal')->select('index')->orderBy('id')->first();
 
@@ -818,13 +773,14 @@ class WebAdminController extends Controller
       $soal->save();
       return redirect('/parameter/addsoal')->with('status', 'Data successfuly added');
     }
+
     public function editsoal($id){
       $manages = Soal::find($id);
       $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
       return view ('soal.editsoal')->with(compact('link','manages'));
     }
-    public function updatesoal(Request $request,$id)
-    {
+
+    public function updatesoal(Request $request,$id) {
         // dd($manage);
         $soal=Soal::find($id);
         $index = DB::table('soal')->select('index')->orderBy('id')->first();

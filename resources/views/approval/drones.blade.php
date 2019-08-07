@@ -19,11 +19,7 @@
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Approval Menu Management</h4>
-                      <p class="text-muted font-14 m-b-30">
-                          You can add, edit and delete menu for frontend in here.
-                      </p>
-
+                      <h4 class="m-t-0 header-title">Rincian UAS</h4>
                       <br>
                       <form action="/approvaldrones/{{$drones->id}}" role="form" method="post">
                       <input type="hidden" name="_method" value="put">
@@ -31,8 +27,28 @@
                       <table id="contoh" class="table table-bordered table-hover datatable">
                           <tbody>
                               <tr>
-                                  <td>Nama</td>
-                                  <td>{{DB::table('users')->where('id','=',$drones->user_id)->first()->nama}}</td>
+                                  <td>Nama Pengusul</td>
+                                  @if (Auth::User()->roles_id == 3)
+                                    <td> <a href="{{url('/').'/identitas/'}}">{{DB::table('users')->where('id','=',$drones->user_id)->first()->nama}}</a> </td>
+                                  @else
+                                    <td> <a href="{{url('/').'/detail/identitas/'.$drones->user_id}}">{{DB::table('users')->where('id','=',$drones->user_id)->first()->nama}}</a> </td>
+                                  @endif
+                              </tr>
+                              <tr>
+                                  <td>Foto Drone</td>
+                                  <td><a href="{{json_decode($drones->pic_of_drones)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones)->resized}}" alt=""> </a></td>
+                              </tr>
+                              <tr>
+                                  <td>Foto Serial Nomor Drone</td>
+                                  <td><a href="{{json_decode($drones->pic_of_drones_with_sn)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones_with_sn)->resized}}" alt=""> </a></td>
+                              </tr>
+                              <tr>
+                                  <td>Foto Bukti Penguasaan Pesawat Udara Tanpa Awak</td>
+                                  <td><a href="{{json_decode($drones->scan_proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->scan_proof_of_ownership)->resized}}" alt=""> </a></td>
+                              </tr>
+                              <tr>
+                                  <td>Foto Bukti Kepemilikan</td>
+                                  <td><a href="{{json_decode($drones->proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->proof_of_ownership)->resized}}" alt=""> </a></td>
                               </tr>
                               <tr>
                                   <td>Manufacturer</td>
@@ -50,11 +66,19 @@
                           </tbody>
                       </table>
                       <hr>
-                      <div class="pull-right">
-                      <button type="submit" class="btn btn-sm btn-success">Approve</button>
-                    </div>
+                      @if ($drones->approved == 0)
+                        <div class="pull-right">
+                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </div>
+                      @endif
+
                   </form>
-                  <a href="/approveidentitas" class="btn btn-sm btn-danger pull-right mr-2">Kembali</a>
+                  @if (Auth::User()->roles_id == 3)
+                    <a href="/drones" class="btn btn-sm btn-danger pull-right mr-2">Kembali</a>
+                  @else
+                    <a href="/approvedrones" class="btn btn-sm btn-danger pull-right mr-2">Kembali</a>
+                  @endif
+
                   </div>
               </div>
           </div>

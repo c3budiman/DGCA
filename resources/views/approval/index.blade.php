@@ -19,14 +19,44 @@
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Approval Menu Management</h4>
+                      <h4 class="m-t-0 header-title">Ready To Approve</h4>
                       <p class="text-muted font-14 m-b-30">
-                          You can add, edit and delete menu for frontend in here.
+                          Data yang siap untuk di cek dan di approve.
                       </p>
 
                       <br>
 
                       <table id="contoh" class="table table-bordered table-hover datatable">
+                          <thead>
+                              <tr>
+                                  <th>No</th>
+                                  <th>Nama</th>
+                                  <th>Email</th>
+                                  <th>Status</th>
+                                  <th colspan="10%">Action</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="content">
+      <div class="container-fluid">
+
+          <div class="row">
+              <div class="col-12">
+                  <div class="card-box table-responsive">
+                      <h4 class="m-t-0 header-title">Approval History</h4>
+                      <p class="text-muted font-14 m-b-30">
+                          Data yang telah di approve
+                      </p>
+
+                      <br>
+
+                      <table id="contoh" class="table table-bordered table-hover datatable2">
                           <thead>
                               <tr>
                                   <th>No</th>
@@ -141,6 +171,19 @@
         processing: true,
         serverSide: true,
         ajax: '{{ route('approveidentitas/json') }}',
+        columns: [
+            {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+            {data: 'nama', name: 'nama'},
+            {data: 'email', name: 'email'},
+            {data: 'approved', name: 'approved'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+
+    $('.datatable2').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route('approveidentitas2/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},

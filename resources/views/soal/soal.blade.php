@@ -15,9 +15,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card-box table-responsive">
-                    <h4 class="m-t-0 header-title">Roles Management</h4>
+                    <h4 class="m-t-0 header-title">Soal UAS Assessment</h4>
                     <p class="text-muted font-14 m-b-30">
-                        This menu used to rename the Roles name.
+                        Menu ini untuk menambah soal untuk uas Assessment
                     </p>
 
                     <div class="pull-right" style="margin-top:-50px">

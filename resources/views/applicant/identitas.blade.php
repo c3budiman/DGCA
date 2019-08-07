@@ -145,9 +145,74 @@
       </div>
     @else
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
           <div class="card-box">
-            <center> <h1 class="display-4">Anda Telah Mendaftarkan Identitas Anda</h1> </center>
+            <h4 class="header-title">Identitas Anda</h4>
+            <p class="text-muted m-b-30">Anda telah mendaftarkan identitas, ke sistem kami. Kami akan melakukan verifikasi paling lambat 7x24 jam.</p>
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Status</label>
+
+              <div class="col-sm-10">
+                @if (Auth::User()->approved == 1)
+                  <input type="text" class="form-control" name="" disabled value="Telah Berhasil di Verifikasi">
+                @else
+                  <input type="text" class="form-control" name="" disabled value="Sedang di Verifikasi">
+                @endif
+
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Nama</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="" disabled value="{{Auth::User()->nama}}">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Email</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="" disabled value="{{Auth::User()->email}}">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Perusahaan</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="" disabled value="{{Auth::User()->company}}">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Alamat</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="" disabled value="{{Auth::User()->address}}">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Telepon</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="" disabled value="{{Auth::User()->phone}}">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Identitas</label>
+              <div class="col-sm-10">
+                <?php $datatb = json_decode(Auth::User()->dokumen_identitas)->original; $datatb2 = json_decode(Auth::User()->dokumen_identitas)->resized; ?>
+                <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Sertifikasi</label>
+              <div class="col-sm-10">
+                <?php $datatb3 = json_decode(Auth::User()->dokumen_sertifikasi)->original; $datatb4 = json_decode(Auth::User()->dokumen_sertifikasi)->resized; ?>
+                <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
+              </div>
+            </div>
+
 
           </div>
         </div>

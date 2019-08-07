@@ -23,10 +23,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Manufacturer</th>
+                        <th>Drones</th>
                         <th>Model</th>
-                        <th>Term of Ownership</th>
-                        <th>Term of Possession</th>
                         <th colspan="10%">Action</th>
                     </tr>
                 </thead>
@@ -39,19 +37,14 @@
     <div class="col-12">
         <div class="card-box table-responsive">
             <h4 class="m-t-0 header-title">Approved Drones List</h4>
-            <p class="text-muted font-14 m-b-30">
-                You can delete drones in this menu.
-            </p>
             <br>
 
             <table id="contoh2" class="table table-bordered table-hover datatable2">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Manufacturer</th>
+                        <th>Drones</th>
                         <th>Model</th>
-                        <th>Term of Ownership</th>
-                        <th>Term of Possession</th>
                         <th colspan="10%">Action</th>
                     </tr>
                 </thead>
@@ -109,10 +102,8 @@ $(document).ready(function() {
       ajax: '{{ route('nadrones/json') }}',
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-          {data: 'manufacturer', name: 'manufacturer'},
+          {data: 'drones_image', name: 'drones_image'},
           {data: 'model', name: 'model'},
-          {data: 'termofowenership', name: 'termofowenership'},
-          {data: 'termofposession', name: 'termofposession'},
           {data: 'action', name: 'action', orderable: false, searchable: false},
       ]
   });
@@ -123,10 +114,8 @@ $(document).ready(function() {
       ajax: '{{ route('appdrones/json') }}',
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-          {data: 'manufacturer', name: 'manufacturer'},
+          {data: 'drones_image', name: 'drones_image'},
           {data: 'model', name: 'model'},
-          {data: 'termofowenership', name: 'termofowenership'},
-          {data: 'termofposession', name: 'termofposession'},
           {data: 'action', name: 'action', orderable: false, searchable: false},
       ]
   });

@@ -25,9 +25,9 @@
                       <label class="col-3 col-form-label">Status : </label>
                       <div class="col-9">
                         <select required class="form-control" name="status" data-placeholder="Silahkan Pilih...">
-                          <option value="">Silahkan Pilih...</option>
-                          <option value="Aktif">Aktif</option>
-                          <option value="Tidak Aktif">Tidak Aktif</option>
+                          <option value="0">Silahkan Pilih...</option>
+                          <option value="1">Aktif</option>
+                          <option value="0">Tidak Aktif</option>
                         </select>
 
                       </div>

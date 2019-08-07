@@ -51,14 +51,15 @@ class applicantController extends Controller
 
       if ($file) {
           $tujuan_upload = public_path().'/dokumen/ktp/'.Auth::User()->id;
-          $nama_file = 'FotoIdentitas_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
+          $random        = $this->generateRandomString();
+          $nama_file = 'FotoIdentitas_'.Auth::User()->id.$random.'.'.$file->getClientOriginalExtension();
           //upload :
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/ktp/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/ktp/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/ktp/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             $user->dokumen_identitas = json_encode($stored);
             $user->save();
@@ -82,7 +83,8 @@ class applicantController extends Controller
 
       if ($file) {
           $tujuan_upload = public_path().'/dokumen/sertifikasi/'.Auth::User()->id;
-          $nama_file = 'FotoSertifikasi_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
+          $random        = $this->generateRandomString();
+          $nama_file = 'FotoSertifikasi_'.Auth::User()->id.$random.'.'.$file->getClientOriginalExtension();
           //upload :
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
@@ -107,16 +109,15 @@ class applicantController extends Controller
       }
     }
 
-
     //isi identitas :
     public function postIdentitas(Request $request) {
       $user          = User::find(Auth::User()->id);
 
       $address = '';
       $address .= DB::table('villages')->where('id',$request->village)->first()->name;
-      $address .= ', '.DB::table('regencies')->where('id',$request->regency)->first()->name;
-      $address .= ', '.DB::table('districts')->where('id',$request->district)->first()->name;
-      $address .= ', '.DB::table('provinces')->where('id',$request->provinsi)->first()->name;
+      $address .= '\, '.DB::table('regencies')->where('id',$request->regency)->first()->name;
+      $address .= '\, '.DB::table('districts')->where('id',$request->district)->first()->name;
+      $address .= '\, '.DB::table('provinces')->where('id',$request->provinsi)->first()->name;
 
       if ($user->dokumen_identitas) {
         $user->nama         = $request->nama;
@@ -132,7 +133,8 @@ class applicantController extends Controller
         );
 
         return redirect('dashboard')->with('status', 'Kamu berhasil mendaftarkan identitas, Silahkan tambahkan drone yang akan di terbangkan di menu Drone!');
-      } else {
+      }
+      else {
         return Redirect::back()->withErrors(['Silahkan Upload Foto Identitas!']);
       }
 
@@ -144,7 +146,17 @@ class applicantController extends Controller
     }
 
     public function addDrones() {
-      return view('applicant.add_drones');
+      $user          = new Drones;
+      $status        = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
+      $array_status  = [1,2];
+      if (!in_array($status, $array_status)) {
+        $user->user_id = Auth::User()->id;
+        $user->save();
+        $id = $user->id;
+      } else {
+        $id = 0;
+      }
+      return view('applicant.add_drones',['id' => $id]);
     }
 
     public function editDrones($id) {
@@ -152,8 +164,13 @@ class applicantController extends Controller
       return view('applicant.edit_drones')->with(compact('manages'));
     }
 
+    public function getdronesuser(Request $request,$id){
+      $drones = drones::where('id',$id)->where('user_id',Auth::User()->id)->first();
+      return view('approval.drones')->with(compact('drones'));
+    }
+
     public function nadronesTB() {
-      return Datatables::of(Drones::query()->where('approved','=','0'))
+      return Datatables::of(Drones::query()->where('user_id',Auth::User()->id)->where('approved','=','0'))
             ->addColumn('action', function ($datatb) {
               $tambah_button='';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
@@ -164,17 +181,34 @@ class applicantController extends Controller
                 .'<button data-id="'.$datatb->id.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
             })
             ->addIndexColumn()
+            ->addColumn('drones_image', function($datatb) {
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+              if ($datatb->pic_of_drones) {
+                return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+              } else {
+                return '';
+              }
+            })
             ->make(true);
     }
 
     public function appdronesTB() {
-      return Datatables::of(Drones::query()->where('approved','=','1'))
+      return Datatables::of(Drones::query()->where('user_id',Auth::User()->id)->where('approved','=','1'))
             ->addColumn('action', function ($datatb) {
-              $tambah_button='';
+              $link = url('/');
+              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> View </a>'
+              .'<div style="padding-top:10px"></div>';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
                 return
-                 $tambah_button
-                .'<button data-id="'.$datatb->id.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+                 $tambah_button;
+            })
+            ->addColumn('drones_image', function($datatb) {
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+              if ($datatb->pic_of_drones) {
+                return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+              } else {
+                return '';
+              }
             })
             ->addIndexColumn()
             ->make(true);
@@ -193,18 +227,14 @@ class applicantController extends Controller
 
     public function uploadDokumenUAS(Request $request) {
       $file = $request->file('bukti_kepemilikan');
-      // $namaoriginal = $request->file('bukti_kepemilikan')->getClientOriginalName();
-      // dd($namaoriginal);
-      $user = DB::table('drones')->where('user_id','=',Auth::User()->id)->first();
-      // dd($user);
-      if($user == null){
-          $user = new Drones;
+
+      if( $request->id ) {
+          //$exist_drone = Drones::where('id',$request->id);
           if ($file) {
               $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-              // $nama_file = $namaoriginal.'_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-              $nama_file = 'FotoKepemilikan_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-              // dd($nama_file);
+              $random        = $this->generateRandomString();
 
+              $nama_file = $request->proof_of_ownership.'_'.$random.Auth::User()->id.'.'.$file->getClientOriginalExtension();
               //upload :
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
                 //store the fotoktp :
@@ -213,62 +243,34 @@ class applicantController extends Controller
                   'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
                   'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
-                $user->proof_of_ownership = json_encode($stored);
-                $user->user_id = Auth::User()->id;
-                $user->save();
+                DB::table('drones')->where('id', $request->id)->update(
+                  ['proof_of_ownership' => json_encode($stored),
+                 ]);
 
                 //Success :
                 return response()->json(['Success' => true, 'data' => $stored], 200);
-              } else {
-                $error = ['fotoktp' => 'fail because of not an image file!'];
+              }
+              else {
+                $error = ['bukti_kepemilikan' => 'fail because of not an image file!'];
                 return response()->json(['Success' => false, 'error' => $error], 401);
               }
-          } else {
+          }
+          else {
             // upload fail because the file is not exist / request is half way through
             $error = ['fotoktp' => 'upload fail!'];
             return response()->json(['Success' => false, 'error' => $error], 401);
           }
-      }else{
-        $user = DB::table('drones')->where('user_id','=',Auth::User()->id)->first();
-      if ($file) {
-          $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-          $nama_file = $request->proof_of_ownership.'_'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-          //upload :
-          if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
-            //store the fotoktp :
-            $stored = [
-              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
-            ];
-            DB::table('drones')->where('user_id', Auth::User()->id)->update(
-              ['proof_of_ownership' => json_encode($stored),
-             ]);
-
-
-            //Success :
-            return response()->json(['Success' => true, 'data' => $stored], 200);
-          } else {
-            $error = ['fotoktp' => 'fail because of not an image file!'];
-            return response()->json(['Success' => false, 'error' => $error], 401);
-          }
-      } else {
-        // upload fail because the file is not exist / request is half way through
-        $error = ['fotoktp' => 'upload fail!'];
-        return response()->json(['Success' => false, 'error' => $error], 401);
-      }
       }
     }
 
     public function uploadPenguasaan(Request $request) {
       $file = $request->file('buktipenguasaan');
-      $user = DB::table('drones')->where('user_id','=',Auth::User()->id)->first();
-      if($user == null){
-          $user = new Drones;
+      if( $request->id ) {
+          //$exist_drone = Drones::where('id',$request->id);
           if ($file) {
               $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-              $nama_file = 'FotoBuktiPenguasaan'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-              // dd($nama_file);
+              $random        = $this->generateRandomString();
+              $nama_file     = 'FotoBuktiPenguasaan'.Auth::User()->id.$random.'.'.$file->getClientOriginalExtension();
 
               //upload :
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
@@ -278,61 +280,34 @@ class applicantController extends Controller
                   'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
                   'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
-                $user->scan_proof_of_ownership = json_encode($stored);
-                $user->user_id = Auth::User()->id;
-                $user->save();
-
+                DB::table('drones')->where('id', $request->id)->update(
+                  ['scan_proof_of_ownership' => json_encode($stored)]
+                );
                 //Success :
                 return response()->json(['Success' => true, 'data' => $stored], 200);
-              } else {
+              }
+              else {
                 $error = ['fotoktp' => 'fail because of not an image file!'];
                 return response()->json(['Success' => false, 'error' => $error], 401);
               }
-          } else {
+          }
+          else {
             // upload fail because the file is not exist / request is half way through
             $error = ['fotoktp' => 'upload fail!'];
             return response()->json(['Success' => false, 'error' => $error], 401);
           }
-      }else{
-      if ($file) {
-          $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-          $nama_file = 'FotoBuktiPenguasaan'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-          // dd($nama_file);
-
-          //upload :
-          if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
-            //store the fotoktp :
-            $stored = [
-              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
-            ];
-            DB::table('drones')->where('user_id', Auth::User()->id)->update(
-              ['scan_proof_of_ownership' => json_encode($stored),
-             ]);
-            //Success :
-            return response()->json(['Success' => true, 'data' => $stored], 200);
-          } else {
-            $error = ['fotoktp' => 'fail because of not an image file!'];
-            return response()->json(['Success' => false, 'error' => $error], 401);
-          }
-      } else {
-        // upload fail because the file is not exist / request is half way through
-        $error = ['fotoktp' => 'upload fail!'];
-        return response()->json(['Success' => false, 'error' => $error], 401);
       }
-        }
-      }
+    }
 
     public function uploadPesawat(Request $request) {
       $file = $request->file('fotopesawat');
-      $user = DB::table('drones')->where('user_id','=',Auth::User()->id)->first();
-      if($user == null){
-          $user = new Drones;
+      if( $request->id ) {
+          //$exist_drone = Drones::where('id',$request->id);
+          //dd($exist_drone->get());
           if ($file) {
               $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-              $nama_file = 'FotoPesawat'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-              // dd($nama_file);
+              $random        = $this->generateRandomString();
+              $nama_file     = 'FotoPesawat'.Auth::User()->id.$random.'.'.$file->getClientOriginalExtension();
 
               //upload :
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
@@ -342,61 +317,34 @@ class applicantController extends Controller
                   'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
                   'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
-                $user->pic_of_drones = json_encode($stored);
-                $user->user_id = Auth::User()->id;
-                $user->save();
-
+                DB::table('drones')->where('id', $request->id)->update(
+                  ['pic_of_drones' => json_encode($stored) ]
+                );
                 //Success :
                 return response()->json(['Success' => true, 'data' => $stored], 200);
-              } else {
+              }
+              else {
                 $error = ['fotoktp' => 'fail because of not an image file!'];
                 return response()->json(['Success' => false, 'error' => $error], 401);
               }
-          } else {
+          }
+          else {
             // upload fail because the file is not exist / request is half way through
             $error = ['fotoktp' => 'upload fail!'];
             return response()->json(['Success' => false, 'error' => $error], 401);
           }
-      }else{
-      if ($file) {
-          $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-          $nama_file = 'FotoNoSeriPesawat'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-          // dd($nama_file);
-
-          //upload :
-          if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
-            //store the fotoktp :
-            $stored = [
-              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
-            ];
-            DB::table('drones')->where('user_id', Auth::User()->id)->update(
-              ['pic_of_drones' => json_encode($stored),
-             ]);
-            //Success :
-            return response()->json(['Success' => true, 'data' => $stored], 200);
-          } else {
-            $error = ['fotoktp' => 'fail because of not an image file!'];
-            return response()->json(['Success' => false, 'error' => $error], 401);
-          }
-      } else {
-        // upload fail because the file is not exist / request is half way through
-        $error = ['fotoktp' => 'upload fail!'];
-        return response()->json(['Success' => false, 'error' => $error], 401);
       }
-        }
-      }
+    }
 
     public function uploadPesawatSn(Request $request) {
       $file = $request->file('nomorseripesawat');
-      $user = DB::table('drones')->where('user_id','=',Auth::User()->id)->first();
-      if($user == null){
-          $user = new Drones;
+
+      if( $request->id ) {
+          $exist_drone = Drones::where('id',$request->id);
           if ($file) {
               $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-              $nama_file = 'FotoPesawatSn'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-              // dd($nama_file);
+              $random        = $this->generateRandomString();
+              $nama_file     = 'FotoPesawatSn'.Auth::User()->id.$random.'.'.$file->getClientOriginalExtension();
 
               //upload :
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
@@ -406,90 +354,102 @@ class applicantController extends Controller
                   'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
                   'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
-                $user->pic_of_drones_with_sn = json_encode($stored);
-                $user->user_id = Auth::User()->id;
-                $user->save();
-
+                DB::table('drones')->where('id', $request->id)->update(
+                  ['pic_of_drones_with_sn' => json_encode($stored)]
+                );
                 //Success :
                 return response()->json(['Success' => true, 'data' => $stored], 200);
-              } else {
+              }
+              else {
                 $error = ['fotoktp' => 'fail because of not an image file!'];
                 return response()->json(['Success' => false, 'error' => $error], 401);
               }
-          } else {
+          }
+          else {
             // upload fail because the file is not exist / request is half way through
             $error = ['fotoktp' => 'upload fail!'];
             return response()->json(['Success' => false, 'error' => $error], 401);
           }
-      }else{
-      if ($file) {
-          $tujuan_upload = public_path().'/dokumen/uas/'.Auth::User()->id;
-          $nama_file = 'FotoPesawatSn'.Auth::User()->id.'.'.$file->getClientOriginalExtension();
-          // dd($nama_file);
-
-          //upload :
-          if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
-            //store the fotoktp :
-            $stored = [
-              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
-            ];
-            DB::table('drones')->where('user_id', Auth::User()->id)->update(
-              ['pic_of_drones_with_sn' => json_encode($stored),
-             ]);
-            //Success :
-            return response()->json(['Success' => true, 'data' => $stored], 200);
-          } else {
-            $error = ['fotoktp' => 'fail because of not an image file!'];
-            return response()->json(['Success' => false, 'error' => $error], 401);
-          }
-      } else {
-        // upload fail because the file is not exist / request is half way through
-        $error = ['fotoktp' => 'upload fail!'];
-        return response()->json(['Success' => false, 'error' => $error], 401);
       }
-        }
-      }
+    }
 
     public function postDrones(Request $request) {
-      DB::table('drones')->where('user_id', Auth::User()->id)->insert(
-        [//drone bio
-         'manufacturer' => $request->manufacturer,
-         'model' => $request->model,
-         'specific_model' => $request->modelspesific,
-         'model_year' => $request->yearmake,
-         'serial_number' => $request->nomorseri,
-         'condition' => $request->condition,
-         'max_weight_take_off' => $request->weighttakeoff,
+       //status drone :
+       //1 created.
+       //null belom lengkap
+       //2 approved.
+       //3 tolak/tunda.
+       $exist_drone = Drones::where('user_id', Auth::User()->id)->where('status',NULL)->where('uas_id',NULL);
+       if ($exist_drone->count() > 0) {
+          //update drone yang last edit aja :
+          $drones=Drones::find($exist_drone->first()->id);
 
-         //kepemilikan UAS
-         'termofowenership' => $request->termofowenership,
-         'owner' => $request->owner,
-         'address' => $request->address,
-         'evidenceofowenership' => $request->evidenceofowenership,
-         'dateownership' => $request->dateownership,
+          //drone bio
+          $drones->manufacturer        = $request->manufacturer;
+          $drones->model               = $request->model;
+          $drones->specific_model      = $request->modelspesific;
+          $drones->model_year          = $request->yearmake;
+          $drones->serial_number       = $request->nomorseri;
+          $drones->condition           = $request->condition;
+          $drones->max_weight_take_off = $request->weighttakeoff;
 
-         //penguasaan UAS
-         'termofposession' => $request->termofposession,
-         'reference' => $request->reference,
-         'namapemberisewa' => $request->namapemberisewa,
-         'alamatpemberisewa' => $request->alamatpemberisewa,
-         'emailpemberisewa' => $request->emailpemberisewa,
-         'nomorteleponpemberisewa' => $request->nomorteleponpemberisewa
-       ]);
+          //kepemilikan UAS
+          $drones->termofowenership = $request->termofowenership;
+          $drones->owner = $request->owner;
+          $drones->address = $request->address;
+          $drones->evidenceofowenership = $request->evidenceofowenership;
+          $drones->dateownership = $request->dateownership;
 
-       // $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
-       //   ['kode_status' => '4','status' => DB::table('status_list')->where('kode_status','4')->first()->keterangan]
-       // );
+          //penguasaan UAS
+          $drones->termofposession = $request->termofposession;
+          $drones->reference = $request->reference;
+          $drones->namapemberisewa = $request->namapemberisewa;
+          $drones->alamatpemberisewa = $request->alamatpemberisewa;
+          $drones->emailpemberisewa = $request->emailpemberisewa;
+          $drones->nomorteleponpemberisewa = $request->nomorteleponpemberisewa;
+          $drones->status = 1;
+          $drones->save();
+          $id_drone = $drones->id;
+       }
+       else {
+         $id_drone = DB::table('drones')->where('user_id', Auth::User()->id)->insert(
+           [//drone bio
+            'manufacturer' => $request->manufacturer,
+            'model' => $request->model,
+            'specific_model' => $request->modelspesific,
+            'model_year' => $request->yearmake,
+            'serial_number' => $request->nomorseri,
+            'condition' => $request->condition,
+            'max_weight_take_off' => $request->weighttakeoff,
+
+            //kepemilikan UAS
+            'termofowenership' => $request->termofowenership,
+            'owner' => $request->owner,
+            'address' => $request->address,
+            'evidenceofowenership' => $request->evidenceofowenership,
+            'dateownership' => $request->dateownership,
+
+            //penguasaan UAS
+            'termofposession' => $request->termofposession,
+            'reference' => $request->reference,
+            'namapemberisewa' => $request->namapemberisewa,
+            'alamatpemberisewa' => $request->alamatpemberisewa,
+            'emailpemberisewa' => $request->emailpemberisewa,
+            'nomorteleponpemberisewa' => $request->nomorteleponpemberisewa
+          ]);
+          $id_drone = $id_drone->id;
+       }
+
+       $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
+         ['kode_status' => '4','status' => 'Berhasil Mendaftarkan Drone Dengan Id : '.$id_drone]
+       );
 
        return redirect('dashboard')->with('status', 'Kamu berhasil menambahkan drone!');
-      // dd($request->all());
     }
 
     public function updateDrones(Request $request,$id) {
-        $drones=Drones::find($id);
-        //drone bio
+         $drones=Drones::find($id);
+         //drone bio
          $drones->manufacturer = $request->manufacturer;
          $drones->model = $request->model;
          $drones->specific_model = $request->modelspesific;
@@ -513,14 +473,13 @@ class applicantController extends Controller
          $drones->emailpemberisewa = $request->emailpemberisewa;
          $drones->nomorteleponpemberisewa = $request->nomorteleponpemberisewa;
 
+         $drones->save();
 
-       // $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
-       //   ['kode_status' => '4','status' => DB::table('status_list')->where('kode_status','4')->first()->keterangan]
-       // );
-       // dd($drones);
-       $drones->save();
-       return redirect('dashboard')->with('status', 'Data telah terupdate!');
-      // dd($request->all());
+         $status = DB::table('user_step')->where('user_id',Auth::User()->id)->update(
+           ['kode_status' => '4','status' => 'Berhasil Mengupdate Drone Dengan Id : '.$drones->id]
+         );
+
+         return redirect('dashboard')->with('status', 'Data telah terupdate!');
     }
 
     protected function uploadImage($file, $tujuan_upload, $nama_file) {
@@ -558,4 +517,13 @@ class applicantController extends Controller
       }
     }
 
+    protected function generateRandomString($length = 5) {
+      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $charactersLength = strlen($characters);
+      $randomString = '';
+      for ($i = 0; $i < $length; $i++) {
+          $randomString .= $characters[rand(0, $charactersLength - 1)];
+      }
+      return $randomString;
+    }
 }

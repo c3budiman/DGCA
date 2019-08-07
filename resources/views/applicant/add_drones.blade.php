@@ -13,9 +13,13 @@
   <?php
     $status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
     #exist  = DB::table('drones')->where('user_id', Auth::User()->id)->where('approved','0')->where('approved','0')->first();
+    $exist  = DB::table('drones')->where('id', $id)->first();
    ?>
-  @if ($status == 3)
-    <form enctype="multipart/form-data" data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postDrones'))}}" method="post">
+   <?php
+      $array_status = [1,2]
+   ?>
+  @if (!in_array($status, $array_status))
+    <form enctype="multipart/form-data" data-parsley-validate id="example-advanced-form" action="/drones/{{$id}}" method="post">
         {{ csrf_field() }}
         <h3>Dokumen Registrasi (DGCA Registration Documents)</h3>
         <fieldset>
@@ -27,14 +31,16 @@
               <div class="col-4">
 
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 100px;">
-                          <img src="/gambar/ownership.png" alt="image" />
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if ($exist->proof_of_ownership != null || $exist->proof_of_ownership != "")
+                          <img src="{{json_decode($exist->proof_of_ownership)->resized}}" alt="image" /> @else
+                          <img src="/gambar/ownership.png"alt="image" />  @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="bukti_kepemilikan">
                          </button>
@@ -52,16 +58,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 100px;">
-                          <img src="/gambar/dronesn.jpeg" alt="image" />
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if ($exist->pic_of_drones_with_sn != null || $exist->pic_of_drones_with_sn != "")
+                          <img src="{{json_decode($exist->pic_of_drones_with_sn)->resized}}" alt="image" /> @else
+                          <img src="/gambar/dronesn.jpeg"alt="image" /> @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="nomorseripesawat">
+                           <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="nomorseripesawat" >
                          </button>
                          <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -78,16 +86,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 100px;">
-                          <img src="/gambar/drone.png" alt="image" />
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if ($exist->pic_of_drones != null || $exist->pic_of_drones != "")
+                          <img src="{{json_decode($exist->pic_of_drones)->resized}}" alt="image" /> @else
+                          <img src="/gambar/drone.png" alt="image" /> @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="fotopesawat">
+                           <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="fotopesawat" >
                          </button>
                          <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -102,16 +112,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 100px;">
-                          <img src="/gambar/ownership.png" alt="image" />
+                      <div class="fileupload-new thumbnail" style=" height: 128px;">
+                          @if ($exist->scan_proof_of_ownership != null || $exist->scan_proof_of_ownership != "")
+                          <img src="{{json_decode($exist->scan_proof_of_ownership)->resized}}" alt="image" /> @else
+                          <img src="/gambar/ownership.png" alt="image" />  @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                            {{-- poto profil is here : --}}
-                           <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="buktipenguasaan">
+                           <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="buktipenguasaan" >
                          </button>
                          <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
@@ -120,6 +132,7 @@
           </div>
 
         </fieldset>
+
 
         <h3>Pesawat Udara Tanpa Awak (Unmanned Aircraft System)</h3>
         <fieldset>
@@ -210,6 +223,7 @@
                   <option value="Pembelian Bersyarat">Pembelian Bersyarat (Conditional Sale)</option>
                   <option value="Lain-lain">Lain-lain (Others)</option>
                 </select>
+                <input type="hidden" name="id" value="{{$id}}">
             </div>
             <div class="col-md-6 form-group">
                 <label for="name">Referensi</label>
@@ -251,24 +265,14 @@
 
 
     </form>
-
-    <!-- @elseif ($status == 1)
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card-box">
-              <center> <h1 class="display-4">Silahkan Memverifikasi Email Terlebih Dahulu!</h1> </center>
-          </div>
+  @else
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card-box">
+            <center> <h1 class="display-4">Silahkan Mendaftarkan Identitas Terlebih Dahulu!</h1> </center>
         </div>
       </div>
-    @else
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card-box">
-              <center> <h1 class="display-4">Silahkan Mendaftarkan Identitas Diri Telebih Dahulu!</h1> </center>
-          </div>
-        </div>
-      </div> -->
-
+    </div>
   @endif
 
 
@@ -369,6 +373,7 @@
       $("#btn_proof_of_ownership").click(function(e){
         $('#CheckList_proof_of_ownership').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$id}});
         uploadedFile.append('bukti_kepemilikan', bukti_kepemilikan.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -392,11 +397,10 @@
   });
 
   $(document).ready(function() {
-      $('.provinsi').select2();
-
       $("#btn_pic_of_drones_with_sn").click(function(e){
         $('#CheckList_pic_of_drones_with_sn').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$id}});
         uploadedFile.append('nomorseripesawat', nomorseripesawat.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -420,11 +424,10 @@
   });
 
   $(document).ready(function() {
-      $('.provinsi').select2();
-
       $("#btn_pic_of_drones").click(function(e){
         $('#CheckList_pic_of_drones').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$id}});
         uploadedFile.append('fotopesawat', fotopesawat.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -448,11 +451,10 @@
   });
 
   $(document).ready(function() {
-      $('.provinsi').select2();
-
       $("#btn_scan_proof_of_ownership").click(function(e){
         $('#CheckList_scan_proof_of_ownership').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$id}});
         uploadedFile.append('buktipenguasaan', buktipenguasaan.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());

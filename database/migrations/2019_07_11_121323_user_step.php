@@ -55,6 +55,7 @@ class UserStep extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('user_step');
         Schema::dropIfExists('status_list');
     }
 }

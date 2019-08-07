@@ -10,7 +10,6 @@
 |
 */
 use Carbon\Carbon;
-use App\tesmenu;
 use Illuminate\Http\Request;
 
 //Clear Cache facade value:
@@ -74,27 +73,10 @@ Route::get('/link2', function() {
     return '<h1>Link created</h1>';
 });
 
-Route::get('slide/json', 'AdminController@slideDataTB')->name('slide/json');
-Route::get('cars/add', 'authController@getCars');
-
 Route::post('tesform',function(Request $request){
-  dd($request->all());
+    dd($request->all());
 });
 
-Route::get('/tesgan22', function() {
-  return Datatables::of(tesmenu::query())
-  ->addColumn('action', function ($datatb) {
-      $link = DB::table('setting_situs')->where('id','=','1')->first()->base_url;
-      return
-       '<a target="_blank" href="'.$link.'/'.$datatb->link.'" class="edit-modal btn btn-xs btn-success" ><i class="fa fa-eye"></i> View</a>'
-       .'<div style="padding-top:10px"></div>'
-       .'<a href="'.$link.'/tesmenu/editsub/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" ><i class="fa fa-edit"></i> Edit</a>'
-       .'<div style="padding-top:10px"></div>'
-      .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
-  })
-  ->addIndexColumn()
-  ->make(true);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -239,14 +221,17 @@ Route::post('parameter/postAddSoal', 'WebAdminController@postAddSoal');
 | Ini route buat roles admin
 |
 */
-Route::get('known-email/json', 'WebAdminController@knownEmailDataTB')->name('known-email/json');
-Route::get('known-email', 'WebAdminController@getKnownEmail');
-Route::get('known-email/add', 'WebAdminController@addKnownEmail');
-Route::post('known-email/add', 'WebAdminController@doAddKnownEmail');
-Route::get('known-email/edit/{id}', 'WebAdminController@editKnownEmail');
-Route::post('known-email/doedit', 'WebAdminController@doEditKnownEmail');
-Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
-
+Route::get('approveidentitas/json', 'AdminController@approveidentitasTB')->name('approveidentitas/json');
+Route::get('approveidentitas2/json', 'AdminController@approveidentitasTB2')->name('approveidentitas2/json');
+Route::get('approveidentitas', 'AdminController@approveidentitas');
+Route::get('detail/identitas/{id}', 'AdminController@getidentitas');
+Route::put('approvalidentitas/{id}', 'AdminController@approvedidentitas');
+Route::get('approvedrones/json', 'AdminController@approvedronesTB')->name('approvedrones/json');
+Route::get('approvedrones2/json', 'AdminController@approvedronesTB2')->name('approvedrones2/json');
+Route::get('approvedrones', 'AdminController@approvedrones');
+Route::get('detail/drones/{id}', 'AdminController@getdrones');
+Route::get('detail/dronesuser/{id}', 'applicantController@getdronesuser');
+Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
 
 
@@ -258,7 +243,6 @@ Route::post('known-email/delete', 'WebAdminController@deleteKnownEmail');
 | Ini route buat api wilayah
 |
 */
-
 Route::get('provinsi/{nama}', 'apiController@getProvinsi');
 Route::get('regency/{id}', 'apiController@getRegency');
 Route::get('district/{id}', 'apiController@getDistrict');
@@ -295,24 +279,6 @@ Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 
 /*
 |--------------------------------------------------------------------------
-| Tambahan Daniel
-|--------------------------------------------------------------------------
-|
-| Ini route approval
-|
-*/
-Route::get('approveidentitas/json', 'AdminController@approveidentitasTB')->name('approveidentitas/json');
-Route::get('approveidentitas', 'AdminController@approveidentitas');
-Route::get('detail/identitas/{id}', 'AdminController@getidentitas');
-Route::put('approvalidentitas/{id}', 'AdminController@approvedidentitas');
-Route::get('approvedrones/json', 'AdminController@approvedronesTB')->name('approvedrones/json');
-Route::get('approvedrones', 'AdminController@approvedrones');
-Route::get('detail/drones/{id}', 'AdminController@getdrones');
-Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
-
-
-/*
-|--------------------------------------------------------------------------
 | Auto Crud
 |--------------------------------------------------------------------------
 |
@@ -328,13 +294,3 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('pendaftarans', 'pendaftaranController');
-Route::get('pendaftaran', 'pendaftaranController@getFront');
-Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
-Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
-

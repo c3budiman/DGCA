@@ -134,7 +134,7 @@
         <div class="row">
             <div class="col-md-6 form-group">
               <label for="name">Nama Pembuat (Manufacturer) <span class="text-danger">*</span></label>
-              <input name="manufacturer" parsley-trigger="change" data-parsley-group="block1" type="text"  class="form-control" value="{{ $manages-> manufacturer}}" required>
+              <input name="manufacturer" parsley-trigger="change" data-parsley-group="block2" type="text"  class="form-control" value="{{ $manages-> manufacturer}}" required>
             </div>
             <div class="col-md-6 form-group">
               <label for="company">Model<span class="text-danger">*</span></label>
@@ -152,23 +152,23 @@
              </div>
             <div class="col-md-6 form-group">
               <label for="phone">Nama Model Khusus (Specific Model Name)<span class="text-danger">*</span></label>
-              <input name="modelspesific" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" value="{{ $manages-> specific_model}}"required>
+              <input name="modelspesific" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> specific_model}}"required>
             </div>
             <div class="col-md-6 form-group">
               <label for="phone">Tahun Pembuatan (Years Of Manufacture)<span class="text-danger">*</span></label>
-              <input name="yearmake" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" value="{{ $manages-> model_year}}"required>
+              <input name="yearmake" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> model_year}}"required>
             </div>
             <div class="col-md-6 form-group">
               <label for="phone">Nomor Seri (Serial Number)<span class="text-danger">*</span></label>
-              <input name="nomorseri" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" value="{{ $manages-> serial_number}}"required>
+              <input name="nomorseri" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> serial_number}}"required>
             </div>
             <div class="col-md-6 form-group">
               <label for="phone">Keadaan (Condition)<span class="text-danger">*</span></label>
-              <input name="condition" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" value="{{ $manages-> condition}}" required>
+              <input name="condition" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> condition}}" required>
             </div>
             <div class="col-md-6 form-group">
               <label for="phone">Berat Maksimum Tinggal Landas (Maximum Take-Off Weight)<span class="text-danger">*</span></label>
-              <input name="weighttakeoff" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" value="{{ $manages-> max_weight_take_off}}"required>
+              <input name="weighttakeoff" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> max_weight_take_off}}"required>
             </div>
         </div>
         <p>(*) Mandatory</p>
@@ -188,19 +188,19 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="name">Nama Pemilik (Owner) </label>
-                <input name="owner" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> owner}}">
+                <input name="owner" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control" value="{{ $manages-> owner}}">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Alamat (Address) </label>
-                <input name="address" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> address}}">
+                <input name="address" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control" value="{{ $manages-> address}}">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Bukti Kepemilikan (Evidence of ownership)</label>
-                <input name="evidenceofowenership" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> evidenceofowenership}}">
+                <input name="evidenceofowenership" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control" value="{{ $manages-> evidenceofowenership}}">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Tanggal Kepemilikan (Date)</label>
-                <input name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block2" class="form-control" value="{{ $manages-> dateownership}}">
+                <input name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block3" class="form-control" value="{{ $manages-> dateownership}}">
             </div>
           </div>
 
@@ -360,6 +360,7 @@
       $("#btn_proof_of_ownership").click(function(e){
         $('#CheckList_proof_of_ownership').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$manages->id}});
         uploadedFile.append('bukti_kepemilikan', bukti_kepemilikan.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -388,6 +389,7 @@
       $("#btn_pic_of_drones_with_sn").click(function(e){
         $('#CheckList_pic_of_drones_with_sn').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$manages->id}});
         uploadedFile.append('nomorseripesawat', nomorseripesawat.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -416,6 +418,7 @@
       $("#btn_pic_of_drones").click(function(e){
         $('#CheckList_pic_of_drones').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$manages->id}});
         uploadedFile.append('fotopesawat', fotopesawat.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -444,6 +447,7 @@
       $("#btn_scan_proof_of_ownership").click(function(e){
         $('#CheckList_scan_proof_of_ownership').hide()
         var uploadedFile = new FormData();
+        uploadedFile.append('id', {{$manages->id}});
         uploadedFile.append('buktipenguasaan', buktipenguasaan.files[0]);
         uploadedFile.append('_token', $('input[name=_token]').val());
         // uploadedFile.append('nameofFile', $('proof_of_ownership').val());
@@ -478,14 +482,14 @@
               return true;
           }
           // Forbid next action if the users has wrong input!
-          // if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
-          // {
-          //     return false;
-          // }
-          // if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
-          // {
-          //     return false;
-          // }
+          if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
+          {
+              return false;
+          }
+          if (newIndex === 3 && ! $('form').parsley().validate({group: 'block3', force: true}) )
+          {
+              return false;
+          }
           // Needed in some cases if the user went back (clean up)
           if (currentIndex < newIndex)
           {

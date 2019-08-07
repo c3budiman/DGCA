@@ -46,10 +46,10 @@ class AdminController extends Controller
 
   //batasin role :
   public function __construct()
-    {
-      $this->middleware('auth');
-      $this->middleware('rule:'.$this->getRoleAdmin().','.$this->getRoleSuperAdmin());
-    }
+  {
+    $this->middleware('auth');
+    $this->middleware('rule:'.$this->getRoleAdmin().','.$this->getRoleSuperAdmin());
+  }
 
     public function getFront() {
       return view('front.index');
@@ -347,12 +347,20 @@ class AdminController extends Controller
     }
 
     public function approveidentitasTB(){
-      return Datatables::of(User::query()->where('id','=','3')->get())
+      return Datatables::of(User::query()->where('roles_id','3')->where('approved','!=','1')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Approve</a>'
-           .'<div style="padding-top:10px"></div>'
-          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function approveidentitasTB2(){
+      return Datatables::of(User::query()->where('roles_id','3')->where('approved','=','1')->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -367,7 +375,7 @@ class AdminController extends Controller
       return view('approval.identitas')->with(compact('user'));
     }
 
-    public function approvedidentitas(Request $request,$id){
+    public function approvedidentitas(Request $request,$id) {
       $user = User::find($id);
       $user->approved = 1;
       $user->save();
@@ -375,12 +383,23 @@ class AdminController extends Controller
     }
 
     public function approvedronesTB(){
-      return Datatables::of(drones::query()->orderBy('id','desc')->get())
+      return Datatables::of(drones::query()->where('approved','0')->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
-           .'<div style="padding-top:10px"></div>'
-          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addColumn('nama', function($datatb) {
+        return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function approvedronesTB2(){
+      return Datatables::of(drones::query()->where('approved','1')->orderBy('id','desc')->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return DB::table('users')->where('id','=',$datatb->user_id)->first()->nama;
