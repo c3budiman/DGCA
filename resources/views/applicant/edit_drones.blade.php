@@ -8,9 +8,12 @@
     display: none;
   }
   </style>
-  <link href="plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
-  <link href="plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
-
+  <link href="{{url('/')}}/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+  <link href="{{url('/')}}/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+  <?php
+    #$status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
+    $exist  = DB::table('drones')->where('id', $manages->id)->first();
+   ?>
     <form enctype="multipart/form-data" data-parsley-validate id="example-advanced-form" action="/drones/{{$manages->id}}" method="post">
       <input type="hidden" name="_method" value="put">
         {{ csrf_field() }}
@@ -25,8 +28,8 @@
 
                   <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          @if ($exist->proof_of_ownership != null || $exist->proof_of_ownership != "")
+                          <img src="{{json_decode($exist->proof_of_ownership)->resized}}" alt="image" /> @else
                           <img src="/gambar/ownership.png"alt="image" />  @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
@@ -38,7 +41,7 @@
                            <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="bukti_kepemilikan" value="{{ $manages-> proof_of_ownership}}">
                          </button>
 
-                         <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -52,8 +55,8 @@
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          @if ($exist->pic_of_drones_with_sn != null || $exist->pic_of_drones_with_sn != "")
+                          <img src="{{json_decode($exist->pic_of_drones_with_sn)->resized}}" alt="image" /> @else
                           <img src="/gambar/dronesn.jpeg"alt="image" /> @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
@@ -64,7 +67,7 @@
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="nomorseripesawat" value="{{ $manages-> pic_of_drones_with_sn}}">
                          </button>
-                         <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -80,8 +83,8 @@
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          @if ($exist->pic_of_drones != null || $exist->pic_of_drones != "")
+                          <img src="{{json_decode($exist->pic_of_drones)->resized}}" alt="image" /> @else
                           <img src="/gambar/drone.png" alt="image" /> @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
@@ -92,7 +95,7 @@
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="fotopesawat" value="{{ $manages-> pic_of_drones}}">
                          </button>
-                         <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -106,8 +109,8 @@
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
+                          @if ($exist->scan_proof_of_ownership != null || $exist->scan_proof_of_ownership != "")
+                          <img src="{{json_decode($exist->scan_proof_of_ownership)->resized}}" alt="image" /> @else
                           <img src="/gambar/ownership.png" alt="image" />  @endif
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
@@ -118,7 +121,7 @@
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="buktipenguasaan" value="{{ $manages-> scan_proof_of_ownership}}">
                          </button>
-                         <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
               </div>
@@ -266,10 +269,10 @@
 @section('js')
 
   <!-- Bootstrap fileupload js -->
-  <script src="plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
-  <script src="plugins/select2/js/select2.min.js"></script>
-  <script src="plugins/bootstrap-select/js/bootstrap-select.js"></script>
-  <script src="plugins/parsleyjs/parsley.min.js"></script>
+  <script src="{{url('/')}}/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+  <script src="{{url('/')}}/plugins/select2/js/select2.min.js"></script>
+  <script src="{{url('/')}}/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+  <script src="{{url('/')}}/plugins/parsleyjs/parsley.min.js"></script>
 
 
   <script type="text/javascript">
@@ -519,7 +522,7 @@
   });
   </script>
   <!-- Sweet Alert Js  -->
-  <script src="plugins/sweet-alert/sweetalert2.min.js"></script>
+  <script src="{{url('/')}}/plugins/sweet-alert/sweetalert2.min.js"></script>
 
   @if (session('status'))
     <script type="text/javascript">

@@ -12,6 +12,7 @@
   <link href="plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
   <?php
     $status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
+    #exist  = DB::table('drones')->where('user_id', Auth::User()->id)->where('approved','0')->where('approved','0')->first();
    ?>
   @if ($status == 3)
     <form enctype="multipart/form-data" data-parsley-validate id="example-advanced-form" action="{{url(action('applicantController@postDrones'))}}" method="post">
@@ -26,21 +27,19 @@
               <div class="col-4">
 
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ownership.png" alt="image" /> @endif
+                      <div class="fileupload-new thumbnail" style=" height: 100px;">
+                          <img src="/gambar/ownership.png" alt="image" />
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="bukti_kepemilikan" id="bukti_kepemilikan">
                          </button>
 
-                         <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_proof_of_ownership" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -53,20 +52,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/dronesn.jpeg" alt="image" /> @endif
+                      <div class="fileupload-new thumbnail" style=" height: 100px;">
+                          <img src="/gambar/dronesn.jpeg" alt="image" />
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="nomorseripesawat" id="nomorseripesawat">
                          </button>
-                         <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_pic_of_drones_with_sn" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -81,20 +78,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/drone.png" alt="image" /> @endif
+                      <div class="fileupload-new thumbnail" style=" height: 100px;">
+                          <img src="/gambar/drone.png" alt="image" />
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="fotopesawat" id="fotopesawat">
                          </button>
-                         <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_pic_of_drones" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
 
@@ -107,20 +102,18 @@
 
               <div class="col-4">
                   <div class="fileupload fileupload-new" data-provides="fileupload">
-                      <div class="fileupload-new thumbnail" style=" height: 128px;">
-                          @if (Auth::User()->ktp != null || Auth::User()->ktp != "")
-                          <img src="{{Auth::User()->avatar}}" alt="image" /> @else
-                          <img src="/gambar/ownership.png" alt="image" /> @endif
+                      <div class="fileupload-new thumbnail" style=" height: 100px;">
+                          <img src="/gambar/ownership.png" alt="image" />
                       </div>
                       <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                       <div>
                           <button type="button" class="btn btn-custom btn-file">
                            <span class="fileupload-new"><i class="fa fa-paperclip"></i> Pilih File</span>
-                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                           <span class="fileupload-exists"><i class="fa fa-undo"></i> Ganti</span>
                            {{-- poto profil is here : --}}
                            <input accept="image/*" type="file" class="btn-light" name="buktipenguasaan" id="buktipenguasaan">
                          </button>
-                         <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new"><i class="fa fa-upload"></i> Unggah</span></button>
+                         <button id="btn_scan_proof_of_ownership" class="btn btn-success"><span class="fileupload-new2"><i class="fa fa-upload"></i> Unggah</span></button>
                       </div>
                   </div>
               </div>
@@ -130,47 +123,47 @@
 
         <h3>Pesawat Udara Tanpa Awak (Unmanned Aircraft System)</h3>
         <fieldset>
-        <div class="row">
-            <div class="col-md-6 form-group">
-              <label for="name">Nama Pembuat (Manufacturer) <span class="text-danger">*</span></label>
-              <input name="manufacturer" parsley-trigger="change" data-parsley-group="block1" type="text"  class="form-control" required>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="company">Model<span class="text-danger">*</span></label>
-              <select required id="model" class="form-control provinsi" name="model" data-placeholder="Silahkan Pilih...">
-                <option value="">Silahkan Pilih...</option>
-                <option value="Pesawat Terbang (Aeroplane)">Pesawat Terbang (Aeroplane)</option>
-                <option value="Helikopter (Rotorcraft)">Helikopter (Rotorcraft)</option>
-                <option value="Ornithopter (Ornithopter)">Ornithopter (Ornithopter)</option>
-                <option value="Balon Udara (Balloon)">Balon Udara (Balloon)</option>
-                <option value="Airship (Airship)">Pesawat Terbang (Aeroplane)</option>
-                <option value="Glider (Glider)">Glider (Glider)</option>
-                <option value="Kite (Glider)">Kite (Glider)</option>
-                <option value="Lain-Lain (Other)">Lain-Lain (Other)</option>
-              </select>
-             </div>
-            <div class="col-md-6 form-group">
-              <label for="phone">Nama Model Khusus (Specific Model Name)<span class="text-danger">*</span></label>
-              <input name="modelspesific" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" required>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="phone">Tahun Pembuatan (Years Of Manufacture)<span class="text-danger">*</span></label>
-              <input name="yearmake" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" required>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="phone">Nomor Seri (Serial Number)<span class="text-danger">*</span></label>
-              <input name="nomorseri" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" required>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="phone">Keadaan (Condition)<span class="text-danger">*</span></label>
-              <input name="condition" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" required>
-            </div>
-            <div class="col-md-6 form-group">
-              <label for="phone">Berat Maksimum Tinggal Landas (Maximum Take-Off Weight)<span class="text-danger">*</span></label>
-              <input name="weighttakeoff" type="text" parsley-trigger="change" data-parsley-group="block1" class="form-control" required>
-            </div>
-        </div>
-        <p>(*) Mandatory</p>
+          <div class="row">
+              <div class="col-md-6 form-group">
+                <label for="name">Nama Pembuat (Manufacturer) <span class="text-danger">*</span></label>
+                <input name="manufacturer" parsley-trigger="change" data-parsley-group="block2" type="text"  class="form-control" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="company">Model<span class="text-danger">*</span></label>
+                <select required id="model" class="form-control provinsi" name="model" data-placeholder="Silahkan Pilih...">
+                  <option value="">Silahkan Pilih...</option>
+                  <option value="Pesawat Terbang (Aeroplane)">Pesawat Terbang (Aeroplane)</option>
+                  <option value="Helikopter (Rotorcraft)">Helikopter (Rotorcraft)</option>
+                  <option value="Ornithopter (Ornithopter)">Ornithopter (Ornithopter)</option>
+                  <option value="Balon Udara (Balloon)">Balon Udara (Balloon)</option>
+                  <option value="Airship (Airship)">Pesawat Terbang (Aeroplane)</option>
+                  <option value="Glider (Glider)">Glider (Glider)</option>
+                  <option value="Kite (Glider)">Kite (Glider)</option>
+                  <option value="Lain-Lain (Other)">Lain-Lain (Other)</option>
+                </select>
+               </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Nama Model Khusus (Specific Model Name)<span class="text-danger">*</span></label>
+                <input name="modelspesific" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Tahun Pembuatan (Years Of Manufacture)<span class="text-danger">*</span></label>
+                <input name="yearmake" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Nomor Seri (Serial Number)<span class="text-danger">*</span></label>
+                <input name="nomorseri" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Keadaan (Condition)<span class="text-danger">*</span></label>
+                <input name="condition" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Berat Maksimum Tinggal Landas (Maximum Take-Off Weight)<span class="text-danger">*</span></label>
+                <input name="weighttakeoff" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control" required>
+              </div>
+          </div>
+          <p>(*) Mandatory</p>
         </fieldset>
 
         <h3>Kepemilikan Pesawat Udara Tanpa Awak (UAS Ownership)</h3>
@@ -187,19 +180,19 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="name">Nama Pemilik (Owner) </label>
-                <input name="owner" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control">
+                <input name="owner" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Alamat (Address) </label>
-                <input name="address" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control">
+                <input name="address" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Bukti Kepemilikan (Evidence of ownership)</label>
-                <input name="evidenceofowenership" type="text" parsley-trigger="change" data-parsley-group="block2" class="form-control">
+                <input name="evidenceofowenership" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Tanggal Kepemilikan (Date)</label>
-                <input name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block2" class="form-control">
+                <input name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
           </div>
 
@@ -220,7 +213,7 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="name">Referensi</label>
-                <input name="reference" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
+                <input name="reference" type="text" parsley-trigger="change" data-parsley-group="block4" class="form-control">
             </div>
 
               <div class="col-md-12">
@@ -229,7 +222,7 @@
 
                 <div class="col-md-6 form-group">
                     <label for="phone">Nama</label>
-                    <input name="namapemberisewa" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
+                    <input name="namapemberisewa" type="text" parsley-trigger="change" data-parsley-group="block4" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="phone">Alamat</label>
@@ -238,11 +231,11 @@
 
                 <div class="col-md-6 form-group">
                     <label for="phone">Email</label>
-                    <input name="emailpemberisewa" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
+                    <input name="emailpemberisewa" type="text" parsley-trigger="change" data-parsley-group="block4" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="phone">Nomor Telepon</label>
-                    <input name="nomorteleponpemberisewa" type="text" parsley-trigger="change" data-parsley-group="block3" class="form-control">
+                    <input name="nomorteleponpemberisewa" type="text" parsley-trigger="change" data-parsley-group="block4" class="form-control">
                 </div>
 
             </div>
@@ -494,14 +487,14 @@
               return true;
           }
           // Forbid next action if the users has wrong input!
-          // if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
-          // {
-          //     return false;
-          // }
-          // if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
-          // {
-          //     return false;
-          // }
+          if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
+          {
+              return false;
+          }
+          if (newIndex === 3 && ! $('form').parsley().validate({group: 'block3', force: true}) )
+          {
+              return false;
+          }
           // Needed in some cases if the user went back (clean up)
           if (currentIndex < newIndex)
           {

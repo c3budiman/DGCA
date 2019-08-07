@@ -21,8 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('company')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->string('dokumen_sertifikasi')->nullable();
-            $table->string('dokumen_identitas')->nullable();
+            $table->text('dokumen_sertifikasi')->nullable();
+            $table->text('dokumen_identitas')->nullable();
             $table->unsignedInteger('roles_id')->nullable();
             $table->unsignedInteger('uas_id')->nullable();
             $table->string('avatar');
@@ -73,6 +73,7 @@ class CreateUsersTable extends Migration
      */
      public function down()
      {
+         Schema::dropIfExists('user_step');
          Schema::dropIfExists('users');
          Schema::dropIfExists('roles');
      }

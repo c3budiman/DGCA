@@ -22,27 +22,14 @@ class Submenu extends Migration
       $kolom->foreign('kepunyaan')->references('id')->on('dashmenu')->onDelete('cascade')->onUpdate('cascade');
       });
 
-      DB::table('submenu')->insert(
-        array(
-            'kepunyaan' => 5,
-            'nama' => 'Menu Sidebar',
-            'link' => '/sidebarsettings'
-        )
-      );
-      DB::table('submenu')->insert(
-        array(
-            'kepunyaan' => 5,
-            'nama' => 'Logo dan Favicon',
-            'link' => '/logodanfavicon'
-        )
-      );
-      DB::table('submenu')->insert(
-        array(
-            'kepunyaan' => 5,
-            'nama' => 'Judul dan Slogan',
-            'link' => '/juduldanslogan'
-        )
-      );
+      DB::table('submenu')->insert([
+          ['kepunyaan' => 5, 'nama' => 'Menu Sidebar',        'link' => '/sidebarsettings'],
+          ['kepunyaan' => 5, 'nama' => 'Logo dan Favicon',    'link' => '/logodanfavicon'],
+          ['kepunyaan' => 5, 'nama' => 'Judul dan Slogan',    'link' => '/juduldanslogan'],
+          ['kepunyaan' => 8, 'nama' => 'Soal UAS Assessment', 'link' => '/parameter/soal'],
+          ['kepunyaan' => 9, 'nama' => 'Approval Identitas',  'link' => '/approveidentitas'],
+          ['kepunyaan' => 9, 'nama' => 'Approval Drones',     'link' => '/approvedrones'],
+      ]);
     }
 
     /**

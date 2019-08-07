@@ -87,9 +87,9 @@ class applicantController extends Controller
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/sertifikasi/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/sertifikasi/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/sertifikasi/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             $user->dokumen_sertifikasi = json_encode($stored);
             $user->save();
@@ -209,9 +209,9 @@ class applicantController extends Controller
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
                 //store the fotoktp :
                 $stored = [
-                  'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-                  'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-                  'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+                  'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+                  'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+                  'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
                 $user->proof_of_ownership = json_encode($stored);
                 $user->user_id = Auth::User()->id;
@@ -237,9 +237,9 @@ class applicantController extends Controller
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             DB::table('drones')->where('user_id', Auth::User()->id)->update(
               ['proof_of_ownership' => json_encode($stored),
@@ -274,9 +274,9 @@ class applicantController extends Controller
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
                 //store the fotoktp :
                 $stored = [
-                  'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-                  'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-                  'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+                  'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+                  'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+                  'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
                 $user->scan_proof_of_ownership = json_encode($stored);
                 $user->user_id = Auth::User()->id;
@@ -303,9 +303,9 @@ class applicantController extends Controller
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             DB::table('drones')->where('user_id', Auth::User()->id)->update(
               ['scan_proof_of_ownership' => json_encode($stored),
@@ -338,9 +338,9 @@ class applicantController extends Controller
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
                 //store the fotoktp :
                 $stored = [
-                  'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-                  'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-                  'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+                  'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+                  'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+                  'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
                 $user->pic_of_drones = json_encode($stored);
                 $user->user_id = Auth::User()->id;
@@ -367,9 +367,9 @@ class applicantController extends Controller
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             DB::table('drones')->where('user_id', Auth::User()->id)->update(
               ['pic_of_drones' => json_encode($stored),
@@ -402,9 +402,9 @@ class applicantController extends Controller
               if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
                 //store the fotoktp :
                 $stored = [
-                  'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-                  'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-                  'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+                  'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+                  'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+                  'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
                 ];
                 $user->pic_of_drones_with_sn = json_encode($stored);
                 $user->user_id = Auth::User()->id;
@@ -431,9 +431,9 @@ class applicantController extends Controller
           if ($this->uploadImage($file, $tujuan_upload, $nama_file)) {
             //store the fotoktp :
             $stored = [
-              'original'    => url('/').'/foto/'.Auth::User()->id.'/'.$nama_file,
-              'resized'     => url('/').'/foto/'.Auth::User()->id.'/Resized'.$nama_file,
-              'thumbnail'   => url('/').'/foto/'.Auth::User()->id.'/Thumbnail'.$nama_file
+              'original'    => url('/').'/dokumen/uas/'.Auth::User()->id.'/'.$nama_file,
+              'resized'     => url('/').'/dokumen/uas/'.Auth::User()->id.'/Resized'.$nama_file,
+              'thumbnail'   => url('/').'/dokumen/uas/'.Auth::User()->id.'/Thumbnail'.$nama_file
             ];
             DB::table('drones')->where('user_id', Auth::User()->id)->update(
               ['pic_of_drones_with_sn' => json_encode($stored),

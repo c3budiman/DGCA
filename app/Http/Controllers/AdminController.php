@@ -349,9 +349,8 @@ class AdminController extends Controller
     public function approveidentitasTB(){
       return Datatables::of(User::query()->where('id','=','3')->get())
       ->addColumn('action', function ($datatb) {
-
           return
-           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Approve</a>'
            .'<div style="padding-top:10px"></div>'
           .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
       })
@@ -378,7 +377,6 @@ class AdminController extends Controller
     public function approvedronesTB(){
       return Datatables::of(drones::query()->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
-
           return
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
            .'<div style="padding-top:10px"></div>'

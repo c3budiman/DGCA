@@ -43,10 +43,10 @@ class CreateDronesTable extends Migration
             $table->string('nomorteleponpemberisewa')->nullable();
 
             //berkas :
-            $table->string('pic_of_drones')->nullable();
-            $table->string('pic_of_drones_with_sn')->nullable();
-            $table->string('scan_proof_of_ownership')->nullable();
-            $table->string('proof_of_ownership')->nullable();
+            $table->text('pic_of_drones')->nullable();
+            $table->text('pic_of_drones_with_sn')->nullable();
+            $table->text('scan_proof_of_ownership')->nullable();
+            $table->text('proof_of_ownership')->nullable();
 
             // $table->string('date_of_proof')->nullable();
             //
