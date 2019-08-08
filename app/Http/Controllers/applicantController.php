@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use App\User;
-use App\Drones;
+use App\drones;
 use Excel;
 use Datatables;
 use Illuminate\Support\Facades\Input;
