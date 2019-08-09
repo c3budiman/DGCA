@@ -8,8 +8,10 @@
     display: none;
   }
   </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
   <link href="{{url('/')}}/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
   <link href="{{url('/')}}/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+
   <?php
     #$status = DB::table('user_step')->where('user_id', Auth::User()->id)->first()->kode_status;
     $exist  = DB::table('drones')->where('id', $manages->id)->first();
@@ -201,22 +203,9 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Tanggal Kepemilikan (Date)</label>
-                <script type="text/javascript">
-                var datefield = $('#dateownership')
 
-                datefield.setAttribute("type", "date")
+                <input id="dateownership" name="dateownership" type="text" placeholder="dd/mm/yyyy" parsley-trigger="change" data-parsley-group="block3" class="form-control">
 
-                if (datefield.type!="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
-                  document.write('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
-                  document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"><\/script>\n')
-                }
-                if (datefield.type != "date"){ //if browser doesn't support input type="date", initialize date picker widget:
-                  $(document).ready(function() {
-                      $('#dateownership').datepicker();
-                  });
-                }
-                </script>
-                <input id="dateownership" name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
           </div>
 
@@ -289,8 +278,17 @@
   <script src="{{url('/')}}/plugins/select2/js/select2.min.js"></script>
   <script src="{{url('/')}}/plugins/bootstrap-select/js/bootstrap-select.js"></script>
   <script src="{{url('/')}}/plugins/parsleyjs/parsley.min.js"></script>
-
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script type="text/javascript">
+  $(function() {
+    $('#dateownership').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+    });
+  });
+  </script>
   <script type="text/javascript">
   var form = $("#example-advanced-form").show();
   var provinsi = $('#provinsi').val();
