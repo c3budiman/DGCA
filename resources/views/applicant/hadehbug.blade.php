@@ -29,7 +29,7 @@
              </div>
             <div class="form-group">
               <label for="phone">No Telepon (Phone)<span class="text-danger">*</span></label>
-              <input name="phone" type="text" value="{{Auth::User()->phone}}" id="phone" parsley-trigger="change" data-parsley-group="block1" data-parsley-type="number" data-parsley-minlength="10" data-parsley-maxlength="13" placeholder="08xxxxxxxxxx" class="form-control" required>
+              <input name="phone" value="{{Auth::User()->phone}}" type="text" id="phone" parsley-trigger="change" data-parsley-group="block1" data-parsley-type="number" data-parsley-minlength="10" data-parsley-maxlength="13" placeholder="08xxxxxxxxxx" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="phone">No KTP (Residence ID)<span class="text-danger">*</span></label>
@@ -43,7 +43,7 @@
             <div class="form-group">
               <label for="address">Provinsi (Province)<span class="text-danger">*</span></label>
               <div class="col-sm-10">
-                <select id="provinsi" class="form-control provinsi" name="provinsi" data-parsley-group="block2" required data-placeholder="Silahkan Pilih..." onchange="selectRegency()">
+                <select id="provinsi" class="form-control provinsi" data-parsley-group="block2" required name="provinsi" data-placeholder="Silahkan Pilih..." onchange="selectRegency()">
                     <?php $table = DB::table('provinces')->get(); ?>
                       <option value="">Silahkan Pilih...</option>
                     @foreach ($table as $row)
@@ -56,7 +56,7 @@
             <div class="form-group">
               <label for="address">Kabupaten/Kota(City)<span class="text-danger">*</span></label>
               <div class="col-sm-10">
-                <select id="regency" class="form-control regency" name="regency" data-placeholder="Silahkan Pilih..." onchange="selectDistrict()">
+                <select id="regency" class="form-control regency" name="regency" data-parsley-group="block2" required data-placeholder="Silahkan Pilih..." onchange="selectDistrict()">
                   <option value="">Silahkan pilih provinsi terlebih dahulu...</option>
                 </select>
               </div>
@@ -65,7 +65,7 @@
             <div class="form-group">
               <label for="address">Kecamatan(district)<span class="text-danger">*</span></label>
               <div class="col-sm-10">
-                <select id="district" class="form-control district" name="district" data-placeholder="Silahkan Pilih..." onchange="selectVillage()">
+                <select id="district" class="form-control district" name="district" data-parsley-group="block2" required data-placeholder="Silahkan Pilih..." onchange="selectVillage()">
                   <option value="">Silahkan pilih Kabupaten/Kota terlebih dahulu...</option>
                 </select>
               </div>
@@ -74,7 +74,7 @@
             <div class="form-group">
               <label for="address">Desa/Kelurahan(villages)<span class="text-danger">*</span></label>
               <div class="col-sm-10">
-                <select id="village" class="form-control village" name="village" data-placeholder="Silahkan Pilih...">
+                <select id="village" class="form-control village" name="village" data-parsley-group="block2" required data-placeholder="Silahkan Pilih...">
                   <option value="">Silahkan pilih Kecamatan terlebih dahulu...</option>
                 </select>
               </div>
@@ -89,9 +89,7 @@
             <div class="col-3">
               <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
                 <div class="fileupload-new thumbnail" style=" height: 120px;">
-                  @if (Auth::User()->dokumen_identitas != null || Auth::User()->dokumen_identitas != "")
-                  <img src="{{json_decode(Auth::User()->dokumen_identitas)->resized}}" alt="image" /> @else
-                  <img src="/gambar/ktp.jpg"alt="image" /> @endif
+                  <img src="/gambar/ktp.jpg" alt="image">
                 </div>
                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                 <div>
@@ -113,9 +111,7 @@
               <div class="col-3">
                 <div class="fileupload fileupload-new" data-provides="fileupload"><input type="hidden">
                   <div class="fileupload-new thumbnail" style=" height: 120px;">
-                    @if (Auth::User()->dokumen_sertifikasi != null || Auth::User()->dokumen_sertifikasi != "")
-                    <img src="{{json_decode(Auth::User()->dokumen_sertifikasi)->resized}}" alt="image" /> @else
-                    <img src="/gambar/ktp.jpg"alt="image" /> @endif
+                    <img src="/gambar/ktp.jpg" alt="image">
                   </div>
                   <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
                   <div>
@@ -207,20 +203,16 @@
             <div class="form-group row">
               <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Identitas</label>
               <div class="col-sm-10">
-                @if (Auth::User()->dokumen_identitas)
-                  <?php $datatb = json_decode(Auth::User()->dokumen_identitas)->original; $datatb2 = json_decode(Auth::User()->dokumen_identitas)->resized; ?>
-                  <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
-                @endif
+                <?php $datatb = json_decode(Auth::User()->dokumen_identitas)->original; $datatb2 = json_decode(Auth::User()->dokumen_identitas)->resized; ?>
+                <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
               </div>
             </div>
 
             <div class="form-group row">
               <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Sertifikasi</label>
               <div class="col-sm-10">
-                @if (Auth::User()->dokumen_sertifikasi)
-                  <?php $datatb3 = json_decode(Auth::User()->dokumen_sertifikasi)->original; $datatb4 = json_decode(Auth::User()->dokumen_sertifikasi)->resized; ?>
-                  <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
-                @endif
+                <?php $datatb3 = json_decode(Auth::User()->dokumen_sertifikasi)->original; $datatb4 = json_decode(Auth::User()->dokumen_sertifikasi)->resized; ?>
+                <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
               </div>
             </div>
 
@@ -252,7 +244,6 @@
   <?php
     $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
   ?>
-
   function selectRegency() {
     if ($('#provinsi').val() != "") {
       $('#regency').select2({
@@ -323,63 +314,56 @@
   }
 
   $(document).ready(function() {
-      $('.provinsi').select2();
-
-      $("#uploadImage").click(function(e){
-        $('#CheckListIdentitas').hide()
-        var uploadedFile = new FormData();
-        uploadedFile.append('upload_doc', upload_doc.files[0]);
-        uploadedFile.append('_token', $('input[name=_token]').val());
-        $.ajax({
-            type: "POST",
-            url: '{{url(action('applicantController@uploadIdentitas'))}}',
-            dataType: "json",
-            processData: false, // important
-            contentType: false, // important
-            data: uploadedFile,
-            success: function (data, status) {
-              $('#CheckListIdentitas').show()
-            },
-            error: function (error) {
-                alert('Kesalahan Saat Upload')
-                console.log(error);
-            }
-        });
-      });
-  });
-
-  $(document).ready(function() {
-      $('.provinsi').select2();
-
-      $("#uploadImage2").click(function(e){
-        $('#CheckListIdentitas2').hide()
-        var uploadedFile = new FormData();
-        uploadedFile.append('upload_doc2', upload_doc2.files[0]);
-        uploadedFile.append('_token', $('input[name=_token]').val());
-        $.ajax({
-            type: "POST",
-            url: '{{url(action('applicantController@uploadIdentitas2'))}}',
-            dataType: "json",
-            processData: false, // important
-            contentType: false, // important
-            data: uploadedFile,
-            success: function (data, status) {
-              $('#CheckListIdentitas2').show()
-            },
-            error: function (error) {
-                alert('Kesalahan Saat Upload')
-                console.log(error);
-            }
-        });
-      });
-  });
-
-  function UpdateIdentitas(){
-    $(document).ready(function() {
+    $("#uploadImage2").click(function(e){
+      $('#CheckListIdentitas2').hide()
+      var uploadedFile = new FormData();
+      uploadedFile.append('upload_doc2', upload_doc2.files[0]);
+      uploadedFile.append('_token', $('input[name=_token]').val());
       $.ajax({
           type: "POST",
-          url: "/updateRemotePilot/identitas",
+          url: '{{url(action('applicantController@uploadIdentitas2'))}}',
           dataType: "json",
+          processData: false, // important
+          contentType: false, // important
+          data: uploadedFile,
+          success: function (data, status) {
+            $('#CheckListIdentitas2').show()
+          },
+          error: function (error) {
+              alert('Kesalahan Saat Upload')
+              console.log(error);
+          }
+      });
+    });
+
+    $("#uploadImage").click(function(e){
+      $('#CheckListIdentitas').hide()
+      var uploadedFile = new FormData();
+      uploadedFile.append('upload_doc', upload_doc.files[0]);
+      uploadedFile.append('_token', $('input[name=_token]').val());
+      $.ajax({
+          type: "POST",
+          url: '{{url(action('applicantController@uploadIdentitas'))}}',
+          dataType: "json",
+          processData: false, // important
+          contentType: false, // important
+          data: uploadedFile,
+          success: function (data, status) {
+            $('#CheckListIdentitas').show()
+          },
+          error: function (error) {
+              alert('Kesalahan Saat Upload')
+              console.log(error);
+          }
+      });
+    });
+
+    function UpdateIdentitas(){
+      return $.ajax({
+          url: '/updateRemotePilot/identitas',
+          type: 'POST',
+          async: false,
+          dataType: 'json',
           data: {
             '_token': $('input[name=_token]').val(),
             nama: $("#name").val(),
@@ -387,26 +371,18 @@
             phone: $("#phone").val(),
             ktp: $("#ktp").val(),
           },
-          success: function (data, status) {
-              return true;
-          },
-          error: function (request, status, error) {
-              console.log(request.responseJSON);
-              $.each(request.responseJSON.errors, function( index, value ) {
-                console.log( value );
-              });
-              return false;
+          success: function(data){
+              console.log(data);
           }
-      });
-    });
-  }
+        });
+    }
 
-  function UpdateAlamat(){
-    $(document).ready(function() {
-      $.ajax({
-          type: "POST",
+    function UpdateAlamat(){
+      return $.ajax({
           url: "/updateRemotePilot/alamat",
-          dataType: "json",
+          type: 'POST',
+          async: false,
+          dataType: 'json',
           data: {
             '_token': $('input[name=_token]').val(),
             provinsi: $('select[name=provinsi]').val(),
@@ -414,84 +390,119 @@
             district: $('select[name=district]').val(),
             village: $('select[name=village]').val(),
           },
-          success: function (data, status) {
-              return true;
-          },
-          error: function (request, status, error) {
-              console.log(request.responseJSON);
-              $.each(request.responseJSON.errors, function( index, value ) {
-                console.log( value );
-              });
-              return false;
+          success: function(data){
+              console.log(data);
           }
-      });
-    });
-  }
+        });
+    }
 
-  form.steps({
-      headerTag: "h3",
-      bodyTag: "fieldset",
-      transitionEffect: "slideLeft",
-      onStepChanging: function (event, currentIndex, newIndex)
-      {
-          // Allways allow previous action even if the current form is not valid!
-          if (currentIndex > newIndex)
-          {
-              return true;
+    function FinalisasiRemotePilot(){
+      return $.ajax({
+          url: "/updateRemotePilot/finalisasi",
+          type: 'POST',
+          async: false,
+          dataType: 'json',
+          data: {
+            '_token': $('input[name=_token]').val(),
+          },
+          success: function(data){
+              console.log(data);
           }
-          // Forbid next action if the users has wrong input!
-          if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
-          {
-              return false;
-          }
-          if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
-          {
-              return false;
-          }
-          //Updater Identitas :
-          if (newIndex === 1 && UpdateIdentitas() )
-          {
-              return true;
-          }
-          //Updater Identitas :
-          if (newIndex === 2 && UpdateAlamat() )
-          {
-              return true;
-          }
-          //
-          // Needed in some cases if the user went back (clean up)
-          if (currentIndex < newIndex)
-          {
-              // To remove error styles
-              form.find(".body:eq(" + newIndex + ") label.error").remove();
-              form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
-          }
-          // form.validate().settings.ignore = ":disabled,:hidden";
-          return true;
-      },
-      onStepChanged: function (event, currentIndex, priorIndex)
-      {
-          // Used to skip the "Warning" step if the user is old enough.
-          if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
-          {
-              form.steps("next");
-          }
-          // Used to skip the "Warning" step if the user is old enough and wants to the previous step.
-          if (currentIndex === 2 && priorIndex === 3)
-          {
-              form.steps("previous");
-          }
-      },
-      onFinishing: function (event, currentIndex)
-      {
-          document.getElementById("example-advanced-form").submit();// Form submission
-          form.validate().settings.ignore = ":disabled";
-          return form.valid();
-      },
-      onFinished: function (event, currentIndex)
-      {
-          alert("Submitted!");
-      }
+        });
+    }
+
+    form.steps({
+        headerTag: "h3",
+        bodyTag: "fieldset",
+        transitionEffect: "slideLeft",
+        onStepChanging: function (event, currentIndex, newIndex)
+        {
+            // Allways allow previous action even if the current form is not valid!
+            if (currentIndex > newIndex)
+            {
+                return true;
+            }
+            // Forbid next action if the users has wrong input!
+            if (newIndex === 1 && ! $('form').parsley().validate({group: 'block1', force: true}) )
+            {
+                return false;
+            }
+            if (newIndex === 2 && ! $('form').parsley().validate({group: 'block2', force: true}) )
+            {
+                return false;
+            }
+            //Updater and checker Identitas :
+            if (newIndex === 1)
+            {
+                UpdateIdentitas().done(function(data){
+                     if(data.Success == true) {
+                       $('.provinsi').select2();
+
+                       return true;
+                     } else {
+                       return false;
+                     }
+                });
+            }
+            //Updater Identitas :
+            if (newIndex === 2)
+            {
+                UpdateAlamat().done(function(data){
+                     if(data.Success == true) {
+                       console.log(data.Success == true)
+                       return false;
+                     } else {
+                       return false;
+                     }
+                });
+            }
+            //Updater Identitas :
+            if (newIndex === 3)
+            {
+                FinalisasiRemotePilot().done(function(data){
+                     if(data.Success == true) {
+                       return true;
+                     } else {
+                       return false;
+                     }
+                });
+            }
+            //
+            // Needed in some cases if the user went back (clean up)
+            if (currentIndex < newIndex)
+            {
+                // To remove error styles
+                form.find(".body:eq(" + newIndex + ") label.error").remove();
+                form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+            }
+            // form.validate().settings.ignore = ":disabled,:hidden";
+            return true;
+        },
+        onStepChanged: function (event, currentIndex, priorIndex)
+        {
+            // Used to skip the "Warning" step if the user is old enough.
+            if (currentIndex === 2 && Number($("#age-2").val()) >= 18)
+            {
+                form.steps("next");
+            }
+            // Used to skip the "Warning" step if the user is old enough and wants to the previous step.
+            if (currentIndex === 2 && priorIndex === 3)
+            {
+                form.steps("previous");
+            }
+        },
+        onFinishing: function (event, currentIndex)
+        {
+            document.getElementById("example-advanced-form").submit();// Form submission
+            form.validate().settings.ignore = ":disabled";
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex)
+        {
+            alert("Submitted!");
+        }
+    });
+
   });
   </script>
   <!-- Sweet Alert Js  -->

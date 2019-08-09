@@ -40,6 +40,45 @@ class applicantController extends Controller
       $this->middleware('rule:'.$this->getRolePengguna().','.'nothingelse');
     }
 
+    public function UpdateRPIdentitas(Request $request) {
+      $user               = User::find(Auth::User()->id);
+      $user->nama         = $request->nama;
+      $user->company      = $request->company;
+      $user->nama         = $request->nama;
+      $user->phone        = $request->phone;
+      $user->ktp          = $request->ktp;
+      $user->save();
+
+      return response()->json(['Success' => true], 200);
+    }
+
+    public function UpdateRPAlamatIdentitas(Request $request) {
+      if ($request->village && $request->regency && $request->district && $request->provinsi) {
+        $user            = User::find(Auth::User()->id);
+        $address         = '';
+        $address        .= DB::table('villages')->where('id',$request->village)->first()->name;
+        $address        .= '\, '.DB::table('regencies')->where('id',$request->regency)->first()->name;
+        $address        .= '\, '.DB::table('districts')->where('id',$request->district)->first()->name;
+        $address        .= '\, '.DB::table('provinces')->where('id',$request->provinsi)->first()->name;
+        $user->address   = $address;
+        $user->save();
+
+        return response()->json(['Success' => true], 200);
+      } else {
+        return response()->json(['Success' => false], 200);
+      }
+
+    }
+
+    public function FinalisasiRemotePilot(Request $request) {
+      $user          = User::find(Auth::User()->id);
+      if ($user->dokumen_identitas && $user->dokumen_sertifikasi) {
+        return response()->json(['Success' => true], 200);
+      } else {
+        return response()->json(['Success' => false], 200);
+      }
+    }
+
     //get isi identitas :
     public function getIdentitas() {
       return view('applicant.identitas');

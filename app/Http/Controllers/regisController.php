@@ -91,7 +91,7 @@ class regisController extends Controller
         return redirect('login')->withErrors(['Terdapat kesalahan saat verifikasi, silahkan coba lagi nanti']);
       }
     } else {
-      return redirect('register')->withErrors(['Invalid Verfication Token!']);
+      return redirect('login')->withErrors(['Email sudah terverifikasi']);
     }
   }
 }

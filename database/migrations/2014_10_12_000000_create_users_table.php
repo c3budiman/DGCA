@@ -19,8 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('active', 2);
             $table->string('approved', 2);
             $table->string('company')->nullable();
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             $table->string('phone')->nullable();
+            $table->string('ktp')->nullable();
             $table->text('dokumen_sertifikasi')->nullable();
             $table->text('dokumen_identitas')->nullable();
             $table->unsignedInteger('roles_id')->nullable();

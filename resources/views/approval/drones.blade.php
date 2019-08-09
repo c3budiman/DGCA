@@ -36,19 +36,36 @@
                               </tr>
                               <tr>
                                   <td>Foto Drone</td>
-                                  <td><a href="{{json_decode($drones->pic_of_drones)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones)->resized}}" alt=""> </a></td>
+                                  @if ($drones->pic_of_drones)
+                                    <td><a href="{{json_decode($drones->pic_of_drones)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones)->resized}}" alt=""> </a></td>
+                                  @else
+                                    <td></td>
+                                  @endif
+
                               </tr>
                               <tr>
                                   <td>Foto Serial Nomor Drone</td>
-                                  <td><a href="{{json_decode($drones->pic_of_drones_with_sn)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones_with_sn)->resized}}" alt=""> </a></td>
+                                  @if ($drones->pic_of_drones_with_sn)
+                                    <td><a href="{{json_decode($drones->pic_of_drones_with_sn)->original}}"> <img height="100px" src="{{json_decode($drones->pic_of_drones_with_sn)->resized}}" alt=""> </a></td>
+                                  @else
+                                    <td></td>
+                                  @endif
                               </tr>
                               <tr>
                                   <td>Foto Bukti Penguasaan Pesawat Udara Tanpa Awak</td>
-                                  <td><a href="{{json_decode($drones->scan_proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->scan_proof_of_ownership)->resized}}" alt=""> </a></td>
+                                  @if ($drones->scan_proof_of_ownership)
+                                    <td><a href="{{json_decode($drones->scan_proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->scan_proof_of_ownership)->resized}}" alt=""> </a></td>
+                                  @else
+                                    <td></td>
+                                  @endif
                               </tr>
                               <tr>
                                   <td>Foto Bukti Kepemilikan</td>
-                                  <td><a href="{{json_decode($drones->proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->proof_of_ownership)->resized}}" alt=""> </a></td>
+                                  @if ($drones->scan_proof_of_ownership)
+                                    <td><a href="{{json_decode($drones->proof_of_ownership)->original}}"> <img height="100px" src="{{json_decode($drones->proof_of_ownership)->resized}}" alt=""> </a></td>
+                                  @else
+                                    <td></td>
+                                  @endif
                               </tr>
                               <tr>
                                   <td>Manufacturer</td>

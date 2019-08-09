@@ -69,16 +69,20 @@
                             <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Identitas</label>
                               <div class="col-sm-10">
-                                <?php $datatb = json_decode($user->dokumen_identitas)->original; $datatb2 = json_decode($user->dokumen_identitas)->resized; ?>
-                                <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
+                                @if ($user->dokumen_identitas)
+                                  <?php $datatb = json_decode($user->dokumen_identitas)->original; $datatb2 = json_decode($user->dokumen_identitas)->resized; ?>
+                                  <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
+                                @endif
                               </div>
                             </div>
 
                             <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Sertifikasi</label>
                               <div class="col-sm-10">
-                                <?php $datatb3 = json_decode($user->dokumen_sertifikasi)->original; $datatb4 = json_decode($user->dokumen_sertifikasi)->resized; ?>
-                                <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
+                                @if ($user->dokumen_sertifikasi)
+                                  <?php $datatb3 = json_decode($user->dokumen_sertifikasi)->original; $datatb4 = json_decode($user->dokumen_sertifikasi)->resized; ?>
+                                  <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
+                                @endif
                               </div>
                             </div>
 
