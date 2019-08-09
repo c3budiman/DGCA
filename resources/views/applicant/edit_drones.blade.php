@@ -147,6 +147,7 @@
                 <option value="Airship (Airship)">Pesawat Terbang (Aeroplane)</option>
                 <option value="Glider (Glider)">Glider (Glider)</option>
                 <option value="Kite (Glider)">Kite (Glider)</option>
+                <option value="Multi Chopter">Multi Chopter</option>
                 <option value="Lain-Lain (Other)">Lain-Lain (Other)</option>
               </select>
              </div>
@@ -200,7 +201,22 @@
             </div>
             <div class="col-md-6 form-group">
                 <label for="phone">Tanggal Kepemilikan (Date)</label>
-                <input name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block3" class="form-control" value="{{ $manages-> dateownership}}">
+                <script type="text/javascript">
+                var datefield = $('#dateownership')
+
+                datefield.setAttribute("type", "date")
+
+                if (datefield.type!="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
+                  document.write('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
+                  document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"><\/script>\n')
+                }
+                if (datefield.type != "date"){ //if browser doesn't support input type="date", initialize date picker widget:
+                  $(document).ready(function() {
+                      $('#dateownership').datepicker();
+                  });
+                }
+                </script>
+                <input id="dateownership" name="dateownership" type="date" parsley-trigger="change" data-parsley-group="block3" class="form-control">
             </div>
           </div>
 
