@@ -259,6 +259,9 @@ Route::get('village/{id}', 'apiController@getVillage');
 */
 Route::get('identitas','applicantController@getIdentitas');
 Route::post('identitas','applicantController@postIdentitas');
+Route::post('updateRemotePilot/identitas', 'applicantController@UpdateRPIdentitas');
+Route::post('updateRemotePilot/alamat', 'applicantController@UpdateRPAlamatIdentitas');
+Route::post('updateRemotePilot/finalisasi', 'applicantController@FinalisasiRemotePilot');
 Route::post('uploadIdentitas', 'applicantController@uploadIdentitas');
 Route::post('uploadIdentitas2', 'applicantController@uploadIdentitas2');
 Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
@@ -285,6 +288,15 @@ Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 | Ini route generate an dari auto crud
 |
 */
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');

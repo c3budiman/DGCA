@@ -25,19 +25,19 @@ class Sidebar extends Migration
       });
 
       DB::table('dashmenu')->insert([
-          ['kepunyaan' => 1, 'class_css' => 'dripicons-home',           'nama' => 'Home',             'link' => '/dashboard'],
-          ['kepunyaan' => 1, 'class_css' => 'dripicons-browser',        'nama' => 'Frontend`s Menu',  'link' => '/front'],
-          ['kepunyaan' => 1, 'class_css' => 'dripicons-lock',           'nama' => 'Roles',            'link' => '/roles'],
-          ['kepunyaan' => 1, 'class_css' => 'dripicons-user-group',     'nama' => 'Pengguna',         'link' => '/manageuser'],
-          ['kepunyaan' => 1, 'class_css' => 'dripicons-device-desktop', 'nama' => 'Website',          'link' => '/manageweb'],
-          ['kepunyaan' => 2, 'class_css' => 'dripicons-home',           'nama' => 'Home',             'link' => '/dashboard'],
-          ['kepunyaan' => 2, 'class_css' => 'dripicons-browser',        'nama' => 'Frontend`s Menu',  'link' => '/front'],
-          ['kepunyaan' => 2, 'class_css' => 'fa fa-car',                'nama' => 'Parameter',        'link' => '/params'],
-          ['kepunyaan' => 2, 'class_css' => 'fa fa-list-ul',            'nama' => 'Approval',         'link' => '/approval'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-home',           'nama' => 'Home',             'link' => '/dashboard'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-user',           'nama' => 'Identitas',        'link' => '/identitas'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket',         'nama' => 'Drone',            'link' => '/drones'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-clipboard',      'nama' => 'UAS Assesment',    'link' => '/uas_assesment'],
+          ['kepunyaan' => 1, 'class_css' => 'dripicons-home',           'nama' => 'Home',                'link' => '/dashboard'],
+          ['kepunyaan' => 1, 'class_css' => 'dripicons-browser',        'nama' => 'Frontend`s Menu',     'link' => '/front'],
+          ['kepunyaan' => 1, 'class_css' => 'dripicons-lock',           'nama' => 'Roles',               'link' => '/roles'],
+          ['kepunyaan' => 1, 'class_css' => 'dripicons-user-group',     'nama' => 'Pengguna',            'link' => '/manageuser'],
+          ['kepunyaan' => 1, 'class_css' => 'dripicons-device-desktop', 'nama' => 'Website',             'link' => '/manageweb'],
+          ['kepunyaan' => 2, 'class_css' => 'dripicons-home',           'nama' => 'Home',                'link' => '/dashboard'],
+          ['kepunyaan' => 2, 'class_css' => 'dripicons-browser',        'nama' => 'Frontend`s Menu',     'link' => '/front'],
+          ['kepunyaan' => 2, 'class_css' => 'fa fa-car',                'nama' => 'Parameter',           'link' => '/params'],
+          ['kepunyaan' => 2, 'class_css' => 'fa fa-list-ul',            'nama' => 'Approval',            'link' => '/approval'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-home',           'nama' => 'Home',                'link' => '/dashboard'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-clipboard',      'nama' => 'UAS Assesment',       'link' => '/uas_assesment'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-user',           'nama' => 'Remote Pilot',        'link' => '/identitas'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket',         'nama' => 'Drones',              'link' => '/drones'],
       ]);
     }
 
