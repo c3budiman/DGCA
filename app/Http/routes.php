@@ -125,6 +125,11 @@ Route::get('pages/index', 'authController@getAturIndex');
 Route::get('managefiles', 'authController@getAturFiles');
 Route::get('manageimages', 'authController@getAturPhotos');
 
+Route::group(['middleware' => 'auth'], function () {
+   Route::get('/laravel-filemanager', '\UniSharp\LaravelFilemanager\controllers\LfmController@show');
+   Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\controllers\UploadController@upload');
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -279,6 +284,10 @@ Route::post('uploadPesawatSn', 'applicantController@uploadPesawatSn');
 Route::post('uploadPesawat', 'applicantController@uploadPesawat');
 Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 
+Route::get('uas_assesment','applicantController@getUasAssesment');
+Route::get('uas_assesment_now/{id}/{id_regs}','applicantController@getSoalUjian');
+Route::post('uas_assesment_now/{id}/{id_regs}','applicantController@saveJawabanAssesment');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -288,15 +297,6 @@ Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 | Ini route generate an dari auto crud
 |
 */
-Route::resource('homes', 'homeController');
-Route::get('home', 'homeController@getFront');
-Route::get('home/json', 'homeController@dataTB');
-Route::get('home/{method}', 'homeController@viewSubmenu');
-
-Route::resource('pendaftarans', 'pendaftaranController');
-Route::get('pendaftaran', 'pendaftaranController@getFront');
-Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
-Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
 Route::resource('homes', 'homeController');
 Route::get('home', 'homeController@getFront');
 Route::get('home/json', 'homeController@dataTB');

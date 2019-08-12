@@ -24,6 +24,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\UasRegs;
+use App\Ujian;
 
 
 class applicantController extends Controller
@@ -38,6 +40,101 @@ class applicantController extends Controller
     {
       $this->middleware('auth');
       $this->middleware('rule:'.$this->getRolePengguna().','.'nothingelse');
+    }
+
+    public function getUasAssesment() {
+      //generate soal, klo dia belum pernah ada uas_regs sebelumnya yang aktif.
+      if (DB::table('uas_regs')->where('user_id',Auth::User()->id)->where('softdelete',0)->count() < 1 ) {
+        //insert ke table uas_regs :
+        $data = new UasRegs;
+        $data->user_id = Auth::User()->id;
+        $data->status = 1;
+        $data->change_by = Auth::User()->nama;
+
+        $soalnya = DB::table('soal')->where('aktif','1')->get();
+
+        if ($data->save()) {
+          foreach ($soalnya as $soal) {
+            $ujian = new Ujian;
+            $ujian->ujian_regs = $data->id;
+            $ujian->user_id = Auth::User()->id;
+            $ujian->id_soal = $soal->id;
+            $ujian->save();
+          }
+          return view('applicant.uasAsessment',['uas_regs'=>$data, 'soal'=>$soal]);
+        }
+        else {
+          return Redirect::back()->withErrors(['Error while saving, please try again later!']);
+        }
+      }
+      else {
+        $uas_regs = DB::table('uas_regs')
+                    ->where('user_id',Auth::User()->id)
+                    ->where('softdelete',0)->first();
+
+        $soal     = DB::table('ujian')
+                    ->where('user_id', Auth::User()->id)
+                    ->where('ujian_regs', $uas_regs->id)->get();
+        //cek apa dia udah kelar apa belom ujian nya :
+        if ($uas_regs->status == 2) {
+          return view('applicant.uasAsessment',['uas_regs'=>$uas_regs, 'soal'=>$soal]);
+        }
+        else {
+          $last_soalnya=1;
+          if (DB::table('ujian')
+                      ->where('user_id', Auth::User()->id)
+                      ->where('ujian_regs', $uas_regs->id)
+                      ->where('jawaban', NULL)->count() > 0) {
+            $last_soal = DB::table('ujian')
+                        ->where('user_id', Auth::User()->id)
+                        ->where('ujian_regs', $uas_regs->id)
+                        ->where('jawaban', NULL)
+                        ->orderBy('id_soal','asc')->first();
+            $last_soalnya = $last_soal->id_soal;
+          }
+          return redirect('uas_assesment_now/'.$last_soalnya.'/'.$uas_regs->id);
+
+        }
+      }
+
+    }
+
+    public function getSoalUjian($id, $id_regs, Request $request) {
+      if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count() > 0) {
+          $current_soal = DB::table('soal')
+                            ->where('id', $id)
+                            ->first();
+
+          $all_soal = DB::table('ujian')
+                            ->where('user_id', Auth::User()->id)
+                            ->where('ujian_regs', $id_regs)
+                            ->get();
+          return view('applicant.ujian',['current_soal'=>$current_soal, 'all_soal'=>$all_soal,'id_regs'=>$id_regs]);
+      }
+      else {
+          return Redirect::back()->withErrors(['Error ujian tidak ditemukan!']);
+      }
+    }
+
+    public function saveJawabanAssesment($id, $id_regs, Request $request) {
+      $last_soalnya = 1;
+
+      if (DB::table('ujian')
+                  ->where('user_id', Auth::User()->id)
+                  ->where('ujian_regs', $id_regs)
+                  ->where('jawaban', NULL)->count() > 0) {
+        $ujian = Ujian::where('id_soal',$id)->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->first();
+        $ujian->jawaban = $request->jawaban;
+        $ujian->save();
+        $last_soal = DB::table('ujian')
+                    ->where('user_id', Auth::User()->id)
+                    ->where('ujian_regs', $id_regs)
+                    ->where('jawaban', NULL)
+                    ->orderBy('id_soal','asc')->first();
+        $last_soalnya = $last_soal->id_soal;
+      }
+
+      return redirect('uas_assesment_now/'.$last_soalnya.'/'.$id_regs);
     }
 
     public function UpdateRPIdentitas(Request $request) {
