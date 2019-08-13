@@ -11,9 +11,6 @@
       justify-content: center;
     }
   </style>
-  <?php
-  $soal = DB::table('soal')->get();
-   ?>
   <div class="row">
     <div class="col-lg-12">
       <div class="card card-body">

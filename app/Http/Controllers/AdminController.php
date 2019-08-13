@@ -431,7 +431,7 @@ class AdminController extends Controller
 
     public function approveUasDataTB()
     {
-      return Datatables::of(UasRegs::query()->where('status','2')->orderBy('id','desc')->get())
+      return Datatables::of(UasRegs::query()->where('status','2')->where('softdelete',0)->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
@@ -445,7 +445,41 @@ class AdminController extends Controller
 
     public function getUasApproval($uas_regs)
     {
-      return view('approval.uas_detail',['uas_regs'=>$uas_regs]);
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $uas_regs)->count() > 1)
+      {
+        $jumlah_soal  = DB::table('ujian')
+                        ->where('ujian_regs', $uas_regs)->count();
+        $jumlah_page  = round($jumlah_soal / 2);
+        $soal         = DB::table('ujian')
+                        ->where('ujian_regs', $uas_regs)->take(2)->get();
+        return view('approval.uas_detail',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page]);
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+
+    }
+
+    public function getUasApprovalWithPage($uas_regs,$page) {
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $uas_regs)->count() > 1)
+      {
+        $jumlah_soal  = DB::table('ujian')
+                        ->where('ujian_regs', $uas_regs)->count();
+        $jumlah_page  = round($jumlah_soal / 2);
+        //dd($jumlah_page);
+        $soal         = DB::table('ujian')
+                        ->where('ujian_regs', $uas_regs)->take(2)->get();
+        $start_at     = $page*2;
+        return view('approval.uas_detail_withpage',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page,'start_at'=>$start_at]);
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+
+
+
     }
 
 

@@ -240,7 +240,9 @@ Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
 Route::get('approval/uas', 'AdminController@getApprovalUAS');
 Route::get('approvalUas/json', 'AdminController@approveUasDataTB')->name('approvalUas/json');
-Route::get('detail/uas/{id}', 'AdminController@getUasApproval');
+Route::get('approval/detail/uas/{id}/{page}', 'AdminController@getUasApprovalWithPage');
+Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
+//Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
 
 /*

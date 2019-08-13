@@ -25,7 +25,7 @@
       <div class="card card-body">
         <h5 class="card-title">Halaman</h5>
         <div class="btn-group flex-wrap">
-          @for ($i=1; $i < $jumlah_page; $i++)
+          @for ($i=1; $i <= $jumlah_page; $i++)
             <a href="/approval/detail/uas/{{$uas_regs}}/{{$i}}" class="btn btn-light waves-effect">{{$i}}</a>
           @endfor
         </div>
@@ -36,13 +36,17 @@
       </div>
     </div>
     <div class="col-md-10">
-      <div class="card m-b-30 card-body">
-        <h5 class="card-title">Nomor 1</h5>
-        <p class="card-text"></p>
-        <div class="card-box">
-
+      <?php $i=0; ?>
+      @foreach ($soal as $soalnya)
+        <?php $i++; ?>
+        <div class="card m-b-30 card-body">
+          <h5 class="card-title">Nomor {{$i}}</h5>
+          <p class="card-text"></p>
+          <div class="card-box">
+            {!! $soalnya->jawaban !!}
+          </div>
         </div>
-      </div>
+      @endforeach
     </div>
   </div>
 @endsection
