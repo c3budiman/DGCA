@@ -242,6 +242,8 @@ Route::get('approval/uas', 'AdminController@getApprovalUAS');
 Route::get('approvalUas/json', 'AdminController@approveUasDataTB')->name('approvalUas/json');
 Route::get('approval/detail/uas/{id}/{page}', 'AdminController@getUasApprovalWithPage');
 Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
+Route::post('approval/saveKepuasan', 'AdminController@saveKepuasan');
+Route::post('approval/saveketerangan', 'AdminController@saveketerangan');
 //Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
 

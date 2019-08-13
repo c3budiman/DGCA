@@ -30,6 +30,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use App\UasRegs;
+use App\Ujian;
 
 class AdminController extends Controller
 {
@@ -467,20 +468,57 @@ class AdminController extends Controller
       {
         $jumlah_soal  = DB::table('ujian')
                         ->where('ujian_regs', $uas_regs)->count();
-        $jumlah_page  = round($jumlah_soal / 2);
-        //dd($jumlah_page);
+        $jml_soal_per = 2;
+        $jumlah_page  = ceil($jumlah_soal / $jml_soal_per);
+        $skip         = 0;
+        $start_at     = ($page * $jml_soal_per) - ($jml_soal_per - 1);
+        if ($page != 1) {
+          $skip = $jml_soal_per*($page-1);
+        }
+
         $soal         = DB::table('ujian')
-                        ->where('ujian_regs', $uas_regs)->take(2)->get();
-        $start_at     = $page*2;
-        return view('approval.uas_detail_withpage',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page,'start_at'=>$start_at]);
+                        ->where('ujian_regs', $uas_regs)->skip($skip)->take($jml_soal_per)->get();
+
+        return view('approval.uas_detail_withpage',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page,'page'=>$page,'start_at'=>$start_at]);
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
       }
-
-
-
     }
+
+    public function saveKepuasan(Request $request){
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $request->uas_regs)->where('id',$request->id)->count() > 0)
+      {
+        $data = Ujian::where('ujian_regs', $request->uas_regs)->where('id',$request->id)->first();
+        $data->satisfy = $request->satisfy;
+        $data->save();
+        $response = array("success"=>"Sukses terupdate");
+        return response()->json($response,200);
+      }
+      else {
+        $response = array("error"=>"Not Found!");
+        return response()->json($response,404);
+      }
+    }
+
+    public function saveketerangan(Request $request) {
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $request->uas_regs)->where('id',$request->id)->count() > 0)
+      {
+        $data = Ujian::where('ujian_regs', $request->uas_regs)->where('id',$request->id)->first();
+        $data->remarks = $request->keterangan;
+        $data->save();
+        $response = array("success"=>"Sukses terupdate");
+        return response()->json($response,200);
+      }
+      else {
+        $response = array("error"=>"Not Found!");
+        return response()->json($response,404);
+      }
+    }
+
+
 
 
 }
