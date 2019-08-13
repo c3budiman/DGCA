@@ -27,6 +27,7 @@ class Submenu extends Migration
           ['kepunyaan' => 5, 'nama' => 'Logo dan Favicon',      'link' => '/logodanfavicon'],
           ['kepunyaan' => 5, 'nama' => 'Judul dan Slogan',      'link' => '/juduldanslogan'],
           ['kepunyaan' => 8, 'nama' => 'Soal UAS Assessment',   'link' => '/parameter/soal'],
+          ['kepunyaan' => 9, 'nama' => 'Approval UAS Assesment','link' => '/approval/uas'],
           ['kepunyaan' => 9, 'nama' => 'Approval Remote Pilot', 'link' => '/approveidentitas'],
           ['kepunyaan' => 9, 'nama' => 'Approval Drones',       'link' => '/approvedrones'],
       ]);

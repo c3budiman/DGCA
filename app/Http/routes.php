@@ -238,6 +238,9 @@ Route::get('detail/drones/{id}', 'AdminController@getdrones');
 Route::get('detail/dronesuser/{id}', 'applicantController@getdronesuser');
 Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
+Route::get('approval/uas', 'AdminController@getApprovalUAS');
+Route::get('approvalUas/json', 'AdminController@approveUasDataTB')->name('approvalUas/json');
+Route::get('detail/uas/{id}', 'AdminController@getUasApproval');
 
 
 /*
@@ -287,6 +290,8 @@ Route::post('uploadPenguasaan', 'applicantController@uploadPenguasaan');
 Route::get('uas_assesment','applicantController@getUasAssesment');
 Route::get('uas_assesment_now/{id}/{id_regs}','applicantController@getSoalUjian');
 Route::post('uas_assesment_now/{id}/{id_regs}','applicantController@saveJawabanAssesment');
+Route::get('finish_ujian/{uas_regs}','applicantController@FinishUASA');
+Route::get('finish_ujian_fix/{uas_regs}','applicantController@FinishFix');
 
 
 /*

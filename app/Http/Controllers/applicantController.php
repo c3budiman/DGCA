@@ -69,15 +69,18 @@ class applicantController extends Controller
       }
       else {
         $uas_regs = DB::table('uas_regs')
-                    ->where('user_id',Auth::User()->id)
+                    ->where('user_id', Auth::User()->id)
                     ->where('softdelete',0)->first();
 
         $soal     = DB::table('ujian')
                     ->where('user_id', Auth::User()->id)
                     ->where('ujian_regs', $uas_regs->id)->get();
-        //cek apa dia udah kelar apa belom ujian nya :
+        //cek apa dia udah kelar, udah di approve, apa belom ujian nya :
         if ($uas_regs->status == 2) {
-          return view('applicant.uasAsessment',['uas_regs'=>$uas_regs, 'soal'=>$soal]);
+          return view('applicant.uasAsessmentFinished', ['approved'=>false] );
+        }
+        elseif ($uas_regs->status == 3) {
+          return view('applicant.uasAsessmentFinished', ['approved'=>true] );
         }
         else {
           $last_soalnya=1;
@@ -100,20 +103,71 @@ class applicantController extends Controller
     }
 
     public function getSoalUjian($id, $id_regs, Request $request) {
-      if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count() > 0) {
-          $current_soal = DB::table('soal')
-                            ->where('id', $id)
-                            ->first();
+      if (UasRegs::where('user_id',Auth::User()->id)
+                  ->where('id',$id_regs)
+                  ->where('softdelete',0)
+                  ->where('status',1)
+                  ->count() > 1)
+      {
+          if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count() > 0) {
+              $current_soal = DB::table('soal')
+                                ->where('id', $id)
+                                ->first();
 
-          $all_soal = DB::table('ujian')
-                            ->where('user_id', Auth::User()->id)
-                            ->where('ujian_regs', $id_regs)
-                            ->get();
-          return view('applicant.ujian',['current_soal'=>$current_soal, 'all_soal'=>$all_soal,'id_regs'=>$id_regs]);
+              $all_soal = DB::table('ujian')
+                                ->where('user_id', Auth::User()->id)
+                                ->where('ujian_regs', $id_regs)
+                                ->get();
+              return view('applicant.ujian',['current_soal'=>$current_soal, 'all_soal'=>$all_soal,'id_regs'=>$id_regs]);
+          }
+          else {
+              return redirect('dashboard')->withErrors(['Error Anda Telah Mensubmit UAS Assesment!']);
+          }
       }
       else {
-          return Redirect::back()->withErrors(['Error ujian tidak ditemukan!']);
+          return Redirect::back()->withErrors(['Error UAS Assesment tidak ditemukan!']);
       }
+
+    }
+
+    public function FinishUASA($uas_regs) {
+      $soal_terjawab        = DB::table('ujian')
+                            ->where('user_id', Auth::User()->id)
+                            ->where('ujian_regs', $uas_regs)
+                            ->whereNotNull('jawaban')
+                            ->count();
+
+      $semua_soal           = DB::table('ujian')
+                            ->where('user_id', Auth::User()->id)
+                            ->where('ujian_regs', $uas_regs)
+                            ->count();
+
+      return view( 'applicant.finish_ujian', ['soal_terjawab'=>$soal_terjawab, 'semua_soal'=>$semua_soal, 'uas_regs'=>$uas_regs] );
+    }
+
+    public function FinishFix($uas_regs) {
+      if (DB::table('uas_regs')
+                  ->where('user_id',Auth::User()->id)
+                  ->where('id',$uas_regs)
+                  ->where('softdelete',0)->count())
+      {
+          $uas_reg = UasRegs::where('user_id',Auth::User()->id)
+                      ->where('id',$uas_regs)
+                      ->where('softdelete',0)->first();
+          //set it to already ujian :
+          $uas_reg->status = 2;
+          if ($uas_reg->save()) {
+            return redirect('dashboard')->with('succes', 'Berhasil Mensubmit Uas Assesment!');
+          }
+          else {
+            return Redirect::back()->withErrors(['Silahkan coba kembali!']);
+          }
+
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+
     }
 
     public function saveJawabanAssesment($id, $id_regs, Request $request) {

@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
+use App\UasRegs;
 
 class AdminController extends Controller
 {
@@ -402,7 +403,7 @@ class AdminController extends Controller
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
-        return DB::table('users')->where('id','=',$datatb->user_id)->first()->nama;
+        return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -422,6 +423,29 @@ class AdminController extends Controller
       $drones->approved = 1;
       $drones->save();
       return redirect('approvedrones')->with('succes', 'User successfuly approved!');
+    }
+
+    public function getApprovalUAS() {
+      return view('approval.index_uas');
+    }
+
+    public function approveUasDataTB()
+    {
+      return Datatables::of(UasRegs::query()->where('status','2')->orderBy('id','desc')->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addColumn('nama', function($datatb) {
+        return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function getUasApproval($uas_regs)
+    {
+      return view('approval.uas_detail',['uas_regs'=>$uas_regs]);
     }
 
 
