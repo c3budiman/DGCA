@@ -126,8 +126,8 @@ Route::get('managefiles', 'authController@getAturFiles');
 Route::get('manageimages', 'authController@getAturPhotos');
 
 Route::group(['middleware' => 'auth'], function () {
-   Route::get('/laravel-filemanager', '\UniSharp\LaravelFilemanager\controllers\LfmController@show');
-   Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\controllers\UploadController@upload');
+   Route::get('/laravel-filemanager', '\UniSharp\LaravelFilemanager\Controllers\LfmController@show');
+   Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\Controllers\UploadController@upload');
 });
 
 
