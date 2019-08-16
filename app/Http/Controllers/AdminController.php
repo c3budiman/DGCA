@@ -449,11 +449,12 @@ class AdminController extends Controller
       if (DB::table('ujian')
                   ->where('ujian_regs', $uas_regs)->count() > 1)
       {
+        $jml_soal_per = 10;
         $jumlah_soal  = DB::table('ujian')
                         ->where('ujian_regs', $uas_regs)->count();
-        $jumlah_page  = round($jumlah_soal / 2);
+        $jumlah_page  = ceil($jumlah_soal / $jml_soal_per);
         $soal         = DB::table('ujian')
-                        ->where('ujian_regs', $uas_regs)->take(2)->get();
+                        ->where('ujian_regs', $uas_regs)->take($jml_soal_per)->get();
         return view('approval.uas_detail',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page]);
       }
       else {
@@ -468,7 +469,7 @@ class AdminController extends Controller
       {
         $jumlah_soal  = DB::table('ujian')
                         ->where('ujian_regs', $uas_regs)->count();
-        $jml_soal_per = 2;
+        $jml_soal_per = 10;
         $jumlah_page  = ceil($jumlah_soal / $jml_soal_per);
         $skip         = 0;
         $start_at     = ($page * $jml_soal_per) - ($jml_soal_per - 1);
