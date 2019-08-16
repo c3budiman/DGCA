@@ -244,6 +244,8 @@ Route::get('approval/detail/uas/{id}/{page}', 'AdminController@getUasApprovalWit
 Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
 Route::post('approval/saveKepuasan', 'AdminController@saveKepuasan');
 Route::post('approval/saveketerangan', 'AdminController@saveketerangan');
+Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
+Route::get('finish_assesment/{uas_regs}', 'AdminController@getFinishAssesment');
 //Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
 

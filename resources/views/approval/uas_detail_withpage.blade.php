@@ -11,6 +11,9 @@
       justify-content: center;
     }
   </style>
+  <!-- Toastr css -->
+  <link href="{{url('/')}}/../plugins/jquery-toastr/jquery.toast.min.css" rel="stylesheet">
+
   <div class="row">
     <div class="col-lg-12">
       <div class="card card-body">
@@ -36,7 +39,7 @@
         </div>
         <br>
         <div class="btn-group flex-wrap">
-          <a href="/finish_ujian" class="btn btn-success">Selesai Menilai</a>
+          <a href="/finish_assesment/{{$uas_regs}}" class="btn btn-success">Selesai Menilai</a>
         </div>
       </div>
     </div>
@@ -72,7 +75,7 @@
             <hr>
             <button id="btn_ket_{{$soalnya->id}}" type="button" onclick="openketerangan({{$soalnya->id}})" class="btn btn-secondary" name="button">Beri Keterangan</button>
             <br>
-            <textarea id="keterangan_{{$soalnya->id}}" name="keterangan_{{$soalnya->id}}" class="form-control" style="display:none;" rows="8" cols="80"></textarea>
+            <textarea id="keterangan_{{$soalnya->id}}" name="keterangan_{{$soalnya->id}}" class="form-control" style="display:none;" rows="8" cols="80">{{$soalnya->remarks}}</textarea>
             <br>
             <button id="btn_saveket_{{$soalnya->id}}" type="button" onclick="saveketerangan({{$soalnya->id}})" style="display:none; margin-left: 10px;" class="btn btn-info pull-right" name="button">Simpan Keterangan</button>
             <button id="btn_batal_{{$soalnya->id}}" type="button" onclick="batal_save({{$soalnya->id}})" style="display:none; margin-left:10px;" class="btn btn-danger pull-right" name="button">Batalkan</button>
@@ -85,6 +88,7 @@
 @endsection
 
 @section('js')
+  <script src="{{url('/')}}/../plugins/jquery-toastr/jquery.toast.min.js"></script>
   <script type="text/javascript">
     function openketerangan(id) {
       document.getElementById('keterangan_'+id).style.display = 'block';
@@ -113,6 +117,16 @@
           },
           success: function (data, status) {
               console.log(data)
+              $.toast({
+                  heading: "Sukses!",
+                  text: "Keterangan Tersimpan.",
+                  position: "top-right",
+                  loaderBg: "#359f56",
+                  icon: "success",
+                  hideAfter: 3e3,
+                  allowToastClose: false,
+                  stack: 1
+              })
               batal_save(id)
           },
           error: function (request, status, error) {
@@ -141,14 +155,45 @@
                 document.getElementById("status_kepuasan_"+id).className = '';
                 document.getElementById("status_kepuasan_"+id).className = 'badge badge-info';
                 document.getElementById("status_kepuasan_"+id).innerHTML = 'Puas';
+                $.toast({
+                    heading: "Sukses!",
+                    text: "Nilai Assesment Tersimpan.",
+                    position: "top-right",
+                    loaderBg: "#356c9f",
+                    icon: "info",
+                    hideAfter: 3e3,
+                    allowToastClose: false,
+                    stack: 1
+                })
+
               } else if (satisfy == 2) {
                 document.getElementById("status_kepuasan_"+id).className = '';
                 document.getElementById("status_kepuasan_"+id).className = 'badge badge-danger';
                 document.getElementById("status_kepuasan_"+id).innerHTML = 'Tidak Puas';
+                $.toast({
+                    heading: "Sukses!",
+                    text: "Nilai Assesment Tersimpan.",
+                    position: "top-right",
+                    loaderBg: "#e22a2a",
+                    icon: "error",
+                    hideAfter: 3e3,
+                    allowToastClose: false,
+                    stack: 1
+                })
               } else if (satisfy == 99) {
                 document.getElementById("status_kepuasan_"+id).className = '';
                 document.getElementById("status_kepuasan_"+id).className = 'badge badge-warning';
                 document.getElementById("status_kepuasan_"+id).innerHTML = 'Netral';
+                $.toast({
+                    heading: "Sukses!",
+                    text: "Nilai Assesment Tersimpan.",
+                    position: "top-right",
+                    loaderBg: "#dee243",
+                    icon: "warning",
+                    hideAfter: 3e3,
+                    allowToastClose: false,
+                    stack: 1
+                })
               }
               console.log(data)
           },

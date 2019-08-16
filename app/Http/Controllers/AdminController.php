@@ -435,7 +435,7 @@ class AdminController extends Controller
       return Datatables::of(UasRegs::query()->where('status','2')->where('softdelete',0)->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/uas/'.$datatb->id.'/1" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
@@ -515,6 +515,24 @@ class AdminController extends Controller
       else {
         $response = array("error"=>"Not Found!");
         return response()->json($response,404);
+      }
+    }
+
+    public function getFinishAssesment($uas_regs) {
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $uas_regs)->count() > 0)
+      {
+        $data           = Ujian::where('ujian_regs', $uas_regs);
+        $ujian_ternilai = $data->whereNotNull('satisfy')->count();
+        $ujian_total    = $data->count();
+        $ujian_puas     = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',1)->count();
+        $ujian_tpuas    = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',2)->count();
+        $ujian_netral   = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',99)->count();
+
+        return view('approval.finish_assesment',['uas_regs'=>$uas_regs,'ujian_total'=>$ujian_total,'ujian_ternilai'=>$ujian_ternilai,'ujian_puas'=>$ujian_puas,'ujian_tpuas'=>$ujian_tpuas,'ujian_netral'=>$ujian_netral]);
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
       }
     }
 
