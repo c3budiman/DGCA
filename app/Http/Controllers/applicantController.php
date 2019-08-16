@@ -185,7 +185,12 @@ class applicantController extends Controller
                     ->where('ujian_regs', $id_regs)
                     ->where('jawaban', NULL)
                     ->orderBy('id_soal','asc')->first();
-        $last_soalnya = $last_soal->id_soal;
+        if ($last_soal->id_soal) {
+          $last_soalnya = $last_soal->id_soal;
+        } else {
+          return redirect('finish_ujian/'.$id_regs);
+        }
+
       }
 
       return redirect('uas_assesment_now/'.$last_soalnya.'/'.$id_regs);
