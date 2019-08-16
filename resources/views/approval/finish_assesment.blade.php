@@ -15,24 +15,27 @@
       line-height: normal;
     }
   </style>
-  <?php
-  $soal = DB::table('soal')->get();
-   ?>
   <div class="row">
     <div class="col-lg-12">
       <div class="card card-body">
-        <h1 style="vertical-align: middle; text-align: center;" class="display-3">Selesai Menilai UAS Assesment?</h1>
-        <br>
-        <br>
-        <br>
+        <h2 style="vertical-align: middle; text-align: center;">Selesai Mengevaluasi UAS Assesment?</h2>
+        <p style="vertical-align: middle; text-align: center;"> Assesment Yang Di Evaluasi : <a href="/detail/identitas/{{$nama_orang->id}}">{{$nama_orang->nama}}</a></p>
+        <br />
+        <br />
         <blockquote style="text-align: center;" class="blockquote">
-          <div class="col-md-4 alert alert-middle alert-custom bg-custom text-white border-0" role="alert">{{$ujian_ternilai}} / {{$ujian_total}} Assesment di Nilai</div> <br>
-          <div class="col-md-4 alert alert-middle alert-info bg-info text-white border-0" role="alert">{{$ujian_puas}} Assesment di Nilai Puas.</div> <br>
-          <div class="col-md-4 alert alert-middle alert-danger bg-danger text-white border-0" role="alert">{{$ujian_tpuas}} Assesment di Nilai Tidak Puas.</div> <br>
-          <div class="col-md-4 alert alert-middle alert-warning bg-warning text-white border-0" role="alert">{{$ujian_netral}} Assesment di Nilai Netral.</div>
-          <br>
-          <a class="btn btn-danger" href="/approval/detail/uas/{{$uas_regs}}/1"><i class="fa fa-times"></i> Batal</a>
-          <a class="btn btn-success" href="/finish_assesment_fix/{{$uas_regs}}"><i class="fa fa-flag-checkered"></i> Submit</a>
+          <div class="col-md-4 alert alert-middle alert-custom bg-custom text-white border-0" role="alert">{{$ujian_ternilai}} / {{$ujian_total}} Assesment di Evaluasi</div> <br>
+          <div class="col-md-4 alert alert-middle alert-info bg-info text-white border-0" role="alert">{{$ujian_puas}} Assesment di Evaluasi Puas.</div> <br>
+          <div class="col-md-4 alert alert-middle alert-danger bg-danger text-white border-0" role="alert">{{$ujian_tpuas}} Assesment di Evaluasi Tidak Puas.</div> <br>
+          <div class="col-md-4 alert alert-middle alert-warning bg-warning text-white border-0" role="alert">{{$ujian_netral}} Assesment di Evaluasi Netral.</div>
+          <br />
+
+          <form style="display:inline;" action="{{url(action('AdminController@FinishUasAssesmentFix'))}}" method="post">
+            {{ csrf_field() }}
+            <input type="hidden" name="uas_regs" value="{{$uas_regs}}">
+            <a class="btn btn-danger" href="/approval/detail/uas/{{$uas_regs}}/1"><i class="fa fa-times"></i> Batal</a>
+            <button class="btn btn-success" type="submit" name="button"><i class="fa fa-flag-checkered"></i> Submit</button>
+          </form>
+
         </blockquote>
       </div>
     </div>

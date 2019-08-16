@@ -17,14 +17,14 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card card-body">
-        <h5 class="card-title">Approval UAS Assesment</h5>
-        <p class="card-text">Isi nilai dengan tingkat kepuasaan agar dapat di approve.</p>
+        <h5 class="card-title">Evaluasi UAS Assesment</h5>
+        <p class="card-text">Isi evaluasi dengan tingkat kepuasan, sistem akan melakukan persetujuan otomatis berdasarkan skor kepuasaan evaluasi yang anda berikan.</p>
       </div>
     </div>
   </div>
   <br>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="card card-body">
         <h5 class="card-title">Halaman</h5>
         <div class="btn-group flex-wrap">
@@ -39,11 +39,11 @@
         </div>
         <br>
         <div class="btn-group flex-wrap">
-          <a href="/finish_assesment/{{$uas_regs}}" class="btn btn-success">Selesai Menilai</a>
+          <a href="/finish_assesment/{{$uas_regs}}" class="btn btn-success"><i class="fa fa-flag-checkered"></i> Selesai </a>
         </div>
       </div>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-9">
       <?php $i=0; ?>
       @foreach ($soal as $soalnya)
         <?php $i++; ?>
@@ -56,7 +56,7 @@
           </div>
 
           <div class="card-footer">
-            <h4>Nilai Jawaban : </h4>
+            <h5 class="card-title">Evaluasi Jawaban : </h5>
             {{ csrf_field() }}
             <button id="btn_puas_{{$soalnya->id}}"    type="button"  onclick="puas({{$soalnya->id}})"   class="btn btn-info"        name="button">Puas</button>
             <button id="btn_tdkpuas_{{$soalnya->id}}" type="button"  onclick="tpuas({{$soalnya->id}})"   class="btn btn-danger"      name="button">Tidak Puas</button>

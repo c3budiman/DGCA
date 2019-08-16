@@ -528,8 +528,37 @@ class AdminController extends Controller
         $ujian_puas     = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',1)->count();
         $ujian_tpuas    = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',2)->count();
         $ujian_netral   = Ujian::where('ujian_regs', $uas_regs)->where('satisfy',99)->count();
+        $uas_reg        = UasRegs::find($uas_regs);
+        $nama_orang     = User::find($uas_reg->user_id);
 
-        return view('approval.finish_assesment',['uas_regs'=>$uas_regs,'ujian_total'=>$ujian_total,'ujian_ternilai'=>$ujian_ternilai,'ujian_puas'=>$ujian_puas,'ujian_tpuas'=>$ujian_tpuas,'ujian_netral'=>$ujian_netral]);
+        return view('approval.finish_assesment',['nama_orang'=>$nama_orang,'uas_regs'=>$uas_regs,'ujian_total'=>$ujian_total,'ujian_ternilai'=>$ujian_ternilai,'ujian_puas'=>$ujian_puas,'ujian_tpuas'=>$ujian_tpuas,'ujian_netral'=>$ujian_netral]);
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+    }
+
+    public function FinishUasAssesmentFix(Request $request) {
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $request->uas_regs)->count() > 0)
+      {
+        $nilai = 0;
+        $data_ujian = Ujian::where('ujian_regs', $request->uas_regs)->get();
+        foreach ($data_ujian as $ujian) {
+          if ($ujian->satisfy == 1) {
+            $nilai+=1;
+          } elseif ($ujian->satisfy == 2) {
+            $nilai-=1;
+          }
+        }
+        //nilai harus di atas 50% klo mau approve :
+        $ujian_total = count($data_ujian);
+        $skor_pass   = round($ujian_total/2);
+        if ($nilai >= $skor_pass) {
+          echo "lulus";
+        } else {
+          echo "tidak lulus";
+        }
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
