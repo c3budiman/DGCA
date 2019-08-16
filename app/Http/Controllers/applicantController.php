@@ -107,7 +107,7 @@ class applicantController extends Controller
                   ->where('id',$id_regs)
                   ->where('softdelete',0)
                   ->where('status',1)
-                  ->count() > 1)
+                  ->count() > 0)
       {
           if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count() > 0) {
               $current_soal = DB::table('soal')
