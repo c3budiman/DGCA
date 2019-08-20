@@ -23,10 +23,15 @@
         <br />
         <br />
         <blockquote style="text-align: center;" class="blockquote">
-          <div class="col-md-4 alert alert-middle alert-custom bg-custom text-white border-0" role="alert">{{$ujian_ternilai}} / {{$ujian_total}} Assesment di Evaluasi</div> <br>
-          <div class="col-md-4 alert alert-middle alert-info bg-info text-white border-0" role="alert">{{$ujian_puas}} Assesment di Evaluasi Puas.</div> <br>
-          <div class="col-md-4 alert alert-middle alert-danger bg-danger text-white border-0" role="alert">{{$ujian_tpuas}} Assesment di Evaluasi Tidak Puas.</div> <br>
-          <div class="col-md-4 alert alert-middle alert-warning bg-warning text-white border-0" role="alert">{{$ujian_netral}} Assesment di Evaluasi Netral.</div>
+          <div class="col-md-6 alert alert-middle alert-info bg-info text-white border-0" role="alert">{{$ujian_ternilai}} / {{$ujian_total}} Assesment di Evaluasi</div> <br>
+          <div class="col-md-6 alert alert-middle alert-custom bg-custom text-white border-0" role="alert">
+            {{$ujian_puas}} Assesment di Evaluasi Puas.
+            <br>
+            {{$ujian_tpuas}} Assesment di Evaluasi Tidak Puas.
+            <br>
+            {{$ujian_netral}} Assesment di Evaluasi Netral.
+          </div> <br>
+          <div class="col-md-6 alert alert-middle alert-primary bg-primary text-white border-0" role="alert">Nilai : {{$nilai_fix}} <br> Status : {{$status}}</div> <br>
           <br />
 
           <form style="display:inline;" action="{{url(action('AdminController@FinishUasAssesmentFix'))}}" method="post">

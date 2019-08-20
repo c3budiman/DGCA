@@ -180,7 +180,7 @@
     $('.datatable2').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('approvalUas/json') }}',
+        ajax: '{{ route('approvalUasFinish/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},

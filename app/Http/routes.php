@@ -240,6 +240,7 @@ Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
 Route::get('approval/uas', 'AdminController@getApprovalUAS');
 Route::get('approvalUas/json', 'AdminController@approveUasDataTB')->name('approvalUas/json');
+Route::get('approvalUasFinish/json', 'AdminController@approvedUasDataTB')->name('approvalUasFinish/json');
 Route::get('approval/detail/uas/{id}/{page}', 'AdminController@getUasApprovalWithPage');
 Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
 Route::post('approval/saveKepuasan', 'AdminController@saveKepuasan');
@@ -247,6 +248,7 @@ Route::post('approval/saveketerangan', 'AdminController@saveketerangan');
 Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
 Route::get('finish_assesment/{uas_regs}', 'AdminController@getFinishAssesment');
 Route::post('finish_assesment_fix', 'AdminController@FinishUasAssesmentFix');
+Route::get('detail/uas/finished/{id}', 'AdminController@UasApprovalFinished');
 //Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
 

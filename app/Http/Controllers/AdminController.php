@@ -349,7 +349,17 @@ class AdminController extends Controller
     }
 
     public function approveidentitasTB(){
-      return Datatables::of(User::query()->where('roles_id','3')->where('approved','!=','1')->get())
+      $user = User::whereIn('id', function($query)
+      {
+          $query->select('user_id')
+                ->from('uas_regs')
+                ->whereRaw('uas_regs.user_id = users.id')
+                ->where('status',3)->where('softdelete',0);
+      })
+      ->where('roles_id','3')->where('approved','=','')->orWhere('approved', 0)
+      ->get();
+
+      return Datatables::of($user)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Details</a>';
@@ -444,6 +454,20 @@ class AdminController extends Controller
       ->make(true);
     }
 
+    public function approvedUasDataTB()
+    {
+      return Datatables::of(UasRegs::query()->where('status','3')->where('softdelete',0)->orderBy('id','desc')->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addColumn('nama', function($datatb) {
+        return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
     public function getUasApproval($uas_regs)
     {
       if (DB::table('ujian')
@@ -455,7 +479,10 @@ class AdminController extends Controller
         $jumlah_page  = ceil($jumlah_soal / $jml_soal_per);
         $soal         = DB::table('ujian')
                         ->where('ujian_regs', $uas_regs)->take($jml_soal_per)->get();
-        return view('approval.uas_detail',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page]);
+        $uas_reg      = UasRegs::find($uas_regs);
+        $nama_orang   = User::find($uas_reg->user_id);
+
+        return view('approval.uas_detail',['uas_reg'=>$uas_reg,'nama_orang'=>$nama_orang,'uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page]);
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
@@ -465,7 +492,7 @@ class AdminController extends Controller
 
     public function getUasApprovalWithPage($uas_regs,$page) {
       if (DB::table('ujian')
-                  ->where('ujian_regs', $uas_regs)->count() > 1)
+                  ->where('ujian_regs', $uas_regs)->count() > 0)
       {
         $jumlah_soal  = DB::table('ujian')
                         ->where('ujian_regs', $uas_regs)->count();
@@ -481,6 +508,22 @@ class AdminController extends Controller
                         ->where('ujian_regs', $uas_regs)->skip($skip)->take($jml_soal_per)->get();
 
         return view('approval.uas_detail_withpage',['uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_page'=>$jumlah_page,'page'=>$page,'start_at'=>$start_at]);
+      }
+      else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+    }
+
+    public function UasApprovalFinished($uas_regs){
+      if (DB::table('ujian')
+                  ->where('ujian_regs', $uas_regs)->count() > 0)
+      {
+        $soal         = DB::table('ujian')
+                        ->where('ujian_regs', $uas_regs)->get();
+        $jumlah_soal = count($soal);
+        $nama_orang     = User::find($uas_reg->user_id);
+
+        return view('approval.uas_detail',['nama_orang'=>$nama_orang,'uas_regs'=>$uas_regs,'soal'=>$soal,'jumlah_soal'=>$jumlah_soal]);
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
@@ -532,7 +575,25 @@ class AdminController extends Controller
         $uas_reg        = UasRegs::find($uas_regs);
         $nama_orang     = User::find($uas_reg->user_id);
 
-        return view('approval.finish_assesment',['nama_orang'=>$nama_orang,'uas_regs'=>$uas_regs,'ujian_total'=>$ujian_total,'ujian_ternilai'=>$ujian_ternilai,'ujian_puas'=>$ujian_puas,'ujian_tpuas'=>$ujian_tpuas,'ujian_netral'=>$ujian_netral]);
+        $nilai          = 0;
+        $data_ujian     = Ujian::where('ujian_regs', $uas_regs)->get();
+        foreach ($data_ujian as $ujian) {
+          if ($ujian->satisfy == 1) {
+            $nilai+=1;
+          }
+        }
+        $ujian_total    = count($data_ujian);
+        $skor_pass      = round($ujian_total/2);
+        $nilai_fix      = $nilai/$ujian_total * 100;
+
+        if ($nilai_fix > $skor_pass) {
+          $status = 'Lulus';
+        }
+        else {
+          $status = 'Tidak Lulus';
+        }
+
+        return view('approval.finish_assesment',['status'=>$status,'nilai_fix'=>$nilai_fix,'nama_orang'=>$nama_orang,'uas_regs'=>$uas_regs,'ujian_total'=>$ujian_total,'ujian_ternilai'=>$ujian_ternilai,'ujian_puas'=>$ujian_puas,'ujian_tpuas'=>$ujian_tpuas,'ujian_netral'=>$ujian_netral]);
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
@@ -543,23 +604,29 @@ class AdminController extends Controller
       if (DB::table('ujian')
                   ->where('ujian_regs', $request->uas_regs)->count() > 0)
       {
-        $nilai = 0;
+        $nilai      = 0;
         $data_ujian = Ujian::where('ujian_regs', $request->uas_regs)->get();
+        $uas_regs   = UasRegs::find($request->uas_regs);
         foreach ($data_ujian as $ujian) {
           if ($ujian->satisfy == 1) {
             $nilai+=1;
-          } elseif ($ujian->satisfy == 2) {
-            $nilai-=1;
           }
         }
         //nilai harus di atas 50% klo mau approve :
         $ujian_total = count($data_ujian);
         $skor_pass   = round($ujian_total/2);
+        $nilai_fix            = $nilai/$ujian_total * 100;
+        $uas_regs->nilai      = $nilai_fix;
+        $uas_regs->change_by  = Auth::User()->nama;
+
         if ($nilai >= $skor_pass) {
-          echo "lulus";
-        } else {
-          echo "tidak lulus";
+          $uas_regs->status = 3;
         }
+        else {
+          $uas_regs->status = 4;
+        }
+        $uas_regs->save();
+        return redirect('approval/uas')->with('succes', 'Assesment Saved!');;
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
