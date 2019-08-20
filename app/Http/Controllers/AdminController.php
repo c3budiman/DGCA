@@ -31,6 +31,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use App\UasRegs;
 use App\Ujian;
+use App\RemotePilot;
+use Dompdf\Dompdf;
+//use QRCode;
+use CodeItNow\BarcodeBundle\Utils\QrCode;
 
 class AdminController extends Controller
 {
@@ -389,13 +393,123 @@ class AdminController extends Controller
 
     public function approvedidentitas(Request $request,$id) {
       $user = User::find($id);
-      $user->approved = 1;
+      $uas_regs = UasRegs::where('user_id',$id)->where('softdelete',0)->first()->id;
+      if ($request->approval == 'approve') {
+        $user->approved = 1;
+        $nomor_pilot = $this->generateRemotePilotCert();
+        $sertifikat = $this->generateCertifiedPilot($nomor_pilot,$user);
+
+        //insert ke tabel pilot :
+        $pilot = new RemotePilot;
+        $pilot->nomor_pilot = $nomor_pilot;
+        $pilot->user_id = $id;
+        $pilot->uas_regs = $uas_regs;
+        $pilot->sertifikasi_pilot = $sertifikat;
+        $pilot->save();
+      } else {
+        $user->approved = 2;
+      }
       $user->save();
       return redirect('approveidentitas')->with('succes', 'User successfuly approved!');
     }
 
+    public function generateCertifiedPilot($nomor_pilot,$user) {
+      // instantiate and use the dompdf class
+      $dompdf = new Dompdf();
+      $qrCode = new QrCode();
+
+      $url = url('/').'/remote_pilot/confirm/'.$nomor_pilot;
+      $qrCode
+          ->setText($url)
+          ->setSize(250)
+          ->setPadding(10)
+          ->setErrorCorrection('high')
+          ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+          ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+          // ->setLabel('QR Code Remote Pilot')
+          ->setLabelFontSize(16)
+          ->setImageType(QrCode::IMAGE_TYPE_PNG)
+      ;
+
+      $dompdf->loadHtml('
+          <div class="">
+            <img style="top:-50px; position: fixed; left:50px;" width="100%" height="10%" src="'.public_path('sertif/1.png').'" alt="">
+            <br>
+            <div style="position: absolute; height: 80%; width: 80%; top: 20%; left: 10%;">
+              <center>
+                <br>
+                <h1>Certificate of Completion</h1>
+                <br>
+
+                <h2>'.$user->nama.' <br> '.$nomor_pilot.'</h2>
+
+                <br>
+                <br>
+
+                <p>Has successfully completed Qualification for Remote Pilot.</p>
+                <br>
+                <br>
+                <img height="100px" src="'.public_path('sertif/dju.png').'" alt="">
+              </center>
+            </div>
+            <img style="position: absolute; top: 70%; left: 60%;" width="100px" src="'.public_path('sertif/nama.png').'" alt="">
+            <img style="position: absolute; top: 71%; left: 58%;" width="150px" src="'.public_path('sertif/line.png').'" alt="">
+            <img style="position: absolute; top: 71%; left: 60%;" height="100px" src="'.public_path('sertif/ttd.png').'" alt="">
+
+            <img style="position: absolute; top: 68%; left: 30%;" height="100px" src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'">
+
+            <img style="position: absolute; bottom:0%; left:-50px; right:-50px; top: 87%;" width="100%" height="10%" src="'.public_path('sertif/2.png').'" alt="">
+          </div>
+    ');
+
+      $dompdf->setPaper('A4', 'landscape');
+
+      $dompdf->set_option('isHtml5ParserEnabled', true);
+      $dompdf->set_option('isRemoteEnabled', true);
+
+      $dompdf->render();
+
+      $pdf_gen = $dompdf->output();
+
+      $tujuan_upload = public_path().'/sertifikasi/pilot/'.$user->id;
+      //make the folder :
+      if (!is_dir($tujuan_upload)) {
+          mkdir($tujuan_upload, 0777, true);
+      }
+      $nama_file = 'Sertifikat_'.$nomor_pilot.'.pdf';
+
+      if(!file_put_contents($tujuan_upload.'/'.$nama_file, $pdf_gen)){
+        return 'false';
+      }else{
+        return url('/').'/sertifikasi/pilot/'.$user->id.'/'.$nama_file;
+      }
+    }
+
+    protected function generateRemotePilotCert() {
+      $inc = DB::table('auto_seq')->where('id', 1)->first();
+      $last_no = $inc->increment_remote_pilot+1;
+
+      if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_remote_pilot' => $last_no] ) ) {
+        $tgl_hari_ini = date("dmy");
+        $nomor_pilot = $tgl_hari_ini.$last_no;
+        return $nomor_pilot;
+      } else {
+        return 'gagalCreate';
+      }
+    }
+
     public function approvedronesTB(){
-      return Datatables::of(drones::query()->where('approved','0')->orderBy('id','desc')->get())
+      $drones = drones::whereIn('user_id', function($query)
+      {
+          $query->select('id')
+                ->from('users')
+                ->whereRaw('drones.user_id = users.id')
+                ->where('approved', 1);
+      })
+      ->where('approved',0)->orderBy('id','desc')
+      ->get();
+
+      return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';

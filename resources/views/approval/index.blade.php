@@ -32,7 +32,7 @@
                                   <th>No</th>
                                   <th>Nama</th>
                                   <th>Email</th>
-                                  <th>Status</th>
+                                  <th>Company</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -62,7 +62,7 @@
                                   <th>No</th>
                                   <th>Nama</th>
                                   <th>Email</th>
-                                  <th>Status</th>
+                                  <th>Company</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -175,7 +175,7 @@
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
             {data: 'email', name: 'email'},
-            {data: 'approved', name: 'approved'},
+            {data: 'company', name: 'company'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -188,7 +188,7 @@
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
             {data: 'email', name: 'email'},
-            {data: 'approved', name: 'approved'},
+            {data: 'company', name: 'company'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

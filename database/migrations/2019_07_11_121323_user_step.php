@@ -21,15 +21,19 @@ class UserStep extends Migration
       DB::table('status_list')->insert([
         ['kode_status' => 1,'keterangan'  => 'Berhasil Mendaftar Awal'],
         ['kode_status' => 2,'keterangan'  => 'Berhasil Memverifikasi Email'],
+
         ['kode_status' => 3,'keterangan'  => 'Berhasil Mendaftarkan Identitas'],
         ['kode_status' => 4,'keterangan'  => 'Berhasil Mendaftarkan Drones %s'],
         ['kode_status' => 5,'keterangan'  => 'Berhasil Melakukan Assesment'],
-        ['kode_status' => 6,'keterangan'  => 'Identitas Telah Diverifikasi Oleh Admin'],
-        ['kode_status' => 7,'keterangan'  => 'Drone %s telah diverifikasi oleh Admin'],
-        ['kode_status' => 8,'keterangan'  => 'Assesment Telah dinilai oleh Admin dan Lulus'],
-        ['kode_status' => 41,'keterangan' => 'Drone Telah Dinyatakan tidak layak oleh Admin'],
-        ['kode_status' => 51,'keterangan' => 'Assesment Telah Ditolak oleh Admin'],
-        ['kode_status' => 52,'keterangan' => 'Assesment Dinyatakan Tidak Lulus oleh Admin'],
+
+        ['kode_status' => 6,'keterangan'  => 'Assesment telah dinilai oleh admin dan lulus'],
+        ['kode_status' => 7,'keterangan'  => 'Assesment telah dinilai oleh admin dan tidak lulus'],
+
+        ['kode_status' => 8,'keterangan' => 'Identitas remote pilot telah ditolak oleh admin'],
+        ['kode_status' => 9,'keterangan' => 'Identitas remote pilot diterima oleh admin'],
+
+        ['kode_status' => 10,'keterangan'  => 'Drone telah dinyatakan layak oleh admin'],
+        ['kode_status' => 11,'keterangan'  => 'Drone telah dinyatakan tidak layak oleh admin'],
       ]);
 
       Schema::create('user_step', function (Blueprint $table) {

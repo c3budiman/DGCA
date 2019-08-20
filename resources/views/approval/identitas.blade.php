@@ -93,11 +93,14 @@
                       <hr>
                       @if ($user->approved != 1)
                         <div class="pull-right">
-                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                          <button name="approval" value="approve" type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </div>
+                        <div class="pull-right" style="margin-right:10px">
+                          <button name="approval" value="disapprove" type="submit" class="btn btn-sm btn-danger">Disapprove</button>
                         </div>
                       @endif
                   </form>
-                    <a href="/approveidentitas" class="btn btn-sm btn-danger pull-right mr-2">Kembali</a>
+                    <a href="/approveidentitas" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
                   </div>
               </div>
           </div>
