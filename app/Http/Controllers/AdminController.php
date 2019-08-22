@@ -35,6 +35,8 @@ use App\RemotePilot;
 use Dompdf\Dompdf;
 //use QRCode;
 use CodeItNow\BarcodeBundle\Utils\QrCode;
+use Mail;
+use App\RegisteredDrone;
 
 class AdminController extends Controller
 {
@@ -399,6 +401,24 @@ class AdminController extends Controller
         $nomor_pilot = $this->generateRemotePilotCert();
         $sertifikat = $this->generateCertifiedPilot($nomor_pilot,$user);
 
+        //send email :
+        $sender = "DGCA Dummy Email | Sertifikat Pilot";
+        $EmailSender = $user->email;
+        $pesan = "Terlampir";
+        Mail::send('emails.send', ['sender' => $sender, 'EmailSender' => $EmailSender, 'pesan' => $pesan],
+        function ($message) use ($user,$nomor_pilot)
+        {
+            $tujuan_upload = public_path().'/sertifikasi/pilot/'.$user->id;
+            $nama_file = 'Sertifikat_'.$nomor_pilot.'.pdf';
+
+            $perihal = "DGCA Dummy Email | Sertifikat Pilot";
+            $sender = "DGCA Dummy Email";
+            $message->from('ugdisposition@gmail.com', 'DGCA Dummy Email No Reply');
+            $message->to($user->email);
+            $message->subject($sender);
+            $message->attach($tujuan_upload.'/'.$nama_file);
+        });
+
         //insert ke tabel pilot :
         $pilot = new RemotePilot;
         $pilot->nomor_pilot = $nomor_pilot;
@@ -406,7 +426,11 @@ class AdminController extends Controller
         $pilot->uas_regs = $uas_regs;
         $pilot->sertifikasi_pilot = $sertifikat;
         $pilot->save();
+
+        //save Log :
+
       } else {
+        //ditolak :
         $user->approved = 2;
       }
       $user->save();
@@ -414,53 +438,53 @@ class AdminController extends Controller
     }
 
     public function generateCertifiedPilot($nomor_pilot,$user) {
-      // instantiate and use the dompdf class
-      $dompdf = new Dompdf();
-      $qrCode = new QrCode();
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $qrCode = new QrCode();
 
-      $url = url('/').'/remote_pilot/confirm/'.$nomor_pilot;
-      $qrCode
-          ->setText($url)
-          ->setSize(250)
-          ->setPadding(10)
-          ->setErrorCorrection('high')
-          ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-          ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-          // ->setLabel('QR Code Remote Pilot')
-          ->setLabelFontSize(16)
-          ->setImageType(QrCode::IMAGE_TYPE_PNG)
-      ;
+        $url = url('/').'/remote_pilot/confirm/'.$nomor_pilot;
+        $qrCode
+            ->setText($url)
+            ->setSize(250)
+            ->setPadding(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            // ->setLabel('QR Code Remote Pilot')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG)
+        ;
 
-      $dompdf->loadHtml('
-          <div class="">
-            <img style="top:-50px; position: fixed; left:50px;" width="100%" height="10%" src="'.public_path('sertif/1.png').'" alt="">
-            <br>
-            <div style="position: absolute; height: 80%; width: 80%; top: 20%; left: 10%;">
-              <center>
-                <br>
-                <h1>Certificate of Completion</h1>
-                <br>
+        $dompdf->loadHtml('
+            <div class="">
+              <img style="top:-50px; position: fixed; left:50px;" width="100%" height="10%" src="'.public_path('sertif/1.png').'" alt="">
+              <br>
+              <div style="position: absolute; height: 80%; width: 80%; top: 20%; left: 10%;">
+                <center>
+                  <br>
+                  <h1>Certificate of Completion</h1>
+                  <br>
 
-                <h2>'.$user->nama.' <br> '.$nomor_pilot.'</h2>
+                  <h2>'.$user->nama.' <br> '.$nomor_pilot.'</h2>
 
-                <br>
-                <br>
+                  <br>
+                  <br>
 
-                <p>Has successfully completed Qualification for Remote Pilot.</p>
-                <br>
-                <br>
-                <img height="100px" src="'.public_path('sertif/dju.png').'" alt="">
-              </center>
+                  <p>Has successfully completed Qualification for Remote Pilot.</p>
+                  <br>
+                  <br>
+                  <img height="100px" src="'.public_path('sertif/dju.png').'" alt="">
+                </center>
+              </div>
+              <img style="position: absolute; top: 70%; left: 60%;" width="100px" src="'.public_path('sertif/nama.png').'" alt="">
+              <img style="position: absolute; top: 71%; left: 58%;" width="150px" src="'.public_path('sertif/line.png').'" alt="">
+              <img style="position: absolute; top: 71%; left: 60%;" height="100px" src="'.public_path('sertif/ttd.png').'" alt="">
+
+              <img style="position: absolute; top: 68%; left: 30%;" height="100px" src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'">
+
+              <img style="position: absolute; bottom:0%; left:-50px; right:-50px; top: 87%;" width="100%" height="10%" src="'.public_path('sertif/2.png').'" alt="">
             </div>
-            <img style="position: absolute; top: 70%; left: 60%;" width="100px" src="'.public_path('sertif/nama.png').'" alt="">
-            <img style="position: absolute; top: 71%; left: 58%;" width="150px" src="'.public_path('sertif/line.png').'" alt="">
-            <img style="position: absolute; top: 71%; left: 60%;" height="100px" src="'.public_path('sertif/ttd.png').'" alt="">
-
-            <img style="position: absolute; top: 68%; left: 30%;" height="100px" src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'">
-
-            <img style="position: absolute; bottom:0%; left:-50px; right:-50px; top: 87%;" width="100%" height="10%" src="'.public_path('sertif/2.png').'" alt="">
-          </div>
-    ');
+      ');
 
       $dompdf->setPaper('A4', 'landscape');
 
@@ -517,6 +541,13 @@ class AdminController extends Controller
       ->addColumn('nama', function($datatb) {
         return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
       })
+      ->addColumn('drones_image', function($datatb) {
+        if ($datatb->pic_of_drones) {
+          return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+        } else {
+          return '';
+        }
+      })
       ->addIndexColumn()
       ->make(true);
     }
@@ -545,9 +576,69 @@ class AdminController extends Controller
 
     public function approveddrones(Request $request,$id){
       $drones = drones::find($id);
-      $drones->approved = 1;
+      $user = User::find($drones->user_id);
+      $uas_regs = UasRegs::where('user_id',$drones->user_id)->where('softdelete',0)->first()->id;
+      if ($request->approval == 'approve') {
+        $drones->approved = 1;
+        $nomor_drone      = $this->generateNomorDrone();
+        $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones);
+
+        //send email :
+        $sender       = "DGCA Dummy Email | Sertifikat Drone";
+        $EmailSender  = $user->email;
+        $pesan        = "Terlampir";
+        Mail::send('emails.send', ['sender' => $sender, 'EmailSender' => $EmailSender, 'pesan' => $pesan],
+        function ($message) use ($user,$nomor_drone)
+        {
+            $tujuan_upload  = public_path().'/sertifikasi/drone/'.$user->id;
+            $nama_file      = 'Sertifikat_Drone_'.$nomor_drone.'.pdf';
+
+            $perihal  = "DGCA Dummy Email | Sertifikat Drones";
+            $sender   = "DGCA Dummy Email";
+            $message->from('ugdisposition@gmail.com', 'DGCA Dummy Email No Reply');
+            $message->to($user->email);
+            $message->subject($sender);
+            $message->attach($tujuan_upload.'/'.$nama_file);
+        });
+
+        //insert ke tabel pilot :
+        $drone = new RegisteredDrone;
+        $drone->nomor_drone = $nomor_pilot;
+        $drone->user_id = $id;
+        $drone->uas_regs = $uas_regs;
+        $drone->sertifikasi_drone = $sertifikat;
+        $drone->save();
+      }
+      else {
+        $drones->approved = 2;
+      }
+
       $drones->save();
       return redirect('approvedrones')->with('succes', 'User successfuly approved!');
+    }
+
+    public function numToB26($num)
+    {
+        do {
+            $val = ($num % 26) ?: 26;
+            $num = ($num - $val) / 26;
+            $b26 = chr($val + 64).($b26 ?: '');
+        } while (0 < $num);
+        return $b26;
+    }
+
+    public function generateNomorDrone($nomor_wilayah){
+      $inc = DB::table('auto_seq')->where('id', 1)->first();
+      $last_no = $inc->increment_drone+1;
+
+      if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_drone' => $last_no] ) ) {
+        $tgl_hari_ini = date("dm");
+        $kode_wilayah = numToB26($nomor_wilayah);
+        $nomor_drone = $kode_wilayah.$tgl_hari_ini.$last_no;
+        return $nomor_drone;
+      } else {
+        return 'gagalCreate';
+      }
     }
 
     public function getApprovalUAS() {

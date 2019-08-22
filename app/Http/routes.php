@@ -78,32 +78,58 @@ Route::post('tesform',function(Request $request){
     dd($request->all());
 });
 
-Route::get('tesser','AdminController@generateCertifiedPilot');
-Route::get('tesser2', function() {
-  return view('sertifikat.tes');
-});
+// Route::get('tesser','AdminController@generateCertifiedPilot');
+// Route::get('tesser2', function() {
+//   return view('sertifikat.tes');
+// });
+//
+// Route::get('qr-code/{url}', function ($url)
+// {
+//   $qrCode = new QrCode();
+//   $qrCode
+//       ->setText($url)
+//       ->setSize(300)
+//       ->setPadding(10)
+//       ->setErrorCorrection('high')
+//       ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+//       ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+//       ->setLabel('QR Code Remote Pilot')
+//       ->setLabelFontSize(16)
+//       ->setImageType(QrCode::IMAGE_TYPE_PNG)
+//   ;
+//   echo '<img src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'" />';
+//
+//   // //dd(public_path('qr_code/tes.png'));
+//   // $tes = QRCode::text($url)->png();
+//   // $tea = imagecreatefromstring($tes);
+//   // // imagepng($tea, public_path('qr_code/tes.png'));
+//   // file_put_contents(public_path('qr_code/tes.png'), $tes);
+// });
 
-Route::get('qr-code/{url}', function ($url)
-{
-  $qrCode = new QrCode();
-  $qrCode
-      ->setText($url)
-      ->setSize(300)
-      ->setPadding(10)
-      ->setErrorCorrection('high')
-      ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-      ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-      ->setLabel('QR Code Remote Pilot')
-      ->setLabelFontSize(16)
-      ->setImageType(QrCode::IMAGE_TYPE_PNG)
-  ;
-  echo '<img src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'" />';
+Route::get('rollback_alamat', function() {
+  $user = DB::table('users')->get();
+  foreach ($user as $usr) {
+    if ($usr->address) {
+      $alamat_real = $usr->address;
+      $alamat_kode = explode("\,", $alamat_real);
+      // dd($alamat_kode);
+      echo DB::table('provinces')->where('name',ltrim($alamat_kode[3], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('districts')->where('name',ltrim($alamat_kode[2], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('villages')->where('name',ltrim($alamat_kode[0], ' '))->first()->id;
+      echo "<br>";
+      DB::table('users')
+            ->where('id', $usr->id)
+            ->update([ 'address_code' => DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id ] );
+      echo $usr->email;
+      echo "<br>";
 
-  // //dd(public_path('qr_code/tes.png'));
-  // $tes = QRCode::text($url)->png();
-  // $tea = imagecreatefromstring($tes);
-  // // imagepng($tea, public_path('qr_code/tes.png'));
-  // file_put_contents(public_path('qr_code/tes.png'), $tes);
+
+    }
+  }
 });
 
 

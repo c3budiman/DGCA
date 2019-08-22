@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('verif_token')->nullable();
             $table->string('api_token')->nullable();
+            $table->string('kode_alamat')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -3,5 +3,6 @@
 /node_modules
 
 /public/dokumen/*
+/public/sertifikasi/*
 
 .env

@@ -86,6 +86,29 @@
                               </div>
                             </div>
 
+                            @if ($user->approved == 1)
+                               @if (DB::table('remote_pilot')->where('user_id',$user->id)->count() > 0)
+                                 <?php
+                                 $remote_pilot = DB::table('remote_pilot')->where('user_id',$user->id)->first();
+                                  ?>
+                                  <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Pilot</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="" disabled value="{{$remote_pilot->nomor_pilot}}">
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label" for="simpleinput">Sertifikat Pilot</label>
+                                    <div class="col-sm-10">
+                                      @if ($remote_pilot->sertifikasi_pilot)
+                                        <a class="btn btn-info" href="{{$remote_pilot->sertifikasi_pilot}}">Download</a>
+                                      @endif
+                                    </div>
+                                  </div>
+                               @endif
+                            @endif
+
 
                           </div>
                         </div>

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RemotePilot extends Migration
+class RegisteredDrone extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,20 @@ class RemotePilot extends Migration
      */
     public function up()
     {
-      Schema::create('remote_pilot', function (Blueprint $table) {
+      Schema::create('registered_drone', function (Blueprint $table) {
           $table->increments('id');
           $table->unsignedInteger('user_id');
           $table->unsignedInteger('uas_regs');
-          $table->string('nomor_pilot')->unique();
-          $table->text('sertifikasi_pilot');
+          $table->string('nomor_drone')->unique();
+          $table->text('sertifikasi_drone');
           $table->timestamps();
       });
-      Schema::table('remote_pilot', function(Blueprint $kolom){
+
+      Schema::table('registered_drone', function(Blueprint $kolom){
         $kolom->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
       });
 
-      Schema::table('remote_pilot', function(Blueprint $kolom){
+      Schema::table('registered_drone', function(Blueprint $kolom){
         $kolom->foreign('uas_regs')->references('id')->on('uas_regs')->onDelete('cascade')->onUpdate('cascade');
       });
     }
@@ -36,6 +37,7 @@ class RemotePilot extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('auto_seq');
         Schema::dropIfExists('remote_pilot');
     }
 }

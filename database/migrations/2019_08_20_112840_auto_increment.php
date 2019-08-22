@@ -18,6 +18,13 @@ class AutoIncrement extends Migration
             $table->unsignedInteger('increment_drone');
             $table->timestamps();
         });
+
+        DB::table('auto_seq')->insert(
+          array(
+              'increment_remote_pilot' => 1,
+              'increment_drone' => 1,
+          )
+      );
     }
 
     /**
@@ -27,6 +34,6 @@ class AutoIncrement extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('auto_seq');
     }
 }

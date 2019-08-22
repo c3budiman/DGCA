@@ -30,10 +30,10 @@
                           <thead>
                               <tr>
                                   <th>No</th>
+                                  <th>Foto Drone</th>
                                   <th>Nama Pemilik</th>
                                   <th>Manufacturer</th>
                                   <th>Model</th>
-                                  <th>Status</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -175,10 +175,10 @@
         ajax: '{{ route('approvedrones/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+            {data: 'drones_image', name: 'drones_image', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
             {data: 'manufacturer', name: 'manufacturer'},
             {data: 'model', name: 'model'},
-            {data: 'approved', name: 'approved'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
