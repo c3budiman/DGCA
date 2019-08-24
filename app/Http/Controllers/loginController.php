@@ -30,7 +30,7 @@ class loginController extends Controller
     //kalo tidak kita kasih response 401 alias unauthorized
     if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])){
         //return response()->json(['error' => 'Your Credential Is Wrong!! Bitch...'], 401);
-        $user = User::where('email',$request->email)->where('password',bcrypt($request->password))->get();
+        $user = User::where('email',$request->email)->get();
         //generate (time-based) UUID object :
         try {
             $uuid1 = Uuid::uuid5(Uuid::NAMESPACE_DNS, $request->email.date('ymdhms') );
