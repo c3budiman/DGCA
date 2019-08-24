@@ -32,6 +32,6 @@ class Kernel extends HttpKernel
         'rule' => \App\Http\Middleware\HakAksesMidleware::class,
         'auth.token' => \App\Http\Middleware\apitoken::class,
         'auth.login' => \App\Http\Middleware\apiLogin::class,
-        'csrf' => \App\Http\Middleware\VerifyCsrfToken::class
+        //'csrf' => \App\Http\Middleware\VerifyCsrfToken::class
     ];
 }
