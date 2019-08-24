@@ -139,7 +139,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        LaravelQRCode\Providers\QRCodeServiceProvider::class,
+        //LaravelQRCode\Providers\QRCodeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -198,7 +198,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Image'      => Intervention\Image\Facades\Image::class,
-        'QRCode'     => LaravelQRCode\Facades\QRCode::class,
+        //'QRCode'     => LaravelQRCode\Facades\QRCode::class,
     ],
 
 ];
