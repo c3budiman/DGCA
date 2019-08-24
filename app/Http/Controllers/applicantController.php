@@ -93,8 +93,9 @@ class applicantController extends Controller
                         ->where('ujian_regs', $uas_regs->id)
                         ->where('jawaban', NULL)
                         ->orderBy('id_soal','asc')->first();
-            $last_soalnya = $last_soal->id_soal;
+            $last_soalnya = $last_soal->id;
           }
+          // dd('uas_assesment_now/'.$last_soalnya.'/'.$uas_regs->id);
           return redirect('uas_assesment_now/'.$last_soalnya.'/'.$uas_regs->id);
 
         }
@@ -109,15 +110,19 @@ class applicantController extends Controller
                   ->where('status',1)
                   ->count() > 0)
       {
-          if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count() > 0) {
+          //dd(DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->where('id', $id)->count());
+          if (DB::table('ujian')->where('user_id', Auth::User()->id)->where('ujian_regs', $id_regs)->count() > 0) {
+              $id_soal = Ujian::find($id)->id_soal;
+
               $current_soal = DB::table('soal')
-                                ->where('id', $id)
+                                ->where('id', $id_soal)
                                 ->first();
 
               $all_soal = DB::table('ujian')
                                 ->where('user_id', Auth::User()->id)
                                 ->where('ujian_regs', $id_regs)
                                 ->get();
+
               return view('applicant.ujian',['current_soal'=>$current_soal, 'all_soal'=>$all_soal,'id_regs'=>$id_regs]);
           }
           else {
@@ -185,7 +190,7 @@ class applicantController extends Controller
                     ->where('ujian_regs', $id_regs)
                     ->where('jawaban', NULL)
                     ->orderBy('id_soal','asc')->first();
-        if ($last_soal->id_soal) {
+        if ( $last_soal ) {
           $last_soalnya = $last_soal->id_soal;
         } else {
           return redirect('finish_ujian/'.$id_regs);

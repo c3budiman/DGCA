@@ -512,14 +512,30 @@ class AdminController extends Controller
     protected function generateRemotePilotCert() {
       $inc = DB::table('auto_seq')->where('id', 1)->first();
       $last_no = $inc->increment_remote_pilot+1;
+      $sprint_ln = sprintf('%04d', $last_no);
+      $date = $inc->remote_pilot_day_last_date;
+      $date_now = date("Y-m-d");
 
-      if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_remote_pilot' => $last_no] ) ) {
+      //kalo tanggal nya dah berubah balik lagi ke 1.
+      if (date_parse($date) != date_parse($date_now)) {
+        DB::table('auto_seq')->where('id', 1)->update( ['remote_pilot_day_last_date' => $date_now] );
+        DB::table('auto_seq')->where('id', 1)->update( ['increment_remote_pilot' => 0] );
         $tgl_hari_ini = date("dmy");
-        $nomor_pilot = $tgl_hari_ini.$last_no;
+        $sprint_ln = sprintf('%04d', 1);
+        $nomor_pilot = $tgl_hari_ini.$sprint_ln;
         return $nomor_pilot;
-      } else {
-        return 'gagalCreate';
       }
+      else {
+        //kalo tanggal nya sama lanjut aja, pake increment biasa
+        if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_remote_pilot' => $last_no] ) ) {
+          $tgl_hari_ini = date("dmy");
+          $nomor_pilot = $tgl_hari_ini.$sprint_ln;
+          return $nomor_pilot;
+        } else {
+          return 'gagalCreate';
+        }
+      }
+
     }
 
     public function approvedronesTB(){
@@ -532,7 +548,7 @@ class AdminController extends Controller
       })
       ->where('approved',0)->orderBy('id','desc')
       ->get();
-
+      //dd($drones);
       return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
@@ -574,14 +590,14 @@ class AdminController extends Controller
       return view('approval.drones')->with(compact('drones'));
     }
 
-    public function approveddrones(Request $request,$id){
+    public function approveddrones(Request $request,$id) {
       $drones = drones::find($id);
       $user = User::find($drones->user_id);
       $uas_regs = UasRegs::where('user_id',$drones->user_id)->where('softdelete',0)->first()->id;
       if ($request->approval == 'approve') {
         $drones->approved = 1;
-        $nomor_drone      = $this->generateNomorDrone();
-        $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones);
+        $nomor_drone      = $this->generateNomorDrone($user->address_code);
+        $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones,$user->nama,$user->id);
 
         //send email :
         $sender       = "DGCA Dummy Email | Sertifikat Drone";
@@ -591,7 +607,7 @@ class AdminController extends Controller
         function ($message) use ($user,$nomor_drone)
         {
             $tujuan_upload  = public_path().'/sertifikasi/drone/'.$user->id;
-            $nama_file      = 'Sertifikat_Drone_'.$nomor_drone.'.pdf';
+            $nama_file      = 'Sertifikat_'.$nomor_drone.'.pdf';
 
             $perihal  = "DGCA Dummy Email | Sertifikat Drones";
             $sender   = "DGCA Dummy Email";
@@ -603,8 +619,8 @@ class AdminController extends Controller
 
         //insert ke tabel pilot :
         $drone = new RegisteredDrone;
-        $drone->nomor_drone = $nomor_pilot;
-        $drone->user_id = $id;
+        $drone->nomor_drone = $nomor_drone;
+        $drone->user_id = $drones->user_id;
         $drone->uas_regs = $uas_regs;
         $drone->sertifikasi_drone = $sertifikat;
         $drone->save();
@@ -619,6 +635,7 @@ class AdminController extends Controller
 
     public function numToB26($num)
     {
+        $b26 = 0;
         do {
             $val = ($num % 26) ?: 26;
             $num = ($num - $val) / 26;
@@ -630,15 +647,101 @@ class AdminController extends Controller
     public function generateNomorDrone($nomor_wilayah){
       $inc = DB::table('auto_seq')->where('id', 1)->first();
       $last_no = $inc->increment_drone+1;
+      $sprint_ln = sprintf('%04d', $last_no);
+      $date = $inc->drone_last_date;
+      $date_now = date("Y-m-d");
 
-      if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_drone' => $last_no] ) ) {
-        $tgl_hari_ini = date("dm");
-        $kode_wilayah = numToB26($nomor_wilayah);
+      if (date_parse($date) != date_parse($date_now)) {
+        DB::table('auto_seq')->where('id', 1)->update( ['remote_pilot_day_last_date' => $date_now] );
+        DB::table('auto_seq')->where('id', 1)->update( ['increment_drone' => 0] );
+        $tgl_hari_ini = date("dmy");
+        $kode_wilayah = $this->numToB26($nomor_wilayah);
         $nomor_drone = $kode_wilayah.$tgl_hari_ini.$last_no;
         return $nomor_drone;
-      } else {
-        return 'gagalCreate';
       }
+      else {
+        if ( DB::table('auto_seq')->where('id', 1)->update( ['increment_drone' => $last_no] ) ) {
+          $tgl_hari_ini = date("dm");
+          $kode_wilayah = $this->numToB26($nomor_wilayah);
+          $nomor_drone = $kode_wilayah.$tgl_hari_ini.$last_no;
+          return $nomor_drone;
+        } else {
+          return 'gagalCreate';
+        }
+      }
+    }
+
+    public function generateCerfiticateDrone($nomor_drone,$drones,$nama,$id_user) {
+          // instantiate and use the dompdf class
+          $dompdf = new Dompdf();
+          $qrCode = new QrCode();
+
+          $url = url('/').'/drone/confirm/'.$nomor_drone;
+          $qrCode
+              ->setText($url)
+              ->setSize(250)
+              ->setPadding(10)
+              ->setErrorCorrection('high')
+              ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+              ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+              // ->setLabel('QR Code Remote Pilot')
+              ->setLabelFontSize(16)
+              ->setImageType(QrCode::IMAGE_TYPE_PNG)
+          ;
+
+          $dompdf->loadHtml('
+              <div class="">
+                <img style="top:-50px; position: fixed; left:50px;" width="100%" height="10%" src="'.public_path('sertif/1.png').'" alt="">
+                <br>
+                <div style="position: absolute; height: 80%; width: 80%; top: 20%; left: 10%;">
+                  <center>
+                    <br>
+                    <h1>Certificate of Drones</h1>
+                    <br>
+
+                    <h2>'.$drones->serial_number.' <br> Registered To : '.$nama.'</h2>
+
+                    <br>
+                    <br>
+
+                    <p>Has successfully completed Qualification for Drone.</p>
+                    <br>
+                    <br>
+                    <img height="100px" src="'.public_path('sertif/dju.png').'" alt="">
+                  </center>
+                </div>
+                <img style="position: absolute; top: 70%; left: 60%;" width="100px" src="'.public_path('sertif/nama.png').'" alt="">
+                <img style="position: absolute; top: 71%; left: 58%;" width="150px" src="'.public_path('sertif/line.png').'" alt="">
+                <img style="position: absolute; top: 71%; left: 60%;" height="100px" src="'.public_path('sertif/ttd.png').'" alt="">
+
+                <img style="position: absolute; top: 68%; left: 30%;" height="100px" src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'">
+
+                <img style="position: absolute; bottom:0%; left:-50px; right:-50px; top: 87%;" width="100%" height="10%" src="'.public_path('sertif/2.png').'" alt="">
+              </div>
+        ');
+
+        $dompdf->setPaper('A4', 'landscape');
+
+        $dompdf->set_option('isHtml5ParserEnabled', true);
+        $dompdf->set_option('isRemoteEnabled', true);
+
+        $dompdf->render();
+
+        $pdf_gen = $dompdf->output();
+
+        $tujuan_upload = public_path().'/sertifikasi/drone/'.$id_user;
+        //make the folder :
+        if (!is_dir($tujuan_upload)) {
+            mkdir($tujuan_upload, 0777, true);
+        }
+        $nama_file = 'Sertifikat_'.$nomor_drone.'.pdf';
+
+        if(!file_put_contents($tujuan_upload.'/'.$nama_file, $pdf_gen) ) {
+          return 'false';
+        }
+        else{
+          return url('/').'/sertifikasi/drone/'.$id_user.'/'.$nama_file;
+        }
     }
 
     public function getApprovalUAS() {

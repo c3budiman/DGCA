@@ -150,17 +150,19 @@ Route::get('daftar', 'regisController@getRegis');
 Route::post('daftar', 'regisController@postRegis');
 Route::get('verif/{token}','regisController@doverif');
 
+//login :
 Route::get('login', ['as' => 'login', 'uses' => 'loginController@getlogin']);
 Route::post('login', 'loginController@postLogin');
+//logout :
 Route::get('logout', 'authController@logout');
-
 // Password reset link request routes...
 Route::get('lupa_password', 'Auth\PasswordController@getEmail');
 Route::post('lupa_password', 'Auth\PasswordController@postEmail');
-
 // Password reset routes...
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
+
+Route::get('onlineuser','loginController@getOnline');
 
 
 /*
@@ -186,6 +188,25 @@ Route::group(['middleware' => 'auth'], function () {
    Route::post('/laravel-filemanager/upload', '\UniSharp\LaravelFilemanager\Controllers\UploadController@upload');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Api Routes
+|--------------------------------------------------------------------------
+|
+| ini routes untuk api nyambungin ke airmap.
+| routes ini meliputi login dan akses data dengan token.
+|
+*/
+//Route::post('api/v2/login', 'loginController@authenticate');
+Route::group(['middleware' => 'auth.login'], function() {
+  Route::post('api/login','loginController@authenticate');
+});
+
+Route::group(['middleware' => 'auth.token'], function () {
+    Route::post('user/tes', 'Api2Controller@tesadmin');
+    Route::get('user/tes2', 'Api2Controller@tesadmin2');
+});
 
 /*
 |--------------------------------------------------------------------------
