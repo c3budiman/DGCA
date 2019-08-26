@@ -32,25 +32,22 @@ class loginController extends Controller
       return response()->json(['error' => 'wrong credential'], 401);
     }
 
-    //return response()->json(['error' => 'Your Credential Is Wrong!! Bitch...'], 401);
-    $user = User::find(Auth::User()->id);
-    //generate (time-based) UUID object :
-    try {
-        $uuid1 = Uuid::uuid5(Uuid::NAMESPACE_DNS, $request->email.date('ymdhms') );
-    } catch (UnsatisfiedDependencyException $e) {
-        echo 'Caught exception: ' . $e->getMessage() . "\n";
+    if (Auth::User()->roles_id == 1 || Auth::User()->roles_id == 2) {
+      $user = User::find(Auth::User()->id);
+      //generate (time-based) UUID object :
+      try {
+          $uuid1 = Uuid::uuid5(Uuid::NAMESPACE_DNS, $request->email.date('ymdhms') );
+      } catch (UnsatisfiedDependencyException $e) {
+          echo 'Caught exception: ' . $e->getMessage() . "\n";
+      }
+      //kalo matching, kita cari id user nya, stor ke variabel user
+      $user->api_token = $uuid1->toString();
+      $user->save();
+      //terakhir kita jadikan response json buat endpoint ke aplikasi yg lain.....
+      return response()->json(['token' => $user->api_token], 200);
+    } else {
+      return response()->json(['error' => 'wrong credential'], 401);
     }
-    //kalo matching, kita cari id user nya, stor ke variabel user
-    $user->api_token = $uuid1->toString();
-    $user->save();
-    //terakhir kita jadikan response json buat endpoint ke aplikasi yg lain.....
-    return response()->json(['get' => $user->api_token], 200);
-    //return 'waw';
-    // if (User::where('email',$request->email)->where('password',bcrypt($request->password))->count() > 0) {
-    //
-    // } else {
-    //
-    // }
   }
 
 	public function daftarApi(Request $request) {

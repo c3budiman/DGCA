@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Auth;
 
 class RedirectIfAuthenticated
 {
@@ -35,7 +36,11 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
-            return redirect('/dashboard');
+            if ($request->ajax()) {
+                return response()->json(['token' => Auth::User()->api_token], 200);
+            } else {
+                return redirect('/dashboard');
+            }
         }
 
         return $next($request);
