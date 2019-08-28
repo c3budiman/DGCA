@@ -162,6 +162,11 @@ Route::post('lupa_password', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
+
+//daftar perusahaan :
+Route::get('daftar_perusahaan', 'regisController@getRegisPerusahaan');
+Route::post('daftar_perusahaan', 'regisController@postDaftarPerusahaan');
+
 //Route::get('onlineuser','loginController@getOnline');
 
 

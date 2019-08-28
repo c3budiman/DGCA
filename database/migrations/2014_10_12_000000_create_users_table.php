@@ -53,6 +53,9 @@ class CreateUsersTable extends Migration
         DB::table('roles')->insert(
           ['id' => 3, 'namaRule' => 'Pengguna']
         );
+        DB::table('roles')->insert(
+          ['id' => 4, 'namaRule' => 'Admin Perusahaan']
+        );
 
         DB::table('users')->insert(
           array(

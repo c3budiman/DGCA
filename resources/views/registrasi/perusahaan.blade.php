@@ -46,32 +46,22 @@
                                 <footer class="blockquote-footer">{{$judul}}</footer>
                             </blockquote>
                             </div>
-                            <form method="post" class="form-horizontal" action="{{url(action('regisController@postRegis'))}}">
+                            <form method="post" class="form-horizontal" action="{{url(action('regisController@postDaftarPerusahaan'))}}">
                             {{ csrf_field() }}
 
                               <div class="form-group row m-b-20">
                                   <div class="col-12">
-                                      <label for="username">Nama Lengkap</label>
+                                      <label for="username">Nama Lengkap penanggung jawab</label>
                                       <input name="nama" class="form-control" type="text" id="username" required placeholder="Budiman Wahid">
                                   </div>
                               </div>
 
-                              @if ($_GET['reg'] == "bisnis")
-                                <div class="form-group row m-b-20">
-                                    <div class="col-12">
-                                        <label for="emailaddress">Perusahaan</label>
-                                        <select id="perusahaan" class="form-control perusahaan" name="perusahaan" required>
-                                            <?php $table = DB::table('perusahaan')->get(); ?>
-                                              <option value="">Silahkan Pilih...</option>
-                                            @foreach ($table as $row)
-                                              <option value="{{$row->id}}">{{$row->nama_perusahaan}}</option>
-                                            @endforeach
-                                        </select>
-
-                                        <a href="/daftar_perusahaan" class="text-muted float-right"><small>Perusahaan Belum Terdaftar?</small></a>
-                                    </div>
-                                </div>
-                              @endif
+                              <div class="form-group row m-b-20">
+                                  <div class="col-12">
+                                      <label for="username">Nama Perusahaan yang di ajukan</label>
+                                      <input name="nama" class="form-control" type="text" id="username" required placeholder="PT. Angin Ribut">
+                                  </div>
+                              </div>
 
                               <div class="form-group row m-b-20">
                                   <div class="col-12">
@@ -87,8 +77,6 @@
                                   </div>
                               </div>
 
-                              <input type="hidden" name="tipe" value="{{$_GET['reg']}}">
-
                               <div class="form-group row text-center m-t-10">
                                   <div class="col-12">
                                       <button class="btn btn-block btn-custom waves-effect waves-light" type="submit">Daftar</button>
@@ -96,11 +84,6 @@
                               </div>
 
                           </form>
-                            {{-- <div class="row m-t-50">
-                                <div class="col-sm-12 text-center">
-                                    <p class="text-muted">Don't have an account? <a href="page-register.html" class="text-dark m-l-5"><b>Sign Up</b></a></p>
-                                </div>
-                            </div> --}}
 
                         </div>
                     </div>
