@@ -41,7 +41,7 @@
         </div>
         <br>
         <div class="btn-group flex-wrap">
-          <a href="/finish_ujian/{{$id_regs}}" class="btn btn-danger"><i class="fa fa-flag-checkered"></i> Submit Assesment</a>
+          <a href="/finish_ujian/{{$id_regs}}" class="btn btn-danger"><i class="fa fa-flag-checkered"></i> Finish</a>
         </div>
       </div>
     </div>

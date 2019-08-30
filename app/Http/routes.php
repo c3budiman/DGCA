@@ -333,6 +333,14 @@ Route::post('finish_assesment_fix', 'AdminController@FinishUasAssesmentFix');
 Route::get('detail/uas/finished/{id}', 'AdminController@UasApprovalFinished');
 //Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
+Route::get('approval/company', 'AdminController@getApprovalCompany');
+Route::get('approval/company/json', 'AdminController@approvalCompanyJson')->name('approval/company/json');
+
+Route::get('approval/detail/company/{id}','AdminController@getDetailCompany');
+Route::put('approval/perusahaan/{id}', 'AdminController@ApproveCompany');
+Route::get('approved/company/json', 'AdminController@approvedCompanyJson')->name('approved/company/json');
+
+
 
 /*
 |--------------------------------------------------------------------------

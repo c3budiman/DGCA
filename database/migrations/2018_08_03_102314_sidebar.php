@@ -40,6 +40,8 @@ class Sidebar extends Migration
           ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket',         'nama' => 'Drones',                       'link' => '/drones'],
           ['kepunyaan' => 4, 'class_css' => 'dripicons-home',           'nama' => 'Home',                         'link' => '/dashboard'],
           ['kepunyaan' => 4, 'class_css' => 'dripicons-clipboard',      'nama' => 'Identitas Perusahaan',         'link' => '/perusahaan'],
+          ['kepunyaan' => 4, 'class_css' => 'dripicons-user',           'nama' => 'Approval Remote Pilot',        'link' => '/approval/remote/pilot_perusahaan'],
+          ['kepunyaan' => 4, 'class_css' => 'dripicons-rocket',         'nama' => 'Drones',                       'link' => '/drones_perusahaan'],
       ]);
     }
 

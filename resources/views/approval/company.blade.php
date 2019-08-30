@@ -4,7 +4,7 @@
 @extends('layouts.dlayout')
 
 @section('title')
-  Approval Data
+  Approval Perusahaan
 @endsection
 
 @section('css')
@@ -21,7 +21,7 @@
                   <div class="card-box table-responsive">
                       <h4 class="m-t-0 header-title">Ready To Approve</h4>
                       <p class="text-muted font-14 m-b-30">
-                          Data UAS yang siap di periksa dan di approve.
+                          Data yang siap untuk di cek dan di approve.
                       </p>
 
                       <br>
@@ -30,11 +30,9 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
-                                  <th>Foto Drone</th>
-                                  <th>Nama Pemilik</th>
-                                  <th>Manufacturer</th>
-                                  <th>Model</th>
+                                  <th>Nama Perusahaan</th>
+                                  <th>Nomor Telepon</th>
+                                  <th>Nomor Siup</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -53,7 +51,7 @@
                   <div class="card-box table-responsive">
                       <h4 class="m-t-0 header-title">Approval History</h4>
                       <p class="text-muted font-14 m-b-30">
-                          Data data yang telah di approve.
+                          Data yang telah di approve
                       </p>
 
                       <br>
@@ -62,10 +60,9 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
-                                  <th>Nama Pemilik</th>
-                                  <th>Manufacturer</th>
-                                  <th>Model</th>
+                                  <th>Nama Perusahaan</th>
+                                  <th>Nomor Telepon</th>
+                                  <th>Nomor Siup</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -173,14 +170,12 @@
     $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('approvedrones/json') }}',
+        ajax: '{{ route('approval/company/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'drones_image', name: 'drones_image', orderable: false, searchable: false},
-            {data: 'nama', name: 'nama'},
-            {data: 'manufacturer', name: 'manufacturer'},
-            {data: 'model', name: 'model'},
+            {data: 'nama_perusahaan', name: 'nama_perusahaan'},
+            {data: 'nomor_telepon', name: 'nomor_telepon'},
+            {data: 'nomor_siup', name: 'nomor_siup'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -188,16 +183,16 @@
     $('.datatable2').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('approvedrones2/json') }}',
+        ajax: '{{ route('approved/company/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'nama', name: 'nama'},
-            {data: 'manufacturer', name: 'manufacturer'},
-            {data: 'model', name: 'model'},
+            {data: 'nama_perusahaan', name: 'nama_perusahaan'},
+            {data: 'nomor_telepon', name: 'nomor_telepon'},
+            {data: 'nomor_siup', name: 'nomor_siup'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
+
 
   });
   </script>

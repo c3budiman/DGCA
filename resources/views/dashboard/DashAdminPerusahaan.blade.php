@@ -20,7 +20,7 @@
                   </li>
                   <li>
                     <a href="#step-3">Approval Admin<br />
-                      <small>Admin Sedang Memverifikasi Pengajuan Perusahaan anda</small>
+                      <small>Perusahaan Sedang Diverikasi</small>
                     </a>
                   </li>
                   <li>
@@ -41,7 +41,7 @@
                       Perusahaan sedang di periksa oleh admin dkppu.
                   </div>
                   <div id="step-4" class="">
-                      Perusahaan telah disetujui, dan dapat mendaftarkan remote pilot serta drone dengan nama perusahaan.
+                      Perusahaan telah disetujui, dan dapat menerima remote pilot serta drone dibawah perusahaan anda.
                   </div>
               </div>
           </div>

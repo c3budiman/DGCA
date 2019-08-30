@@ -30,6 +30,7 @@
                           <thead>
                               <tr>
                                   <th>No</th>
+                                  <th>#ID</th>
                                   <th>Nama</th>
                                   <th>Nilai</th>
                                   <th colspan="10%">Action</th>
@@ -59,6 +60,7 @@
                           <thead>
                               <tr>
                                   <th>No</th>
+                                  <th>#ID</th>
                                   <th>Nama</th>
                                   <th>Nilai</th>
                                   <th colspan="10%">Action</th>
@@ -171,6 +173,7 @@
         ajax: '{{ route('approvalUas/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+            {data: 'id', name: 'id'},
             {data: 'nama', name: 'nama'},
             {data: 'nilai', name: 'nilai'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -183,6 +186,7 @@
         ajax: '{{ route('approvalUasFinish/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+            {data: 'id', name: 'id'},
             {data: 'nama', name: 'nama'},
             {data: 'nilai', name: 'nilai'},
             {data: 'action', name: 'action', orderable: false, searchable: false},

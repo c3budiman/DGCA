@@ -37,6 +37,7 @@ use Dompdf\Dompdf;
 use CodeItNow\BarcodeBundle\Utils\QrCode;
 use Mail;
 use App\RegisteredDrone;
+use App\Perusahaan;
 
 class AdminController extends Controller
 {
@@ -118,7 +119,7 @@ class AdminController extends Controller
            .'<a href="'.$link.'/front/edit/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" ><i class="fa fa-edit"></i> Edit</a>'
            .'<a style="margin-left:5px" target="_blank" href="/front/'.$datatb->id.'/editadvance" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Code Editor</a>'
            .'<div style="padding-top:10px"></div>'
-          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->email.'"  class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->email.'"  class="delete-modal btn btn-xs btn-danger"><i class="fa fa-trash"></i> Delete</button>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -329,9 +330,9 @@ class AdminController extends Controller
       ->addColumn('action', function ($datatb) {
         $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
           return
-           '<a href="'.$link.'/edit/slide/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</a>'
+           '<a href="'.$link.'/edit/slide/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>'
            .'<div style="padding-top:10px"></div>'
-          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+          .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->title.'" class="delete-modal btn btn-xs btn-danger"><i class="fa fa-trash"></i> Delete</button>';
       })
       ->addIndexColumn()
       ->addColumn('imagesnya', function($datatb) {
@@ -368,7 +369,7 @@ class AdminController extends Controller
       return Datatables::of($user)
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -378,7 +379,7 @@ class AdminController extends Controller
       return Datatables::of(User::query()->where('roles_id','3')->where('approved','=','1')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -552,7 +553,7 @@ class AdminController extends Controller
       return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
@@ -572,7 +573,7 @@ class AdminController extends Controller
       return Datatables::of(drones::query()->where('approved','1')->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
@@ -753,7 +754,7 @@ class AdminController extends Controller
       return Datatables::of(UasRegs::query()->where('status','2')->where('softdelete',0)->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/uas/'.$datatb->id.'/1" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/uas/'.$datatb->id.'/1" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
@@ -767,7 +768,7 @@ class AdminController extends Controller
       return Datatables::of(UasRegs::query()->where('status','3')->where('softdelete',0)->orderBy('id','desc')->get())
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Details</a>';
+           '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addColumn('nama', function($datatb) {
         return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
@@ -934,14 +935,53 @@ class AdminController extends Controller
           $uas_regs->status = 4;
         }
         $uas_regs->save();
-        return redirect('approval/uas')->with('succes', 'Assesment Saved!');;
+        return redirect('approval/uas')->with('succes', 'Assesment Saved!');
       }
       else {
         return Redirect::back()->withErrors(['Not Found!']);
       }
     }
 
+    public function getApprovalCompany(){
+      return view('approval.company');
+    }
 
+    public function approvalCompanyJson() {
+      return Datatables::of(Perusahaan::where('approved',2)->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/company/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
 
+    public function approvedCompanyJson() {
+      return Datatables::of(Perusahaan::where('approved',1)->get())
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/company/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function getDetailCompany($id) {
+      $perusahaan = Perusahaan::find($id);
+      return view('approval.detail_company',['perusahaan'=>$perusahaan]);
+    }
+
+    public function ApproveCompany(Request $request,$id) {
+      //dd($request->all());
+      $perusahaan = Perusahaan::find($id);
+      if ($request->approval == 'approve') {
+        $perusahaan->approved = 1;
+      } else {
+        $perusahaan->approved = 0;
+      }
+      $perusahaan->save();
+
+      return redirect('approval/company')->with('succes', 'Company Approved!');;
+    }
 
 }

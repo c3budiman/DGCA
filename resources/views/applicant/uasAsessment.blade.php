@@ -40,7 +40,7 @@
         </div>
         <br>
         <div class="btn-group flex-wrap">
-          <a href="/finish_ujian" class="btn btn-success">Finish Assesment</a>
+          <a href="/finish_ujian" class="btn btn-success">Finish</a>
         </div>
       </div>
     </div>
