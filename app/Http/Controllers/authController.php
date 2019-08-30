@@ -25,12 +25,23 @@ class authController extends Controller
     return redirect('/login')->with('status', 'You have successfully logout!');
   }
   public function getRoot() {
-    if (Auth::User()->roles_id == 1) {
-      return view('dashboard.DashSuperAdmin');
-    } elseif (Auth::User()->roles_id == 2) {
-      return view('dashboard.DashAdmin');
-    } else {
-      return view('dashboard.DashUser');
+    $roles_id = Auth::User()->roles_id;
+    switch ($roles_id) {
+      case 1:
+        return view('dashboard.DashSuperAdmin');
+        break;
+      case 2:
+        return view('dashboard.DashAdmin');
+        break;
+      case 3:
+        return view('dashboard.DashUser');
+        break;
+      case 4:
+        return view('dashboard.DashAdminPerusahaan');
+        break;
+      default:
+        return view('dashboard.DashUser');
+        break;
     }
   }
   public function getMyProfile() {

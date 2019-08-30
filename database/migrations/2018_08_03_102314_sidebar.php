@@ -34,10 +34,12 @@ class Sidebar extends Migration
           ['kepunyaan' => 2, 'class_css' => 'dripicons-browser',        'nama' => 'Frontend`s Menu',     'link' => '/front'],
           ['kepunyaan' => 2, 'class_css' => 'fa fa-car',                'nama' => 'Parameter',           'link' => '/params'],
           ['kepunyaan' => 2, 'class_css' => 'fa fa-list-ul',            'nama' => 'Approval',            'link' => '/approval'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-home',           'nama' => 'Home',                'link' => '/dashboard'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-clipboard',      'nama' => 'UAS Assesment',       'link' => '/uas_assesment'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-user',           'nama' => 'Remote Pilot',        'link' => '/identitas'],
-          ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket',         'nama' => 'Drones',              'link' => '/drones'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-home',           'nama' => 'Home',                         'link' => '/dashboard'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-clipboard',      'nama' => 'UAS Assesment',                'link' => '/uas_assesment'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-user',           'nama' => 'Remote Pilot',                 'link' => '/identitas'],
+          ['kepunyaan' => 3, 'class_css' => 'dripicons-rocket',         'nama' => 'Drones',                       'link' => '/drones'],
+          ['kepunyaan' => 4, 'class_css' => 'dripicons-home',           'nama' => 'Home',                         'link' => '/dashboard'],
+          ['kepunyaan' => 4, 'class_css' => 'dripicons-clipboard',      'nama' => 'Identitas Perusahaan',         'link' => '/perusahaan'],
       ]);
     }
 

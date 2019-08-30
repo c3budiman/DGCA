@@ -59,7 +59,7 @@
                               <div class="form-group row m-b-20">
                                   <div class="col-12">
                                       <label for="username">Nama Perusahaan yang di ajukan</label>
-                                      <input name="nama" class="form-control" type="text" id="username" required placeholder="PT. Angin Ribut">
+                                      <input name="company" class="form-control" type="text" id="username" required placeholder="PT. Angin Ribut">
                                   </div>
                               </div>
 

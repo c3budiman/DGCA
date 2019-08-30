@@ -336,6 +336,20 @@ Route::get('detail/uas/finished/{id}', 'AdminController@UasApprovalFinished');
 
 /*
 |--------------------------------------------------------------------------
+| Admin Perusahaan Routes
+|--------------------------------------------------------------------------
+|
+| ini routes untuk admin perusahaan,
+| routes ini meliputi pendaftaran identitas perusahaan, dan penambahan anggota admin perusahaan
+|
+*/
+Route::get('perusahaan', 'AdminPerusahaanController@getIsianPerusahaan');
+Route::post('perusahaan', 'AdminPerusahaanController@SaveIsianPerusahaan');
+Route::post('perusahaan/dokumen', 'AdminPerusahaanController@UploadDokumenPerusahaan');
+
+
+/*
+|--------------------------------------------------------------------------
 | Api Wilayah
 |--------------------------------------------------------------------------
 |

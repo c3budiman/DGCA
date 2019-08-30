@@ -10,7 +10,9 @@
           var data = google.visualization.arrayToDataTable([
             ['User Roles', 'Total'],
             ['{{DB::table('roles')->where('id','=','1')->first()->namaRule}}',     {{DB::table('users')->where('roles_id','=','1')->count()}}],
-            ['{{DB::table('roles')->where('id','=','2')->first()->namaRule}}',     {{DB::table('users')->where('roles_id','=','2')->count()}}]
+            ['{{DB::table('roles')->where('id','=','2')->first()->namaRule}}',     {{DB::table('users')->where('roles_id','=','2')->count()}}],
+            ['{{DB::table('roles')->where('id','=','3')->first()->namaRule}}',     {{DB::table('users')->where('roles_id','=','3')->count()}}],
+            ['{{DB::table('roles')->where('id','=','4')->first()->namaRule}}',     {{DB::table('users')->where('roles_id','=','4')->count()}}]
           ]);
 
           var options = {

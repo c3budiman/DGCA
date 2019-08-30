@@ -24,12 +24,12 @@ class SettingSitus extends Migration
          });
          DB::table('setting_situses')->insert([
              [
-              'namaSitus' => 'DGCA',
-              'slogan' => 'Pendaftaran, Drone dan Lisensi Pilot.' ,
-              'favicon' => '/gambar/logo.png',
-              'logo' => 'https://imsis-djpu.dephub.go.id/regdrone/assets/web/images/logo22.png',
+              'namaSitus'   => 'DGCA',
+              'slogan'      => 'Pendaftaran, Drone dan Lisensi Pilot.' ,
+              'favicon'     => '/gambar/logo.png',
+              'logo'        => 'https://imsis-djpu.dephub.go.id/regdrone/assets/web/images/logo22.png',
               'alamatSitus' => 'http://localhost:8000',
-              'footer' => '2019 © Copyright <strong>DGCA</strong>. All Rights Reserved'
+              'footer'      => '2019 © Copyright <strong>DGCA</strong>. All Rights Reserved'
             ],
          ]);
 
