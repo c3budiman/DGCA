@@ -3,6 +3,7 @@
 
 @section('content')
   <div class="row">
+
     <div class="col-12">
       <div class="card-box">
         <h4 class="header-title mb-4">Status Pendaftaran</h4>
@@ -45,6 +46,64 @@
                   </div>
               </div>
           </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="card-box">
+        <h4 class="header-title mb-4">Status Keanggotaan Perusahaan</h4>
+        @if (Auth::User()->approved_company == 1)
+          <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+        @else
+          <div class="">
+             <p style="font-size:15px;">Pending Approval Perusahaan <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
+          </div>
+
+        @endif
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="card-box">
+        <h4 class="header-title mb-4">Status UAS Assesment</h4>
+        <?php
+        $uas_regs = null;
+        if (DB::table('uas_regs')->where('user_id',Auth::User()->id)->where('softdelete',0)->count() > 0) {
+          $uas_regs = DB::table('uas_regs')->where('user_id',Auth::User()->id)->where('softdelete',0)->first()->status;
+        }
+        ?>
+        @if ($uas_regs)
+          @if ($uas_regs == 2)
+            <p style="font-size:15px;">Sedang Di Nilai <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
+          @elseif ($uas_regs == 1)
+            <p style="font-size:15px;">Sedang Dikerjakan <i style="color:green; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
+          @elseif ($uas_regs == 3)
+            <p style="font-size:15px;">Lulus <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+          @elseif ($uas_regs == 4)
+            <p style="font-size:15px;">Tidak Lulus <i style="color:red; font-size:15px;" class="fa fa-times"> </i> </p>
+          @endif
+        @else
+          <div class="">
+             <p style="font-size:15px;">Belum Ujian <i style="color:blue; font-size:15px;" class="fa fa-hourglass-1"> </i> </p>
+          </div>
+        @endif
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="card-box">
+        <h4 class="header-title mb-4">Status Remote Pilot</h4>
+        @if (Auth::User()->approved)
+          @if (Auth::User()->approved == 1)
+            <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+          @else
+            <p style="font-size:15px;">Verifikasi Tidak Berhasil <i style="color:red; font-size:15px;" class="fa fa-times"> </i> </p>
+          @endif
+        @else
+          <div class="">
+             <p style="font-size:15px;">Belum Mendaftarkan Identitas <i style="color:blue; font-size:15px;" class="fa fa-hourglass-1"> </i> </p>
+          </div>
+        @endif
       </div>
     </div>
   </div>

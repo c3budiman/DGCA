@@ -24,10 +24,6 @@
               <input value="{{ Auth::User()->nama }}" parsley-trigger="change" data-parsley-group="block1" type="text" name="nama" class="form-control" id="name" required>
             </div>
             <div class="form-group">
-              <label for="company">Nama Perusahaan (Company)<span class="text-danger">*</span></label>
-               <input type="text" name="company" parsley-trigger="change" data-parsley-group="block1" value="{{ Auth::User()->company }}" class="form-control" id="company" required>
-             </div>
-            <div class="form-group">
               <label for="phone">No Telepon (Phone)<span class="text-danger">*</span></label>
               <input name="phone" type="text" value="{{Auth::User()->phone}}" id="phone" parsley-trigger="change" data-parsley-group="block1" data-parsley-type="number" data-parsley-minlength="10" data-parsley-maxlength="13" placeholder="08xxxxxxxxxx" class="form-control" required>
             </div>

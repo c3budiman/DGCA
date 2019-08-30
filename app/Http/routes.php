@@ -132,6 +132,31 @@ Route::get('rollback_alamat', function() {
   }
 });
 
+Route::get('rollback_company', function() {
+  $user = DB::table('users')->get();
+  foreach ($user as $usr) {
+    if ($usr->company) {
+      if (DB::table('perusahaan')->where('id',$usr->company)->count() > 0) {
+        continue;
+      } else {
+        if ($usr->company == 'n/a') {
+          DB::table('users')
+                ->where('id', $usr->id)
+                ->update( [ 'company' => 2 ] );
+        } else {
+          DB::table('users')
+                ->where('id', $usr->id)
+                ->update( [ 'company' => 3 ] );
+        }
+      }
+    } else {
+      DB::table('users')
+            ->where('id', $usr->id)
+            ->update( [ 'company' => 3 ] );
+    }
+  }
+});
+
 
 
 /*

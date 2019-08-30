@@ -204,8 +204,6 @@ class applicantController extends Controller
     public function UpdateRPIdentitas(Request $request) {
       $user               = User::find(Auth::User()->id);
       $user->nama         = $request->nama;
-      $user->company      = $request->company;
-      $user->nama         = $request->nama;
       $user->phone        = $request->phone;
       $user->ktp          = $request->ktp;
       $user->save();
@@ -320,8 +318,6 @@ class applicantController extends Controller
       $address .= '\, '.DB::table('provinces')->where('id',$request->provinsi)->first()->name;
 
       if ($user->dokumen_identitas) {
-        $user->nama         = $request->nama;
-        $user->company      = $request->company;
         $user->nama         = $request->nama;
         $user->phone        = $request->phone;
         $user->address      = $address;

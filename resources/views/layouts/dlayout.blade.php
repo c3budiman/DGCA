@@ -73,11 +73,22 @@
                         </div>
                         <h5><a href="#">{{Auth::User()->nama}}</a></h5>
                         <?php
+                          $company = NULL;
                           $roles_id = Auth::User()->roles_id;
                           $namaRule = DB::table('roles')->where('id','=', $roles_id)->first()->namaRule;
                           $dashboardMenu = DB::table('dashmenu')->where('kepunyaan','=', $roles_id)->get();
+                          if (DB::table('perusahaan')->where('id',$roles_id)->count() > 0) {
+                            $company = DB::table('perusahaan')->where('id',$roles_id)->first()->nama_perusahaan;
+                          }
                         ?>
-                        <p class="text-muted">{{$namaRule}}</p>
+                        @if ($roles_id == 3)
+                          @if ($company)
+                            <p class="text-muted">{{$company}}</p>
+                          @endif
+                        @else
+                          <p class="text-muted">{{$namaRule}}</p>
+                        @endif
+
                     </div>
                     <div id="sidebar-menu">
                       <ul class="metismenu" id="side-menu">

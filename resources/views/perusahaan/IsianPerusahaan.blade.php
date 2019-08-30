@@ -111,7 +111,7 @@
             </div>
         </div>
     </div>
-  @elseif ($perusahaan->apprved == 1)
+  @elseif ($perusahaan->approved == 1)
     Telah Terverifikasi
   @else
     <form enctype="application/x-www-form-urlencoded" data-parsley-validate id="example-advanced-form" action="{{url(action('AdminPerusahaanController@SaveIsianPerusahaan'))}}" method="post">
