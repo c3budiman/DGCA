@@ -30,9 +30,9 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
+                                  <th>Email</th>
                                   <th>Nama</th>
-                                  <th>Nilai</th>
+                                  <th>Company</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -60,9 +60,12 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
+                                  <th>Email</th>
                                   <th>Nama</th>
-                                  <th>Nilai</th>
+                                  <th>Company</th>
+                                  <th>Nilai Ujian</th>
+                                  <th>Validator</th>
+                                  <th>Tanggal Approval</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -173,9 +176,9 @@
         ajax: '{{ route('approvalUas/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'nama', name: 'nama'},
-            {data: 'nilai', name: 'nilai'},
+            {data: 'email', name: 'users.email'},
+            {data: 'nama', name: 'users.nama'},
+            {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -186,9 +189,12 @@
         ajax: '{{ route('approvalUasFinish/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'nama', name: 'nama'},
+            {data: 'email', name: 'users.email'},
+            {data: 'nama', name: 'users.nama'},
+            {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
             {data: 'nilai', name: 'nilai'},
+            {data: 'validator', name: 'validator', orderable: false, searchable: false},
+            {data: 'updated_at', name: 'updated_at'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

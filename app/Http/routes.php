@@ -366,6 +366,14 @@ Route::put('approval/perusahaan/{id}', 'AdminController@ApproveCompany');
 Route::get('approved/company/json', 'AdminController@approvedCompanyJson')->name('approved/company/json');
 
 
+Route::get('manage/perusahaan', 'AdminController@getManagePerusahaan');
+Route::get('approved/company/json/{id}', 'AdminController@approvedCompanyJson2')->name('approved/company/json/{id}');
+
+Route::get('manage/company/json', 'AdminController@manageCompanyJson')->name('manage/company/json');
+Route::get('manage/company/json/{id}', 'AdminController@manageCompanyJson2');
+Route::post('manage/company/approve','AdminController@ApproveUsertoCompanyByAdmin');
+
+
 
 /*
 |--------------------------------------------------------------------------

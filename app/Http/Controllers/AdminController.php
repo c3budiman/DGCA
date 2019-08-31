@@ -38,6 +38,7 @@ use CodeItNow\BarcodeBundle\Utils\QrCode;
 use Mail;
 use App\RegisteredDrone;
 use App\Perusahaan;
+use App\HistoryPerusahaan;
 
 class AdminController extends Controller
 {
@@ -576,13 +577,26 @@ class AdminController extends Controller
     }
 
     public function approvedronesTB2(){
-      return Datatables::of(drones::query()->where('approved','1')->orderBy('id','desc')->get())
+      $drones = DB::table('drones')
+            ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+            ->join('users', 'drones.user_id', '=', 'users.id')
+            ->select('drones.id','drones.pic_of_drones','drones.model', 'users.nama', 'registered_drone.nomor_drone', 'registered_drone.sertifikasi_drone', 'registered_drone.created_at as csr','registered_drone.approved_by as approved_by')
+            ->where('drones.approved','=','1');
+
+      return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
-      ->addColumn('nama', function($datatb) {
-        return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
+      ->addColumn('validator', function ($datatb) {
+          return User::find($datatb->approved_by)->nama;
+      })
+      ->addColumn('drones_image', function($datatb) {
+        if ($datatb->pic_of_drones) {
+          return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+        } else {
+          return '';
+        }
       })
       ->addIndexColumn()
       ->make(true);
@@ -757,13 +771,16 @@ class AdminController extends Controller
 
     public function approveUasDataTB()
     {
-      return Datatables::of(UasRegs::query()->where('status','2')->where('softdelete',0)->orderBy('id','desc')->get())
+      $query = DB::table('uas_regs')
+            ->join('users', 'users.id', '=', 'uas_regs.user_id')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('uas_regs.*', 'users.nama','users.email','perusahaan.nama_perusahaan')
+            ->where('uas_regs.status','2')->where('uas_regs.softdelete',0);
+
+      return Datatables::of($query)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/uas/'.$datatb->id.'/1" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
-      })
-      ->addColumn('nama', function($datatb) {
-        return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
       })
       ->addIndexColumn()
       ->make(true);
@@ -771,13 +788,19 @@ class AdminController extends Controller
 
     public function approvedUasDataTB()
     {
-      return Datatables::of(UasRegs::query()->where('status','3')->where('softdelete',0)->orderBy('id','desc')->get())
+      $query = DB::table('uas_regs')
+            ->join('users', 'users.id', '=', 'uas_regs.user_id')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('uas_regs.*', 'users.nama','users.email','perusahaan.nama_perusahaan')
+            ->where('uas_regs.status','3')->where('uas_regs.softdelete',0);
+
+      return Datatables::of($query)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/uas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
       })
-      ->addColumn('nama', function($datatb) {
-        return '<a href="'.url('/').'/detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
+      ->addColumn('validator', function ($datatb) {
+          return User::find($datatb->approved_by)->nama;
       })
       ->addIndexColumn()
       ->make(true);
@@ -963,13 +986,87 @@ class AdminController extends Controller
     }
 
     public function approvedCompanyJson() {
-      return Datatables::of(Perusahaan::where('approved',1)->get())
+      $query = DB::table('perusahaan')
+            ->join('users', 'users.id', '=', 'perusahaan.approved_by')
+            ->select('perusahaan.*', 'users.nama')
+            ->where('perusahaan.approved',1);
+
+      return Datatables::of($query)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/company/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
       })
       ->addIndexColumn()
       ->make(true);
+    }
+
+    public function approvedCompanyJson2($id) {
+      $query = DB::table('perusahaan')
+            ->join('users', 'users.id', '=', 'perusahaan.approved_by')
+            ->select('perusahaan.*', 'users.nama')
+            ->where('perusahaan.approved',1)->where('perusahaan.id',$id);
+
+      return Datatables::of($query)
+      ->addColumn('action', function ($datatb) {
+          return
+           '<a href="detail/company/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function manageCompanyJson() {
+      $query = DB::table('users')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('users.id','users.nama','users.email', 'perusahaan.nama_perusahaan')
+            ->where('users.roles_id',3)->where('users.active','1')
+            ->where('perusahaan.approved',1)->where('users.approved_company',0);
+            //dd($query->get());
+
+      return Datatables::of($query)
+      // ->addColumn('action', function ($datatb) {
+      //     return
+      //      '<a href="manage/company/user/approve/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+      // })
+      ->addColumn('action', function ($datatb) {
+        $tambah_button='';
+        $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+          return '<button data-id="'.$datatb->id.'" data-name2="'.$datatb->nama.'" class="delete-modal btn btn-xs btn-success"><i class="fa fa-check"></i> Setujui</button>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function manageCompanyJson2($id) {
+      $query = DB::table('users')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('users.id','users.nama','users.email', 'perusahaan.nama_perusahaan')
+            ->where('users.roles_id',3)->where('users.active','1')
+            ->where('perusahaan.approved',1)->where('users.approved_company',0)->where('perusahaan.id',$id);
+            //dd($query->get());
+
+      return Datatables::of($query)
+      ->addColumn('action', function ($datatb) {
+        $tambah_button='';
+        $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+          return '<button data-id="'.$datatb->id.'" data-name2="'.$datatb->nama.'" class="delete-modal btn btn-xs btn-success"><i class="fa fa-check"></i> Setujui</button>';
+      })
+      ->addIndexColumn()
+      ->make(true);
+    }
+
+    public function ApproveUsertoCompanyByAdmin(Request $request) {
+      //dd($request->all());
+      $user = User::find($request->id);
+      $historyPP = new HistoryPerusahaan;
+      $historyPP->id_user = $request->id;
+      $historyPP->company = $user->company;
+      $historyPP->approved_by = Auth::User()->id;
+      $historyPP->save();
+      $user->approved_company = 1;
+      $response = array("success"=>"Berhasil Di Approve");
+      $user->save();
+      return response()->json($response,200);
     }
 
     public function getDetailCompany($id) {
@@ -988,6 +1085,10 @@ class AdminController extends Controller
       $perusahaan->save();
 
       return redirect('approval/company')->with('succes', 'Company Approved!');;
+    }
+
+    public function getManagePerusahaan() {
+      return view('perusahaan.manage');
     }
 
 }

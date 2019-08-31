@@ -62,10 +62,11 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
                                   <th>Nama Pemilik</th>
-                                  <th>Manufacturer</th>
                                   <th>Model</th>
+                                  <th>Nomor Lisensi Drones</th>
+                                  <th>Validator</th>
+                                  <th>Tanggal Approval</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -191,10 +192,11 @@
         ajax: '{{ route('approvedrones2/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
-            {data: 'nama', name: 'nama'},
-            {data: 'manufacturer', name: 'manufacturer'},
+            {data: 'nama', name: 'users.nama'},
             {data: 'model', name: 'model'},
+            {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
+            {data: 'validator', name: 'validator', orderable: false, searchable: false},
+            {data: 'csr', name: 'registered_drone.created_at'},            
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

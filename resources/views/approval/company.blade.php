@@ -63,6 +63,8 @@
                                   <th>Nama Perusahaan</th>
                                   <th>Nomor Telepon</th>
                                   <th>Nomor Siup</th>
+                                  <th>Validator</th>
+                                  <th>Tanggal Approval</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -189,6 +191,8 @@
             {data: 'nama_perusahaan', name: 'nama_perusahaan'},
             {data: 'nomor_telepon', name: 'nomor_telepon'},
             {data: 'nomor_siup', name: 'nomor_siup'},
+            {data: 'nama', name: 'users.nama'},
+            {data: 'updated_at', name: 'updated_at'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

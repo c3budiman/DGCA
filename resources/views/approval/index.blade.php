@@ -64,8 +64,8 @@
                                   <th>Email</th>
                                   <th>Company</th>
                                   <th>Nomor Pilot</th>
-                                  <th>Tanggal Approve</th>
                                   <th>Validator</th>
+                                  <th>Tanggal Approval</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -193,8 +193,8 @@
             {data: 'email', name: 'email'},
             {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
             {data: 'nomor_pilot', name: 'remote_pilot.nomor_pilot'},
-            {data: 'created_at', name: 'remote_pilot.created_at'},
             {data: 'validator', name: 'validator', orderable: false, searchable: false},
+            {data: 'created_at', name: 'remote_pilot.created_at'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
