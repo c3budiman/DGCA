@@ -30,10 +30,9 @@
                           <thead>
                               <tr>
                                   <th>No</th>
-                                  <th>#ID</th>
                                   <th>Foto Drone</th>
                                   <th>Nama Pemilik</th>
-                                  <th>Manufacturer</th>
+                                  <th>Perusahaan</th>
                                   <th>Model</th>
                                   <th colspan="10%">Action</th>
                               </tr>
@@ -177,11 +176,10 @@
         ajax: '{{ route('approvedrones/json') }}',
         columns: [
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-            {data: 'id', name: 'id'},
             {data: 'drones_image', name: 'drones_image', orderable: false, searchable: false},
-            {data: 'nama', name: 'nama'},
-            {data: 'manufacturer', name: 'manufacturer'},
-            {data: 'model', name: 'model'},
+            {data: 'nama', name: 'users.nama'},
+            {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
+            {data: 'model', name: 'drones.model'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -196,7 +194,7 @@
             {data: 'model', name: 'model'},
             {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
             {data: 'validator', name: 'validator', orderable: false, searchable: false},
-            {data: 'csr', name: 'registered_drone.created_at'},            
+            {data: 'csr', name: 'registered_drone.created_at'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

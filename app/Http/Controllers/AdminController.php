@@ -433,6 +433,7 @@ class AdminController extends Controller
         $pilot->user_id = $id;
         $pilot->uas_regs = $uas_regs;
         $pilot->sertifikasi_pilot = $sertifikat;
+        $pilot->approved_by = Auth::User()->id;
         $pilot->save();
 
         //save Log :
@@ -529,7 +530,7 @@ class AdminController extends Controller
         DB::table('auto_seq')->where('id', 1)->update( ['remote_pilot_day_last_date' => $date_now] );
         DB::table('auto_seq')->where('id', 1)->update( ['increment_remote_pilot' => 0] );
         $tgl_hari_ini = date("dmy");
-        $sprint_ln = sprintf('%04d', 1);
+        $sprint_ln = sprintf('%04d', $last_no);
         $nomor_pilot = $tgl_hari_ini.$sprint_ln;
         return $nomor_pilot;
       }
@@ -552,18 +553,21 @@ class AdminController extends Controller
           $query->select('id')
                 ->from('users')
                 ->whereRaw('drones.user_id = users.id')
-                ->where('approved', 1);
+                ->where('approved', 1)->orWhere('roles_id', 4);
       })
-      ->where('approved',0)->orderBy('id','desc')
+      ->where('approved',0)->whereNotNull('model')->orderBy('id','desc')
       ->get();
+
+      $drones = DB::table('drones')
+            ->join('users', 'drones.user_id', '=', 'users.id')
+            ->join('perusahaan', 'perusahaan.id', '=', 'users.company')
+            ->select('drones.id','drones.pic_of_drones','drones.model', 'users.nama','perusahaan.nama_perusahaan')
+            ->where('drones.approved',0)->whereNotNull('drones.model')->whereNotNull('drones.pic_of_drones')->whereNotNull('drones.proof_of_ownership');
       //dd($drones);
       return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
-      })
-      ->addColumn('nama', function($datatb) {
-        return '<a href="detail/identitas/'.$datatb->user_id.'"> '.DB::table('users')->where('id','=',$datatb->user_id)->first()->nama.' </a>';
       })
       ->addColumn('drones_image', function($datatb) {
         if ($datatb->pic_of_drones) {
@@ -614,42 +618,84 @@ class AdminController extends Controller
     public function approveddrones(Request $request,$id) {
       $drones = drones::find($id);
       $user = User::find($drones->user_id);
-      $uas_regs = UasRegs::where('user_id',$drones->user_id)->where('softdelete',0)->first()->id;
-      if ($request->approval == 'approve') {
-        $drones->approved = 1;
-        $nomor_drone      = $this->generateNomorDrone($user->address_code);
-        $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones,$user->nama,$user->id);
+      if ($user->roles_id == 4) {
+        if ($request->approval == 'approve') {
+          $drones->approved = 1;
+          $nomor_drone      = $this->generateNomorDrone($user->address_code);
+          $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones,$user->nama,$user->id);
 
-        //send email :
-        $sender       = "DGCA Dummy Email | Sertifikat Drone";
-        $EmailSender  = $user->email;
-        $pesan        = "Terlampir";
-        Mail::send('emails.send', ['sender' => $sender, 'EmailSender' => $EmailSender, 'pesan' => $pesan],
-        function ($message) use ($user,$nomor_drone)
-        {
-            $tujuan_upload  = public_path().'/sertifikasi/drone/'.$user->id;
-            $nama_file      = 'Sertifikat_'.$nomor_drone.'.pdf';
+          //send email :
+          $sender       = "DGCA Dummy Email | Sertifikat Drone";
+          $EmailSender  = $user->email;
+          $pesan        = "Terlampir";
+          Mail::send('emails.send', ['sender' => $sender, 'EmailSender' => $EmailSender, 'pesan' => $pesan],
+          function ($message) use ($user,$nomor_drone)
+          {
+              $tujuan_upload  = public_path().'/sertifikasi/drone/'.$user->id;
+              $nama_file      = 'Sertifikat_'.$nomor_drone.'.pdf';
 
-            $perihal  = "DGCA Dummy Email | Sertifikat Drones";
-            $sender   = "DGCA Dummy Email";
-            $message->from('ugdisposition@gmail.com', 'DGCA Dummy Email No Reply');
-            $message->to($user->email);
-            $message->subject($sender);
-            $message->attach($tujuan_upload.'/'.$nama_file);
-        });
+              $perihal  = "DGCA Dummy Email | Sertifikat Drones";
+              $sender   = "DGCA Dummy Email";
+              $message->from('ugdisposition@gmail.com', 'DGCA Dummy Email No Reply');
+              $message->to($user->email);
+              $message->subject($sender);
+              $message->attach($tujuan_upload.'/'.$nama_file);
+          });
 
-        //insert ke tabel pilot :
-        $drone = new RegisteredDrone;
-        $drone->nomor_drone = $nomor_drone;
-        $drone->user_id = $drones->user_id;
-        $drone->uas_regs = $uas_regs;
-        $drone->sertifikasi_drone = $sertifikat;
-        $drone->save();
+          //insert ke tabel pilot :
+          $drone2 = new RegisteredDrone;
+          $drone2->nomor_drone = $nomor_drone;
+          $drone2->user_id = $drones->user_id;
+          $drone2->sertifikasi_drone = $sertifikat;
+          $drone2->drones_reg = $drones->id;
+          $drone2->approved_by = Auth::User()->id;
+          $drone2->company = $user->company;
+          $drone2->save();
+        }
+        else {
+          $drones->approved = 2;
+        }
       }
       else {
-        $drones->approved = 2;
-      }
+        $uas_regs = UasRegs::where('user_id',$drones->user_id)->where('softdelete',0)->first()->id;
+        if ($request->approval == 'approve') {
+          $drones->approved = 1;
+          $nomor_drone      = $this->generateNomorDrone($user->address_code);
+          $sertifikat       = $this->generateCerfiticateDrone($nomor_drone,$drones,$user->nama,$user->id);
 
+          //send email :
+          $sender       = "DGCA Dummy Email | Sertifikat Drone";
+          $EmailSender  = $user->email;
+          $pesan        = "Terlampir";
+          Mail::send('emails.send', ['sender' => $sender, 'EmailSender' => $EmailSender, 'pesan' => $pesan],
+          function ($message) use ($user,$nomor_drone)
+          {
+              $tujuan_upload  = public_path().'/sertifikasi/drone/'.$user->id;
+              $nama_file      = 'Sertifikat_'.$nomor_drone.'.pdf';
+
+              $perihal  = "DGCA Dummy Email | Sertifikat Drones";
+              $sender   = "DGCA Dummy Email";
+              $message->from('ugdisposition@gmail.com', 'DGCA Dummy Email No Reply');
+              $message->to($user->email);
+              $message->subject($sender);
+              $message->attach($tujuan_upload.'/'.$nama_file);
+          });
+
+          //insert ke tabel pilot :
+          $drone2 = new RegisteredDrone;
+          $drone2->nomor_drone = $nomor_drone;
+          $drone2->user_id = $drones->user_id;
+          $drone2->uas_regs = $uas_regs;
+          $drone2->drones_reg = $drones->id;
+          $drone2->sertifikasi_drone = $sertifikat;
+          $drone2->approved_by = Auth::User()->id;
+          $drone2->company = $user->company;
+          $drone2->save();
+        }
+        else {
+          $drones->approved = 2;
+        }
+      }
       $drones->save();
       return redirect('approvedrones')->with('succes', 'User successfuly approved!');
     }
@@ -963,6 +1009,7 @@ class AdminController extends Controller
         else {
           $uas_regs->status = 4;
         }
+        $uas_regs->approved_by = Auth::User()->id;
         $uas_regs->save();
         return redirect('approval/uas')->with('succes', 'Assesment Saved!');
       }
@@ -1082,6 +1129,7 @@ class AdminController extends Controller
       } else {
         $perusahaan->approved = 0;
       }
+      $perusahaan->approved_by = Auth::User()->id;
       $perusahaan->save();
 
       return redirect('approval/company')->with('succes', 'Company Approved!');;

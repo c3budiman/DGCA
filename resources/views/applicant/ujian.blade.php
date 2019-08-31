@@ -29,12 +29,12 @@
           @foreach ($all_soal as $soalnya)
             <?php $i++; ?>
             @if ($i === $current_soal->id)
-              <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-light waves-effect active">{{$i}}</a>
+              <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-light waves-effect active">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</a>
             @else
               @if ($soalnya->jawaban == null)
-                <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-light waves-effect">{{$i}}</a>
+                <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-light waves-effect">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</a>
               @else
-                <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-secondary waves-light waves-effect">{{$i}}</a>
+                <a href="/uas_assesment_now/{{$soalnya->id}}/{{$id_regs}}" class="btn btn-secondary waves-light waves-effect">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</a>
               @endif
             @endif
           @endforeach
@@ -47,7 +47,7 @@
     </div>
     <div class="col-md-10">
       <div class="card m-b-30 card-body">
-        <h5 class="card-title">Nomor {{$current_soal->id}}</h5>
+        <h5 class="card-title">Nomor {{ $current_soal->id }}</h5>
         <p class="card-text">{!! $current_soal->soal !!}</p>
         <div class="card-box">
           <form enctype="multipart/form-data" action="{{url('/')}}/uas_assesment_now/{{$current_soal->id}}/{{$id_regs}}" method="post" class="form-horizontal ">

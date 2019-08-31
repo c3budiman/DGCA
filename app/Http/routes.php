@@ -375,6 +375,10 @@ Route::post('manage/company/approve','AdminController@ApproveUsertoCompanyByAdmi
 
 
 
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Admin Perusahaan Routes
@@ -387,6 +391,33 @@ Route::post('manage/company/approve','AdminController@ApproveUsertoCompanyByAdmi
 Route::get('perusahaan', 'AdminPerusahaanController@getIsianPerusahaan');
 Route::post('perusahaan', 'AdminPerusahaanController@SaveIsianPerusahaan');
 Route::post('perusahaan/dokumen', 'AdminPerusahaanController@UploadDokumenPerusahaan');
+Route::get('perusahaan/approval/anggota','AdminPerusahaanController@getApprovalAnggotaPerusahaan');
+Route::get('manage/self/json', 'AdminPerusahaanController@manageCompanyJson')->name('manage/self/json');
+Route::get('detail/identitas/adminperu/{id}', 'AdminPerusahaanController@getidentitas');
+Route::post('manage/self/approve','AdminPerusahaanController@ApproveUsertoCompanyByAdmin');
+Route::post('manage/self/remove','AdminPerusahaanController@RemoveUserFromCompany');
+
+Route::get('perusahaan/anggota','AdminPerusahaanController@getAnggotaPerusahaan');
+Route::get('manage/anggota/json', 'AdminPerusahaanController@manageAnggotaJson')->name('manage/anggota/json');
+
+Route::get('perusahaan/adrones/json', 'AdminPerusahaanController@nadronesTB')->name('perusahaan/nadrones/json');
+Route::get('perusahaan/appdrones/json', 'AdminPerusahaanController@appdronesTB')->name('perusahaan/appdrones/json');
+Route::get('perusahaan/companyDrones/json', 'AdminPerusahaanController@companyDronesDataTB')->name('perusahaan/companyDrones/json');
+
+Route::get('perusahaan/drones','AdminPerusahaanController@getDrones');
+Route::get('perusahaan/addDrones','AdminPerusahaanController@addDrones');
+Route::get('perusahaan/editDrones/{id}','AdminPerusahaanController@editDrones');
+
+Route::post('perusahaan/drones','AdminPerusahaanController@postDrones');
+Route::post('perusahaan/drones/delete','AdminPerusahaanController@deleteDrones');
+Route::put('perusahaan/drones/{id}','AdminPerusahaanController@updateDrones');
+Route::post('perusahaan/drones/{id}','AdminPerusahaanController@updateDrones');
+
+Route::post('perusahaan/uploadDokumenUAS', 'AdminPerusahaanController@uploadDokumenUAS');
+Route::post('perusahaan/uploadPesawatSn', 'AdminPerusahaanController@uploadPesawatSn');
+Route::post('perusahaan/uploadPesawat', 'AdminPerusahaanController@uploadPesawat');
+Route::post('perusahaan/uploadPenguasaan', 'AdminPerusahaanController@uploadPenguasaan');
+
 
 
 /*

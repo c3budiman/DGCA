@@ -31,6 +31,16 @@
                       <div class="row">
                         <div class="col-12">
                           <div class="card-box">
+                            @if ($user->roles_id == 4)
+                              <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="simpleinput">Status User : </label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" name="" disabled value="Admin Perusahaan">
+                                </div>
+                              </div>
+                            @endif
+
+
                             <div class="form-group row">
                               <label class="col-sm-2 col-form-label" for="simpleinput">Nama</label>
                               <div class="col-sm-10">
@@ -52,78 +62,89 @@
                               </div>
                             </div>
 
-                            <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="simpleinput">Alamat</label>
-                              <div class="col-sm-10">
-                                <input type="text" class="form-control" name="" disabled value="{{$user->address}}">
+                            @if ($user->roles_id == 3)
+                              <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="simpleinput">Alamat</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" name="" disabled value="{{$user->address}}">
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Telepon</label>
-                              <div class="col-sm-10">
-                                <input type="text" class="form-control" name="" disabled value="{{$user->phone}}">
+                              <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Telepon</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" name="" disabled value="{{$user->phone}}">
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Identitas</label>
-                              <div class="col-sm-10">
-                                @if ($user->dokumen_identitas)
-                                  <?php $datatb = json_decode($user->dokumen_identitas)->original; $datatb2 = json_decode($user->dokumen_identitas)->resized; ?>
-                                  <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
-                                @endif
+                              <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Identitas</label>
+                                <div class="col-sm-10">
+                                  @if ($user->dokumen_identitas)
+                                    <?php $datatb = json_decode($user->dokumen_identitas)->original; $datatb2 = json_decode($user->dokumen_identitas)->resized; ?>
+                                    <a href="{{$datatb}}"><img src="{{$datatb2}}" alt="" height="100px"></a>
+                                  @endif
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="form-group row">
-                              <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Sertifikasi</label>
-                              <div class="col-sm-10">
-                                @if ($user->dokumen_sertifikasi)
-                                  <?php $datatb3 = json_decode($user->dokumen_sertifikasi)->original; $datatb4 = json_decode($user->dokumen_sertifikasi)->resized; ?>
-                                  <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
-                                @endif
+                              <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="simpleinput">Dokumen Sertifikasi</label>
+                                <div class="col-sm-10">
+                                  @if ($user->dokumen_sertifikasi)
+                                    <?php $datatb3 = json_decode($user->dokumen_sertifikasi)->original; $datatb4 = json_decode($user->dokumen_sertifikasi)->resized; ?>
+                                    <a href="{{$datatb3}}"><img src="{{$datatb4}}" alt="" height="100px"></a>
+                                  @endif
+                                </div>
                               </div>
-                            </div>
 
-                            @if ($user->approved == 1)
-                               @if (DB::table('remote_pilot')->where('user_id',$user->id)->count() > 0)
-                                 <?php
-                                 $remote_pilot = DB::table('remote_pilot')->where('user_id',$user->id)->first();
-                                  ?>
-                                  <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Pilot</label>
-                                    <div class="col-sm-10">
-                                      <input type="text" class="form-control" name="" disabled value="{{$remote_pilot->nomor_pilot}}">
+                              @if ($user->approved == 1)
+                                 @if (DB::table('remote_pilot')->where('user_id',$user->id)->count() > 0)
+                                   <?php
+                                   $remote_pilot = DB::table('remote_pilot')->where('user_id',$user->id)->first();
+                                    ?>
+                                    <div class="form-group row">
+                                      <label class="col-sm-2 col-form-label" for="simpleinput">Nomor Pilot</label>
+                                      <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="" disabled value="{{$remote_pilot->nomor_pilot}}">
+                                      </div>
                                     </div>
-                                  </div>
 
-                                  <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label" for="simpleinput">Sertifikat Pilot</label>
-                                    <div class="col-sm-10">
-                                      @if ($remote_pilot->sertifikasi_pilot)
-                                        <a class="btn btn-info" href="{{$remote_pilot->sertifikasi_pilot}}">Download</a>
-                                      @endif
+                                    <div class="form-group row">
+                                      <label class="col-sm-2 col-form-label" for="simpleinput">Sertifikat Pilot</label>
+                                      <div class="col-sm-10">
+                                        @if ($remote_pilot->sertifikasi_pilot)
+                                          <a class="btn btn-info" href="{{$remote_pilot->sertifikasi_pilot}}">Download</a>
+                                        @endif
+                                      </div>
                                     </div>
-                                  </div>
-                               @endif
+                                 @endif
+                              @endif
                             @endif
-
-
+                            
                           </div>
                         </div>
                       </div>
                       <hr>
-                      @if ($user->approved != 1)
-                        <div class="pull-right">
-                          <button name="approval" value="approve" type="submit" class="btn btn-sm btn-success">Approve</button>
-                        </div>
-                        <div class="pull-right" style="margin-right:10px">
-                          <button name="approval" value="disapprove" type="submit" class="btn btn-sm btn-danger">Disapprove</button>
-                        </div>
+                      @if (Auth::User()->roles_id == 2)
+                        @if ($user->roles_id == 3)
+                          @if ($user->approved != 1)
+                            <div class="pull-right">
+                              <button name="approval" value="approve" type="submit" class="btn btn-sm btn-success">Approve</button>
+                            </div>
+                            <div class="pull-right" style="margin-right:10px">
+                              <button name="approval" value="disapprove" type="submit" class="btn btn-sm btn-danger">Disapprove</button>
+                            </div>
+                          @endif
+                        @endif
                       @endif
+
                   </form>
+                  @if (Auth::User()->roles_id == 2)
                     <a href="/approveidentitas" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
+                  @else
+                    <a href="/perusahaan/approval/anggota" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
+                  @endif
+
                   </div>
               </div>
           </div>
