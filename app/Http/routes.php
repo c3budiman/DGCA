@@ -414,12 +414,14 @@ Route::post('uoloadBerkas', 'applicantController@uploadBerkas');
 
 Route::get('nadrones/json', 'applicantController@nadronesTB')->name('nadrones/json');
 Route::get('appdrones/json', 'applicantController@appdronesTB')->name('appdrones/json');
+Route::get('companyDrones/json', 'applicantController@companyDronesDataTB')->name('companyDrones/json');
 Route::get('drones','applicantController@getDrones');
 Route::get('addDrones','applicantController@addDrones');
 Route::get('editDrones/{id}','applicantController@editDrones');
-Route::put('drones/{id}','applicantController@updateDrones');
 Route::post('drones','applicantController@postDrones');
 Route::post('drones/delete','applicantController@deleteDrones');
+Route::put('drones/{id}','applicantController@updateDrones');
+Route::post('drones/{id}','applicantController@updateDrones');
 Route::post('uploadDokumenUAS', 'applicantController@uploadDokumenUAS');
 Route::post('uploadPesawatSn', 'applicantController@uploadPesawatSn');
 Route::post('uploadPesawat', 'applicantController@uploadPesawat');
@@ -430,6 +432,9 @@ Route::get('uas_assesment_now/{id}/{id_regs}','applicantController@getSoalUjian'
 Route::post('uas_assesment_now/{id}/{id_regs}','applicantController@saveJawabanAssesment');
 Route::get('finish_ujian/{uas_regs}','applicantController@FinishUASA');
 Route::get('finish_ujian_fix/{uas_regs}','applicantController@FinishFix');
+
+Route::get('changeCompany','applicantController@getPindahPerusahaan');
+Route::post('changeCompany','applicantController@doPindahPerusahaan');
 
 
 /*

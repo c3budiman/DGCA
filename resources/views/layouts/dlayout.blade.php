@@ -78,7 +78,7 @@
                           $namaRule = DB::table('roles')->where('id','=', $roles_id)->first()->namaRule;
                           $dashboardMenu = DB::table('dashmenu')->where('kepunyaan','=', $roles_id)->get();
                           if (DB::table('perusahaan')->where('id',$roles_id)->count() > 0) {
-                            $company = DB::table('perusahaan')->where('id',$roles_id)->first()->nama_perusahaan;
+                            $company = DB::table('perusahaan')->where('id',Auth::User()->company)->first()->nama_perusahaan;
                           }
                         ?>
                         @if ($roles_id == 3)

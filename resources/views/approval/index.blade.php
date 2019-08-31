@@ -63,6 +63,9 @@
                                   <th>Nama</th>
                                   <th>Email</th>
                                   <th>Company</th>
+                                  <th>Nomor Pilot</th>
+                                  <th>Tanggal Approve</th>
+                                  <th>Validator</th>
                                   <th colspan="10%">Action</th>
                               </tr>
                           </thead>
@@ -175,7 +178,7 @@
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
             {data: 'email', name: 'email'},
-            {data: 'company', name: 'company'},
+            {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -188,7 +191,10 @@
             {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             {data: 'nama', name: 'nama'},
             {data: 'email', name: 'email'},
-            {data: 'company', name: 'company'},
+            {data: 'nama_perusahaan', name: 'perusahaan.nama_perusahaan'},
+            {data: 'nomor_pilot', name: 'remote_pilot.nomor_pilot'},
+            {data: 'created_at', name: 'remote_pilot.created_at'},
+            {data: 'validator', name: 'validator', orderable: false, searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

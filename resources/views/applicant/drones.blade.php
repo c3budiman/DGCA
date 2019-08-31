@@ -23,6 +23,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>#id</th>
                         <th>Drones</th>
                         <th>Model</th>
                         <th colspan="10%">Action</th>
@@ -43,8 +44,30 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Drones</th>
+                        <th>Foto Drones</th>
                         <th>Model</th>
+                        <th>Nomor Drone</th>
+                        <th colspan="10%">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card-box table-responsive">
+            <h4 class="m-t-0 header-title">Company Drones</h4>
+            <br>
+
+            <table id="contoh3" class="table table-bordered table-hover datatable3">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Foto Drones</th>
+                        <th>Model</th>
+                        <th>Nomor Drone</th>
                         <th colspan="10%">Action</th>
                     </tr>
                 </thead>
@@ -102,7 +125,8 @@ $(document).ready(function() {
       ajax: '{{ route('nadrones/json') }}',
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-          {data: 'drones_image', name: 'drones_image'},
+          {data: 'id', name: 'id'},
+          {data: 'drones_image', name: 'drones_image', orderable: false, searchable: false},
           {data: 'model', name: 'model'},
           {data: 'action', name: 'action', orderable: false, searchable: false},
       ]
@@ -114,53 +138,65 @@ $(document).ready(function() {
       ajax: '{{ route('appdrones/json') }}',
       columns: [
           {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-          {data: 'drones_image', name: 'drones_image'},
+          {data: 'pic_of_drones', name: 'pic_of_drones', orderable: false, searchable: false},
           {data: 'model', name: 'model'},
+          {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
           {data: 'action', name: 'action', orderable: false, searchable: false},
       ]
   });
 
-  $(document).on('click', '.delete-modal', function() {
-      $('#footer_action_button').text(" Delete");
-      $('#footer_action_button').removeClass('glyphicon-check');
-      $('#footer_action_button').addClass('glyphicon-trash');
-      $('.actionBtn').removeClass('btn-success');
-      $('.actionBtn').addClass('btn-danger');
-      $('.actionBtn').addClass('delete');
-      $('.modal-title').text('Delete');
-      $('.did').text($(this).data('id'));
-      $('.deleteContent').show();
-      $('.form-horizontal').hide();
-      $('#iddelete').val($(this).data('id'));
-      $('.dname').html($(this).data('name'));
-      $('#myModal').modal('show');
+  $('.datatable3').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '{{ route('companyDrones/json') }}',
+      columns: [
+          {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+          {data: 'pic_of_drones', name: 'pic_of_drones', orderable: false, searchable: false},
+          {data: 'model', name: 'model'},
+          {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
+          {data: 'action', name: 'action', orderable: false, searchable: false},
+      ]
   });
-
-    $('.modal-footer').on('click', '.delete', function() {
-        $.ajax({
-            type: "POST",
-            <?php
-            $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
-             ?>
-            url: "{{$link}}/drones/delete",
-            dataType: "json",
-            data: {
-              '_token': $('input[name=_token]').val(),
-              id: $("#iddelete").val(),
-            },
-            success: function (data, status) {
-                $('.datatable').DataTable().ajax.reload(null, false);
-                $('.datatable2').DataTable().ajax.reload(null, false);
-            },
-            error: function (request, status, error) {
-                console.log($("#iddelete").val());
-                console.log(request.responseJSON);
-                $.each(request.responseJSON.errors, function( index, value ) {
-                  alert( value );
-                });
-            }
-        });
+  $(document).on('click', '.delete-modal', function() {
+        $('#footer_action_button').text(" Delete");
+        $('#footer_action_button').removeClass('glyphicon-check');
+        $('#footer_action_button').addClass('glyphicon-trash');
+        $('.actionBtn').removeClass('btn-success');
+        $('.actionBtn').addClass('btn-danger');
+        $('.actionBtn').addClass('delete');
+        $('.modal-title').text('Delete');
+        $('.did').text($(this).data('id'));
+        $('.deleteContent').show();
+        $('.form-horizontal').hide();
+        $('#iddelete').val($(this).data('id'));
+        $('.dname').html($(this).data('name'));
+        $('#myModal').modal('show');
     });
+      $('.modal-footer').on('click', '.delete', function() {
+          $.ajax({
+              type: "POST",
+              <?php
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+               ?>
+              url: "{{$link}}/drones/delete",
+              dataType: "json",
+              data: {
+                '_token': $('input[name=_token]').val(),
+                id: $("#iddelete").val(),
+              },
+              success: function (data, status) {
+                  $('.datatable').DataTable().ajax.reload(null, false);
+                  $('.datatable2').DataTable().ajax.reload(null, false);
+              },
+              error: function (request, status, error) {
+                  console.log($("#iddelete").val());
+                  console.log(request.responseJSON);
+                  $.each(request.responseJSON.errors, function( index, value ) {
+                    alert( value );
+                  });
+              }
+          });
+      });
 });
 </script>
 @endsection

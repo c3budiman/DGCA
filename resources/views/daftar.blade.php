@@ -61,7 +61,7 @@
                                     <div class="col-12">
                                         <label for="emailaddress">Perusahaan</label>
                                         <select id="perusahaan" class="form-control perusahaan" name="perusahaan" required>
-                                            <?php $table = DB::table('perusahaan')->get(); ?>
+                                            <?php $table = DB::table('perusahaan')->where('approved',1)->get(); ?>
                                               <option value="">Silahkan Pilih...</option>
                                             @foreach ($table as $row)
                                               <option value="{{$row->id}}">{{$row->nama_perusahaan}}</option>

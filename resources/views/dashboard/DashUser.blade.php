@@ -36,10 +36,10 @@
                       Registrasi Yang Dilakukan Pada Website DKPPU, Meliputi Pengisian Identitas Diri, Data-Data Drone, dan Pertanyaan Kelayakan Pilot.
                   </div>
                   <div id="step-2" class="">
-                      Step Content
+                      Anda Telah Berhasil Mendaftarkan Remote Pilot, dan memiliki drone yang bisa anda gunakan, silahkan lanjutkan pendaftaran pada airnav.
                   </div>
                   <div id="step-3" class="">
-                      Step Content
+                      Silahkan Menuju Airnav, Untuk melanjutkan pendaftaran, data kami terhubung sehingga anda dapat melanjutkan pendaftaran dengan data yang ada telah masukkan di situs ini.
                   </div>
                   <div id="step-4" class="">
                       Step Content
@@ -93,9 +93,11 @@
     <div class="col-6">
       <div class="card-box">
         <h4 class="header-title mb-4">Status Remote Pilot</h4>
-        @if (Auth::User()->approved)
+        @if (Auth::User()->ktp)
           @if (Auth::User()->approved == 1)
             <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+          @elseif (Auth::User()->approved == '')
+            <p style="font-size:15px;">Sedang Di Nilai <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
           @else
             <p style="font-size:15px;">Verifikasi Tidak Berhasil <i style="color:red; font-size:15px;" class="fa fa-times"> </i> </p>
           @endif
@@ -112,10 +114,25 @@
 
 
 @section('jstambahan')
+  <?php
+  $status = 0;
+  if (DB::table('remote_pilot')->where('user_id',Auth::User()->id)->where('status',1)->count() > 0) {
+    if (DB::table('registered_drone')->where('user_id',Auth::User()->id)->where('status',1)->count() > 0) {
+      $status = 2;
+    }
+
+    if (Auth::User()->approved_company == 1) {
+      if (DB::table('registered_drone')->where('company',Auth::User()->company)->where('status',1)->count() > 0) {
+        $status = 2;
+      }
+    }
+
+  }
+   ?>
   <script type="text/javascript">
     $(document).ready(function(){
         $('#smartwizard').smartWizard({
-          selected: 0,
+          selected: {{$status}},
           theme: 'dots',
           toolbarSettings: {
             showNextButton: false

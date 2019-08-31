@@ -356,15 +356,12 @@ class AdminController extends Controller
     }
 
     public function approveidentitasTB(){
-      $user = User::whereIn('id', function($query)
-      {
-          $query->select('user_id')
-                ->from('uas_regs')
-                ->whereRaw('uas_regs.user_id = users.id')
-                ->where('status',3)->where('softdelete',0);
-      })
-      ->where('roles_id','3')->where('approved','=','')->orWhere('approved', 0)
-      ->get();
+      $user = DB::table('users')
+            ->join('uas_regs', 'users.id', '=', 'uas_regs.user_id')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('users.*', 'perusahaan.nama_perusahaan')
+            ->where('uas_regs.status',3)->where('uas_regs.softdelete',0)
+            ->where('users.roles_id',3)->where('users.approved','=','')->orWhere('users.approved', 0);
 
       return Datatables::of($user)
       ->addColumn('action', function ($datatb) {
@@ -376,10 +373,19 @@ class AdminController extends Controller
     }
 
     public function approveidentitasTB2(){
-      return Datatables::of(User::query()->where('roles_id','3')->where('approved','=','1')->get())
+      $user = DB::table('users')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->join('remote_pilot', 'users.id', '=', 'remote_pilot.user_id')
+            ->select('users.*', 'perusahaan.nama_perusahaan', 'remote_pilot.nomor_pilot', 'remote_pilot.approved_by', 'remote_pilot.sertifikasi_pilot','remote_pilot.created_at')
+            ->where('users.roles_id',3)->where('users.approved','=','1');
+
+      return Datatables::of($user)
       ->addColumn('action', function ($datatb) {
           return
            '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addColumn('validator', function ($datatb) {
+          return User::find($datatb->approved_by)->nama;
       })
       ->addIndexColumn()
       ->make(true);

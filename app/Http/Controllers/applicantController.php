@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\UasRegs;
 use App\Ujian;
+use App\RegisteredDrone;
 
 
 class applicantController extends Controller
@@ -376,6 +377,14 @@ class applicantController extends Controller
                  $tambah_button
                 .'<button data-id="'.$datatb->id.'" class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
             })
+            ->addColumn('drones_image', function($datatb) {
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+              if ($datatb->pic_of_drones) {
+                return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+              } else {
+                return '';
+              }
+            })
             ->addIndexColumn()
             ->addColumn('drones_image', function($datatb) {
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
@@ -389,17 +398,54 @@ class applicantController extends Controller
     }
 
     public function appdronesTB() {
-      return Datatables::of(Drones::query()->where('user_id',Auth::User()->id)->where('approved','=','1'))
+      $drones = DB::table('drones')
+            ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+            ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
+            ->where('drones.user_id',Auth::User()->id)->where('drones.approved','=','1');
+     //dd($drones);
+
+      return Datatables::of($drones)
             ->addColumn('action', function ($datatb) {
               $link = url('/');
-              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> View </a>'
+              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
+              .'<div style="padding-top:10px"></div>';
+              $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
               .'<div style="padding-top:10px"></div>';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
                 return
                  $tambah_button;
             })
-            ->addColumn('drones_image', function($datatb) {
+            ->addColumn('pic_of_drones', function($datatb) {
+              $link = url('/').'/';
+              if ($datatb->pic_of_drones) {
+                return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+              } else {
+                return '';
+              }
+            })
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function companyDronesDataTB() {
+      $drones = DB::table('drones')
+            ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+            ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
+            ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
+
+      return Datatables::of($drones)
+            ->addColumn('action', function ($datatb) {
+              $link = url('/');
+              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
+              .'<div style="padding-top:10px"></div>';
+              $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
+              .'<div style="padding-top:10px"></div>';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+                return
+                 $tambah_button;
+            })
+            ->addColumn('pic_of_drones', function($datatb) {
+              $link = url('/').'/';
               if ($datatb->pic_of_drones) {
                 return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
               } else {
@@ -411,6 +457,7 @@ class applicantController extends Controller
     }
 
     public function deleteDrones(Request $request, Drones $drones){
+      //dd($request->all());
       $drones = Drones::find($request->id);
       $drones->softdelete = 1;
       $drones->save();
@@ -676,6 +723,19 @@ class applicantController extends Controller
          );
 
          return redirect('dashboard')->with('status', 'Data telah terupdate!');
+    }
+
+    public function getPindahPerusahaan() {
+      return view('applicant.pindahCompany');
+    }
+
+    public function doPindahPerusahaan(Request $request) {
+      //dd($request->all());
+      $user = User::find(Auth::User()->id);
+      $user->approved_company = 0;
+      $user->company = $request->perusahaan;
+      $user->save();
+      return redirect('dashboard')->with('status', 'Data telah terupdate!');
     }
 
     protected function uploadImage($file, $tujuan_upload, $nama_file) {
