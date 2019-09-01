@@ -1131,8 +1131,11 @@ class AdminController extends Controller
       }
       $perusahaan->approved_by = Auth::User()->id;
       $perusahaan->save();
+      $user = User::where('company', $perusahaan->id)->where('roles_id',4)->first();
+      $user->approved_company = 1;
+      $user->save();
 
-      return redirect('approval/company')->with('succes', 'Company Approved!');;
+      return redirect('approval/company')->with('succes', 'Company Approved!');
     }
 
     public function getManagePerusahaan() {

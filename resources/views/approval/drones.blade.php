@@ -200,6 +200,8 @@
                   </form>
                   @if (Auth::User()->roles_id == 3)
                     <a href="/drones" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
+                  @elseif (Auth::User()->roles_id == 4)
+                    <a href="/perusahaan/drones" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
                   @else
                     <a href="/approvedrones" class="btn btn-sm btn-secondary pull-right mr-2">Kembali</a>
                   @endif

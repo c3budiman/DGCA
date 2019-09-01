@@ -42,7 +42,7 @@ class AdminPerusahaanController extends Controller
 
     public function editDrones($id) {
       $manages = Drones::find($id);
-      return view('applicant.edit_drones')->with(compact('manages'));
+      return view('perusahaan.edit_drones')->with(compact('manages'));
     }
 
     public function getdronesuser(Request $request,$id){
@@ -55,7 +55,7 @@ class AdminPerusahaanController extends Controller
             ->addColumn('action', function ($datatb) {
               $tambah_button='';
               $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
-                $tambah_button = '<a href="'.$link.'/editDrones/'.$datatb->id.'" class="btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Edit </a>'
+                $tambah_button = '<a href="'.$link.'/perusahaan/editDrones/'.$datatb->id.'" class="btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Edit </a>'
                 .'<div style="padding-top:10px"></div>';
                 return
                  $tambah_button
@@ -91,7 +91,7 @@ class AdminPerusahaanController extends Controller
       return Datatables::of($drones)
             ->addColumn('action', function ($datatb) {
               $link = url('/');
-              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
+              $tambah_button = '<a href="'.$link.'/detail/dronecompuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
               .'<div style="padding-top:10px"></div>';
               $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
               .'<div style="padding-top:10px"></div>';
@@ -114,13 +114,18 @@ class AdminPerusahaanController extends Controller
     public function companyDronesDataTB() {
       $drones = DB::table('drones')
             ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+            ->join('users', function ($join) {
+                    $join->on('users.id', '=', 'drones.user_id')
+                         ->where('users.company', '=', Auth::User()->company)
+                         ->where('users.approved_company','=',1);
+            })
             ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
             ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
 
       return Datatables::of($drones)
             ->addColumn('action', function ($datatb) {
               $link = url('/');
-              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
+              $tambah_button = '<a href="'.$link.'/detail/dronecompuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
               .'<div style="padding-top:10px"></div>';
               $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
               .'<div style="padding-top:10px"></div>';
@@ -138,6 +143,22 @@ class AdminPerusahaanController extends Controller
             })
             ->addIndexColumn()
             ->make(true);
+    }
+
+    public function getdronesuser2(Request $request,$id){
+      if (drones::where('id',$id)->count() > 0) {
+        $drones = drones::where('id',$id)->first();
+        $user_company = User::where('id',$drones->user_id)->first()->company;
+        if (Auth::User()->company == $user_company) {
+          return view('approval.drones')->with(compact('drones'));
+        } else {
+          $drones = drones::where('id',$id)->where('user_id',Auth::User()->id)->first();
+          return view('approval.drones')->with(compact('drones'));
+        }
+      } else {
+        return Redirect::back()->withErrors(['Not Found!']);
+      }
+
     }
 
     public function deleteDrones(Request $request, Drones $drones){
@@ -401,7 +422,7 @@ class AdminPerusahaanController extends Controller
          $drones->nomorteleponpemberisewa = $request->nomorteleponpemberisewa;
 
          $drones->save();
-         
+
          return redirect('dashboard')->with('status', 'Data telah terupdate!');
     }
 

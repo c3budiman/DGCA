@@ -439,61 +439,37 @@ class applicantController extends Controller
     }
 
     public function companyDronesDataTB() {
-      if (Auth::User()->approved_company == 1) {
-        $drones = DB::table('drones')
-              ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
-              ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
-              ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
+      $drones = DB::table('drones')
+            ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+            ->join('users', function ($join) {
+                    $join->on('users.id', '=', 'drones.user_id')
+                         ->where('users.company', '=', Auth::User()->company)
+                         ->where('users.approved_company','=',1);
+            })
+            ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
+            ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
 
-        return Datatables::of($drones)
-              ->addColumn('action', function ($datatb) {
-                $link = url('/');
-                $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
-                .'<div style="padding-top:10px"></div>';
-                $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
-                .'<div style="padding-top:10px"></div>';
-                $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
-                  return
-                   $tambah_button;
-              })
-              ->addColumn('pic_of_drones', function($datatb) {
-                $link = url('/').'/';
-                if ($datatb->pic_of_drones) {
-                  return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
-                } else {
-                  return '';
-                }
-              })
-              ->addIndexColumn()
-              ->make(true);
-      } else {
-        $drones = DB::table('drones')
-              ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
-              ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
-              ->where('drones.user_id',0)->where('drones.approved','=','99');
-
-        return Datatables::of($drones)
-              ->addColumn('action', function ($datatb) {
-                $link = url('/');
-                $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
-                .'<div style="padding-top:10px"></div>';
-                $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
-                .'<div style="padding-top:10px"></div>';
-                $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
-                  return
-                   $tambah_button;
-              })
-              ->addColumn('pic_of_drones', function($datatb) {
-                $link = url('/').'/';
-                if ($datatb->pic_of_drones) {
-                  return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
-                } else {
-                  return '';
-                }
-              })
-              ->addIndexColumn()
-              ->make(true);
-      }
+      return Datatables::of($drones)
+            ->addColumn('action', function ($datatb) {
+              $link = url('/');
+              $tambah_button = '<a href="'.$link.'/detail/dronesuser/'.$datatb->id.'" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> View </a>'
+              .'<div style="padding-top:10px"></div>';
+              $tambah_button .= '<a href="'.$datatb->sertifikasi_drone.'" class="btn btn-xs btn-success"><i class="fa fa-download"></i> Download Sertifikat </a>'
+              .'<div style="padding-top:10px"></div>';
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+                return
+                 $tambah_button;
+            })
+            ->addColumn('pic_of_drones', function($datatb) {
+              $link = url('/').'/';
+              if ($datatb->pic_of_drones) {
+                return '<a href="'.json_decode($datatb->pic_of_drones)->original.'"><img src="'.json_decode($datatb->pic_of_drones)->resized.'" alt="" height="100px"></a>';
+              } else {
+                return '';
+              }
+            })
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function deleteDrones(Request $request, Drones $drones){

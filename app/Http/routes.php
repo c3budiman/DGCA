@@ -56,106 +56,78 @@ Route::get('/config-cache', function() {
 //     return '<h1>Command Generated</h1>';
 // });
 
-Route::get('/makecrud', function() {
-    $exitCode = Artisan::call('crud:generator', ['name' => 'submenu']);
-    return '<h1>Crud Generated</h1>';
-});
+// Route::get('/makecrud', function() {
+//     $exitCode = Artisan::call('crud:generator', ['name' => 'submenu']);
+//     return '<h1>Crud Generated</h1>';
+// });
 
 //symlink
 //u need to specify basepath for laravel, and base public_html
-Route::get('/link', function() {
-    symlink(base_path('public/photos'), base_path('../photos'));
-    symlink(base_path('public/files'), base_path('../files'));
-    return '<h1>Link created</h1>';
-});
-
-Route::get('/link2', function() {
-    symlink(base_path('public/files'), base_path('../files'));
-    return '<h1>Link created</h1>';
-});
+// Route::get('/link', function() {
+//     symlink(base_path('public/photos'), base_path('../photos'));
+//     symlink(base_path('public/files'), base_path('../files'));
+//     return '<h1>Link created</h1>';
+// });
+//
+// Route::get('/link2', function() {
+//     symlink(base_path('public/files'), base_path('../files'));
+//     return '<h1>Link created</h1>';
+// });
 
 Route::post('tesform',function(Request $request){
     dd($request->all());
 });
 
-// Route::get('tesser','AdminController@generateCertifiedPilot');
-// Route::get('tesser2', function() {
-//   return view('sertifikat.tes');
+// Route::get('rollback_alamat', function() {
+//   $user = DB::table('users')->get();
+//   foreach ($user as $usr) {
+//     if ($usr->address) {
+//       $alamat_real = $usr->address;
+//       $alamat_kode = explode("\,", $alamat_real);
+//       // dd($alamat_kode);
+//       echo DB::table('provinces')->where('name',ltrim($alamat_kode[3], ' '))->first()->id;
+//       echo "<br>";
+//       echo DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id;
+//       echo "<br>";
+//       echo DB::table('districts')->where('name',ltrim($alamat_kode[2], ' '))->first()->id;
+//       echo "<br>";
+//       echo DB::table('villages')->where('name',ltrim($alamat_kode[0], ' '))->first()->id;
+//       echo "<br>";
+//       DB::table('users')
+//             ->where('id', $usr->id)
+//             ->update([ 'address_code' => DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id ] );
+//       echo $usr->email;
+//       echo "<br>";
+//
+//
+//     }
+//   }
 // });
 //
-// Route::get('qr-code/{url}', function ($url)
-// {
-//   $qrCode = new QrCode();
-//   $qrCode
-//       ->setText($url)
-//       ->setSize(300)
-//       ->setPadding(10)
-//       ->setErrorCorrection('high')
-//       ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-//       ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-//       ->setLabel('QR Code Remote Pilot')
-//       ->setLabelFontSize(16)
-//       ->setImageType(QrCode::IMAGE_TYPE_PNG)
-//   ;
-//   echo '<img src="data:'.$qrCode->getContentType().';base64,'.$qrCode->generate().'" />';
-//
-//   // //dd(public_path('qr_code/tes.png'));
-//   // $tes = QRCode::text($url)->png();
-//   // $tea = imagecreatefromstring($tes);
-//   // // imagepng($tea, public_path('qr_code/tes.png'));
-//   // file_put_contents(public_path('qr_code/tes.png'), $tes);
+// Route::get('rollback_company', function() {
+//   $user = DB::table('users')->get();
+//   foreach ($user as $usr) {
+//     if ($usr->company) {
+//       if (DB::table('perusahaan')->where('id',$usr->company)->count() > 0) {
+//         continue;
+//       } else {
+//         if ($usr->company == 'n/a') {
+//           DB::table('users')
+//                 ->where('id', $usr->id)
+//                 ->update( [ 'company' => 2 ] );
+//         } else {
+//           DB::table('users')
+//                 ->where('id', $usr->id)
+//                 ->update( [ 'company' => 3 ] );
+//         }
+//       }
+//     } else {
+//       DB::table('users')
+//             ->where('id', $usr->id)
+//             ->update( [ 'company' => 3 ] );
+//     }
+//   }
 // });
-
-Route::get('rollback_alamat', function() {
-  $user = DB::table('users')->get();
-  foreach ($user as $usr) {
-    if ($usr->address) {
-      $alamat_real = $usr->address;
-      $alamat_kode = explode("\,", $alamat_real);
-      // dd($alamat_kode);
-      echo DB::table('provinces')->where('name',ltrim($alamat_kode[3], ' '))->first()->id;
-      echo "<br>";
-      echo DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id;
-      echo "<br>";
-      echo DB::table('districts')->where('name',ltrim($alamat_kode[2], ' '))->first()->id;
-      echo "<br>";
-      echo DB::table('villages')->where('name',ltrim($alamat_kode[0], ' '))->first()->id;
-      echo "<br>";
-      DB::table('users')
-            ->where('id', $usr->id)
-            ->update([ 'address_code' => DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id ] );
-      echo $usr->email;
-      echo "<br>";
-
-
-    }
-  }
-});
-
-Route::get('rollback_company', function() {
-  $user = DB::table('users')->get();
-  foreach ($user as $usr) {
-    if ($usr->company) {
-      if (DB::table('perusahaan')->where('id',$usr->company)->count() > 0) {
-        continue;
-      } else {
-        if ($usr->company == 'n/a') {
-          DB::table('users')
-                ->where('id', $usr->id)
-                ->update( [ 'company' => 2 ] );
-        } else {
-          DB::table('users')
-                ->where('id', $usr->id)
-                ->update( [ 'company' => 3 ] );
-        }
-      }
-    } else {
-      DB::table('users')
-            ->where('id', $usr->id)
-            ->update( [ 'company' => 3 ] );
-    }
-  }
-});
 
 
 
@@ -192,7 +164,9 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('daftar_perusahaan', 'regisController@getRegisPerusahaan');
 Route::post('daftar_perusahaan', 'regisController@postDaftarPerusahaan');
 
-//Route::get('onlineuser','loginController@getOnline');
+Route::get('drone/confirm/{id}', 'guestController@GetVerifDrone');
+Route::get('remote_pilot/confirm/{id}', 'guestController@GetVerifRemotePilot');
+
 
 
 /*
@@ -342,7 +316,6 @@ Route::get('approvedrones/json', 'AdminController@approvedronesTB')->name('appro
 Route::get('approvedrones2/json', 'AdminController@approvedronesTB2')->name('approvedrones2/json');
 Route::get('approvedrones', 'AdminController@approvedrones');
 Route::get('detail/drones/{id}', 'AdminController@getdrones');
-Route::get('detail/dronesuser/{id}', 'applicantController@getdronesuser');
 Route::put('approvaldrones/{id}', 'AdminController@approveddrones');
 
 Route::get('approval/uas', 'AdminController@getApprovalUAS');
@@ -418,6 +391,8 @@ Route::post('perusahaan/uploadPesawatSn', 'AdminPerusahaanController@uploadPesaw
 Route::post('perusahaan/uploadPesawat', 'AdminPerusahaanController@uploadPesawat');
 Route::post('perusahaan/uploadPenguasaan', 'AdminPerusahaanController@uploadPenguasaan');
 
+Route::get('detail/dronecompuser/{id}', 'AdminPerusahaanController@getdronesuser2');
+
 
 
 /*
@@ -461,6 +436,7 @@ Route::post('drones','applicantController@postDrones');
 Route::post('drones/delete','applicantController@deleteDrones');
 Route::put('drones/{id}','applicantController@updateDrones');
 Route::post('drones/{id}','applicantController@updateDrones');
+Route::get('detail/dronesuser/{id}', 'applicantController@getdronesuser');
 Route::post('uploadDokumenUAS', 'applicantController@uploadDokumenUAS');
 Route::post('uploadPesawatSn', 'applicantController@uploadPesawatSn');
 Route::post('uploadPesawat', 'applicantController@uploadPesawat');
