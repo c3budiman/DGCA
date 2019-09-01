@@ -164,8 +164,8 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::get('daftar_perusahaan', 'regisController@getRegisPerusahaan');
 Route::post('daftar_perusahaan', 'regisController@postDaftarPerusahaan');
 
-Route::get('drone/confirm/{id}', 'guestController@GetVerifDrone');
-Route::get('remote_pilot/confirm/{id}', 'guestController@GetVerifRemotePilot');
+Route::get('drone/confirm/{id}', 'NoMidlewareController@GetVerifDrone');
+Route::get('remote_pilot/confirm/{id}', 'NoMidlewareController@GetVerifRemotePilot');
 
 
 
