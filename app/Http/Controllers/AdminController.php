@@ -1142,4 +1142,8 @@ class AdminController extends Controller
       return view('perusahaan.manage');
     }
 
+    public function getReport() {
+      return view('perusahaan.getReport');
+    }
+
 }

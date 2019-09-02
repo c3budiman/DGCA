@@ -210,6 +210,16 @@ Route::group(['middleware' => 'auth.login'], function() {
 Route::group(['middleware' => 'auth.token'], function () {
     Route::post('user/tes', 'Api2Controller@tesadmin');
     Route::get('user/tes2', 'Api2Controller@tesadmin2');
+
+    //u can do it with company, approval date, or the name like.... it limit the result to 100 only.
+    Route::get('api/v1/remote_pilot','Api2Controller@getRemotePilot');
+    Route::get('api/v1/drones','Api2Controller@getDrone');
+    Route::get('api/v1/company','Api2Controller@getCompany');
+
+    //u can do it with license number to get specific info of the drone/remote pilot :
+    //Route::post('api/v1/remote_pilot/with_license_number','Api2Controller@getRemotePilotWithSN');
+    //Route::post('api/v1/drones/with_license_number','Api2Controller@getDroneWithSN');
+
 });
 
 /*
@@ -345,6 +355,9 @@ Route::get('approved/company/json/{id}', 'AdminController@approvedCompanyJson2')
 Route::get('manage/company/json', 'AdminController@manageCompanyJson')->name('manage/company/json');
 Route::get('manage/company/json/{id}', 'AdminController@manageCompanyJson2');
 Route::post('manage/company/approve','AdminController@ApproveUsertoCompanyByAdmin');
+
+Route::get('report','AdminController@getReport');
+Route::get('report/perusahaan/user','AdminController@getReportPerusahaanUser')
 
 
 

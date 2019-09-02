@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\User;
 use Illuminate\Contracts\Auth\Guard;
+use Auth;
 
 class apitoken
 {
@@ -37,9 +38,13 @@ class apitoken
 
     public function hasMatchingToken($token)
     {
-        //dd(User::where('api_token', $token)->first()->nama);
         if($user = User::where('api_token', $token)->first()){
-          return true;
+          if ($this->auth->check()) {
+              return true;
+          } else {
+              Auth::login($user);
+              return true;
+          }
         }
     }
 }
