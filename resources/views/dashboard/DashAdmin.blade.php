@@ -72,7 +72,7 @@
     <div class="row">
       <div class="col-md-6">
           <div class="card-box">
-              <h4 class="header-title">Heat Map (Coming Soon)</h4>
+              <h4 class="header-title">Heat Map Pendaftar</h4>
               <div id="indonesia" style="height: 500px"></div>
           </div>
       </div>

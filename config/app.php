@@ -139,6 +139,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         //LaravelQRCode\Providers\QRCodeServiceProvider::class,
 
         /*
@@ -198,6 +199,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Image'      => Intervention\Image\Facades\Image::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         //'QRCode'     => LaravelQRCode\Facades\QRCode::class,
     ],
 

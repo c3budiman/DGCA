@@ -61,6 +61,24 @@ class AdminController extends Controller
     $this->middleware('rule:'.$this->getRoleAdmin().','.$this->getRoleSuperAdmin());
   }
 
+    public function getReportPerusahaanUser() {
+
+      //$data = User::whereNotNull('address')->get()->toArray();
+      //dd($data);
+
+      // Excel::create('Filename', function($excel) use($data) {
+      //     $excel->sheet('Sheetname', function($sheet) use($data) {
+      //         $sheet->fromArray($data);
+      //     });
+      // })->export('xls');
+
+      Excel::create('Report Pendaftar', function($excel) {
+          $excel->sheet('Pendaftar', function($sheet) {
+              $sheet->loadView('report.tabel_user');
+          });
+      })->export('xls');
+    }
+
     public function getFront() {
       return view('front.index');
     }
@@ -548,15 +566,15 @@ class AdminController extends Controller
     }
 
     public function approvedronesTB(){
-      $drones = drones::whereIn('user_id', function($query)
-      {
-          $query->select('id')
-                ->from('users')
-                ->whereRaw('drones.user_id = users.id')
-                ->where('approved', 1)->orWhere('roles_id', 4);
-      })
-      ->where('approved',0)->whereNotNull('model')->orderBy('id','desc')
-      ->get();
+      // $drones = drones::whereIn('user_id', function($query)
+      // {
+      //     $query->select('id')
+      //           ->from('users')
+      //           ->whereRaw('drones.user_id = users.id')
+      //           ->where('approved', 1)->orWhere('roles_id', 4);
+      // })
+      // ->where('approved',0)->whereNotNull('model')->orderBy('id','desc')
+      // ->get();
 
       $drones = DB::table('drones')
             ->join('users', 'drones.user_id', '=', 'users.id')
@@ -1121,6 +1139,32 @@ class AdminController extends Controller
       return view('approval.detail_company',['perusahaan'=>$perusahaan]);
     }
 
+    public function getReportDrones() {
+      return view('report.index_drone');
+    }
+
+    public function reportDroneJson() {
+      $drones = DB::table('drones')
+            ->join('users', 'drones.user_id', '=', 'users.id')
+            ->join('perusahaan', 'perusahaan.id', '=', 'users.company')
+            ->leftJoin('registered_drone', 'registered_drone.drones_reg','=','drones.id')
+            ->select('drones.id','drones.approved','drones.model','drones.serial_number',
+                     'users.nama','users.email', 'drones.manufacturer',
+                     'registered_drone.nomor_drone','perusahaan.nama_perusahaan','drones.updated_at')
+            ->whereNotNull('drones.model')->whereNotNull('drones.serial_number')->whereNotNull('drones.manufacturer');
+
+      return Datatables::of($drones)
+            ->addIndexColumn()
+            ->addColumn('status', function ($datatb) {
+              if ($datatb->approved == 1) {
+                return 'Terverifikasi';
+              } else {
+                return 'Belum Terverifikasi';
+              }
+            })
+            ->make(true);
+    }
+
     public function ApproveCompany(Request $request,$id) {
       //dd($request->all());
       $perusahaan = Perusahaan::find($id);
@@ -1143,7 +1187,56 @@ class AdminController extends Controller
     }
 
     public function getReport() {
-      return view('perusahaan.getReport');
+      return view('report.report_index');
+    }
+
+    public function nonaktifkanPerusahaan(Request $request) {
+      $perusahaan = Perusahaan::find($request->id_perusahaan);
+      $perusahaan->approved = 2;
+      $perusahaan->save();
+      return redirect('manage/perusahaan')->with('succes', 'Company Successfully Disabled!');
+    }
+
+    public function reportCompanyJson() {
+      $query = DB::table('users')
+            ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
+            ->select('users.*','perusahaan.nama_perusahaan')
+            ->where('users.roles_id',3);
+
+      return Datatables::of($query)
+      ->addIndexColumn()
+      ->addColumn('address', function ($datatb) {
+        $address='';
+        if ($datatb->address) {
+          $tes = explode('\,',$datatb->address);
+          foreach ($tes as $t) {
+            $address .= $t;
+          }
+          return $address;
+        } else {
+          return 'N/A';
+        }
+      })
+      ->addColumn('status_user', function ($datatb) {
+        if ($datatb->active == 1) {
+          if ($datatb->approved == 1) {
+            return 'Remote Pilot Terdaftar';
+          }
+          else {
+            return 'Remote Pilot Belum Terdaftar';
+          }
+        } else {
+          return 'Belum Verifikasi Email';
+        }
+      })
+      ->addColumn('status_user_perusahaan', function ($datatb) {
+        if ($datatb->approved_company == 1) {
+          return 'Terverifikasi';
+        } else {
+          return 'Belum Terverifikasi';
+        }
+      })
+      ->make(true);
     }
 
 }

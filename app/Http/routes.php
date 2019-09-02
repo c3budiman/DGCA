@@ -356,10 +356,14 @@ Route::get('manage/company/json', 'AdminController@manageCompanyJson')->name('ma
 Route::get('manage/company/json/{id}', 'AdminController@manageCompanyJson2');
 Route::post('manage/company/approve','AdminController@ApproveUsertoCompanyByAdmin');
 
-Route::get('report','AdminController@getReport');
-Route::get('report/perusahaan/user','AdminController@getReportPerusahaanUser')
+Route::get('report/daftar','AdminController@getReport');
+Route::get('report/perusahaan/user','AdminController@getReportPerusahaanUser');
+Route::get('report/company/json', 'AdminController@reportCompanyJson')->name('report/company/json');
 
+Route::get('report/drones','AdminController@getReportDrones');
+Route::get('report/drones/json', 'AdminController@reportDroneJson')->name('report/drones/json');
 
+Route::post('nonaktifkan/perusahaan','AdminController@nonaktifkanPerusahaan');
 
 
 
