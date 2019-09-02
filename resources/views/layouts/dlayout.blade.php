@@ -92,28 +92,36 @@
                     </div>
                     <div id="sidebar-menu">
                       <ul class="metismenu" id="side-menu">
-                    @foreach ($dashboardMenu as $dmenu)
-                              <!--<li class="menu-title">Navigation</li>-->
-                              @if(DB::table('submenu')->where('kepunyaan','=', $dmenu->id)->count() > 0)
-                                <?php
-                                  $dashboardChild = DB::table('submenu')->where('kepunyaan','=', $dmenu->id)->get();
-                                ?>
-                                <li>
-                                    <a href="javascript: void(0);"><i class="{{$dmenu->class_css}}"></i><span> {{$dmenu->nama}} </span> <span class="menu-arrow"></span></a>
-                                    <ul class="nav-second-level" aria-expanded="false">
-                                        @foreach ($dashboardChild as $dchild)
-                                          <li><a href="{{$dchild->link}}">{{$dchild->nama}}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                @else
-                                  <li>
-                                      <a href="{{$dmenu->link}}">
-                                          <i class="{{$dmenu->class_css}}"></i><span> {{$dmenu->nama}} </span>
-                                      </a>
-                                  </li>
+                      @foreach ($dashboardMenu as $dmenu)
+                              @if ($dmenu->id == 16)
+
                               @endif
-                  @endforeach
+                              <?php
+                                if ($dmenu->id == 16 && Auth::User()->company == 4) {
+                                  continue;
+                                }
+                              ?>
+                                <!--<li class="menu-title">Navigation</li>-->
+                                @if(DB::table('submenu')->where('kepunyaan','=', $dmenu->id)->count() > 0)
+                                  <?php
+                                    $dashboardChild = DB::table('submenu')->where('kepunyaan','=', $dmenu->id)->get();
+                                  ?>
+                                  <li>
+                                      <a href="javascript: void(0);"><i class="{{$dmenu->class_css}}"></i><span> {{$dmenu->nama}} </span> <span class="menu-arrow"></span></a>
+                                      <ul class="nav-second-level" aria-expanded="false">
+                                          @foreach ($dashboardChild as $dchild)
+                                            <li><a href="{{$dchild->link}}">{{$dchild->nama}}</a></li>
+                                          @endforeach
+                                      </ul>
+                                  </li>
+                                  @else
+                                    <li>
+                                        <a href="{{$dmenu->link}}">
+                                            <i class="{{$dmenu->class_css}}"></i><span> {{$dmenu->nama}} </span>
+                                        </a>
+                                    </li>
+                                @endif
+                     @endforeach
                           </ul>
                         </div>
                     <div class="clearfix"></div>

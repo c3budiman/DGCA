@@ -29,6 +29,9 @@
                         $status_text = 'Tidak Aktif';
                         break;
                       case 3:
+                        $status_text = 'Tidak Aktif Sementara';
+                        break;
+                      case 4:
                         $status_text = 'Sertifikat Di Cabut';
                         break;
                       default:
@@ -38,6 +41,12 @@
                  ?>
                 <td align="left"> <b>{{$status_text}}</b> </td>
               </tr>
+              @if ($status != 1)
+                <tr>
+                  <td align="right">Keterangan : </td>
+                  <td align="left"> {{$drones->alasan_pk}} </td>
+                </tr>
+              @endif
               <tr>
                 <td align="right">Model Pesawat Tanpa Awak : </td>
                 <td align="left">{{$drones->model}}</td>

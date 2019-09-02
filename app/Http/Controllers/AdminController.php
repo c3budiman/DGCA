@@ -395,19 +395,53 @@ class AdminController extends Controller
       $user = DB::table('users')
             ->join('perusahaan', 'users.company', '=', 'perusahaan.id')
             ->join('remote_pilot', 'users.id', '=', 'remote_pilot.user_id')
-            ->select('users.*', 'perusahaan.nama_perusahaan', 'remote_pilot.nomor_pilot', 'remote_pilot.approved_by', 'remote_pilot.sertifikasi_pilot','remote_pilot.created_at')
+            ->select('users.*', 'perusahaan.nama_perusahaan', 'remote_pilot.nomor_pilot', 'remote_pilot.alasan_pk', 'remote_pilot.status as status_pk', 'remote_pilot.approved_by', 'remote_pilot.sertifikasi_pilot','remote_pilot.created_at')
             ->where('users.roles_id',3)->where('users.approved','=','1');
 
       return Datatables::of($user)
       ->addColumn('action', function ($datatb) {
           return
-           '<a href="detail/identitas/'.$datatb->id.'" class="edit-modal btn btn-xs btn-success"><i class="fa fa-edit"></i> Details</a>';
+           '<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->nomor_pilot.'"  class="edit-modal btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Peninjauan Kembali</button>'.
+           '<div style="padding-top:10px"></div>'.
+           '<a href="detail/identitas/'.$datatb->id.'" class="btn btn-xs btn-success"><i class="fa fa-eye"></i> Details</a>';
+      })
+      ->addColumn('status', function ($datatb) {
+        $status = '';
+        switch ($datatb->status_pk) {
+          case 1:
+            $status = 'Aktif';
+            break;
+          case 2:
+            $status = 'Nonaktif';
+            break;
+          case 3:
+            $status = 'Nonaktif Sementara';
+            break;
+          case 4:
+            $status = 'Lisensi di Cabut';
+            break;
+          default:
+            $status = '';
+            break;
+        }
+        return $status;
       })
       ->addColumn('validator', function ($datatb) {
           return User::find($datatb->approved_by)->nama;
       })
       ->addIndexColumn()
       ->make(true);
+    }
+
+    public function savePKIdentitas(Request $request) {
+      $remote_pilot              = RemotePilot::where('nomor_pilot',$request->nomor_pilot)->first();
+      $remote_pilot->status      = $request->status_peninjauan;
+      $remote_pilot->alasan_pk   = $request->alasan_pk;
+      $remote_pilot->approved_by = Auth::User()->id;
+      $remote_pilot->save();
+
+      $response = array("success"=>"Data Saved Successfully");
+      return response()->json($response,200);
     }
 
     public function approveidentitas(){
@@ -602,13 +636,36 @@ class AdminController extends Controller
       $drones = DB::table('drones')
             ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
             ->join('users', 'drones.user_id', '=', 'users.id')
-            ->select('drones.id','drones.pic_of_drones','drones.model', 'users.nama', 'registered_drone.nomor_drone', 'registered_drone.sertifikasi_drone', 'registered_drone.created_at as csr','registered_drone.approved_by as approved_by')
+            ->select('drones.id','drones.pic_of_drones','drones.model', 'users.nama', 'registered_drone.nomor_drone', 'registered_drone.status as status_pk', 'registered_drone.sertifikasi_drone', 'registered_drone.created_at as csr','registered_drone.approved_by as approved_by')
             ->where('drones.approved','=','1');
 
       return Datatables::of($drones)
       ->addColumn('action', function ($datatb) {
           return
+          '<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-email="'.$datatb->nomor_drone.'"  class="edit-modal btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Peninjauan Kembali</button>'.
+          '<div style="padding-top:10px"></div>'.
            '<a href="detail/drones/'.$datatb->id.'" class="edit-modal btn btn-xs btn-info"><i class="fa fa-edit"></i> Details</a>';
+      })
+      ->addColumn('status', function ($datatb) {
+        $status = '';
+        switch ($datatb->status_pk) {
+          case 1:
+            $status = 'Aktif';
+            break;
+          case 2:
+            $status = 'Nonaktif';
+            break;
+          case 3:
+            $status = 'Nonaktif Sementara';
+            break;
+          case 4:
+            $status = 'Lisensi di Cabut';
+            break;
+          default:
+            $status = '';
+            break;
+        }
+        return $status;
       })
       ->addColumn('validator', function ($datatb) {
           return User::find($datatb->approved_by)->nama;
@@ -622,6 +679,17 @@ class AdminController extends Controller
       })
       ->addIndexColumn()
       ->make(true);
+    }
+
+    public function savePKDrone(Request $request) {
+      $drones              = RegisteredDrone::where('nomor_drone',$request->nomor_drone)->first();
+      $drones->status      = $request->status_peninjauan;
+      $drones->alasan_pk   = $request->alasan_pk;
+      $drones->approved_by = Auth::User()->id;
+      $drones->save();
+
+      $response = array("success"=>"Data Saved Successfully");
+      return response()->json($response,200);
     }
 
     public function approvedrones(){

@@ -745,6 +745,14 @@ class WebAdminController extends Controller
       ->make(true);
     }
 
+    public function deleteSoal(Request $request) {
+      $soal=Soal::find($request->id);
+      $soal->aktif = 0;
+      $soal->save();
+      $response = array("success"=>"deleted successfuly");
+      return response()->json($response,200);
+    }
+
     public function soal(){
       return view ('soal.soal');
     }
@@ -781,7 +789,7 @@ class WebAdminController extends Controller
     }
 
     public function updatesoal(Request $request,$id) {
-        // dd($manage);
+        //dd($request->all());
         $soal=Soal::find($id);
         $index = DB::table('soal')->select('index')->orderBy('id')->first();
         $a = $index->index;
@@ -791,7 +799,13 @@ class WebAdminController extends Controller
         }else{
           $soal->index = $a + 1;
         }
-        $soal->aktif = $request->status;
+
+        if ($request->status == "Aktif") {
+          $soal->aktif = 1;
+        } else {
+          $soal->aktif = 0;
+        }
+
         $soal->soal = $request->soal;
         // dd($soal);
         $soal->save();

@@ -78,31 +78,31 @@ Route::post('tesform',function(Request $request){
     dd($request->all());
 });
 
-// Route::get('rollback_alamat', function() {
-//   $user = DB::table('users')->get();
-//   foreach ($user as $usr) {
-//     if ($usr->address) {
-//       $alamat_real = $usr->address;
-//       $alamat_kode = explode("\,", $alamat_real);
-//       // dd($alamat_kode);
-//       echo DB::table('provinces')->where('name',ltrim($alamat_kode[3], ' '))->first()->id;
-//       echo "<br>";
-//       echo DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id;
-//       echo "<br>";
-//       echo DB::table('districts')->where('name',ltrim($alamat_kode[2], ' '))->first()->id;
-//       echo "<br>";
-//       echo DB::table('villages')->where('name',ltrim($alamat_kode[0], ' '))->first()->id;
-//       echo "<br>";
-//       DB::table('users')
-//             ->where('id', $usr->id)
-//             ->update([ 'address_code' => DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id ] );
-//       echo $usr->email;
-//       echo "<br>";
-//
-//
-//     }
-//   }
-// });
+Route::get('rollback_alamat', function() {
+  $user = DB::table('users')->get();
+  foreach ($user as $usr) {
+    if ($usr->address) {
+      $alamat_real = $usr->address;
+      $alamat_kode = explode("\,", $alamat_real);
+      // dd($alamat_kode);
+      echo DB::table('provinces')->where('name',ltrim($alamat_kode[3], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('districts')->where('name',ltrim($alamat_kode[2], ' '))->first()->id;
+      echo "<br>";
+      echo DB::table('villages')->where('name',ltrim($alamat_kode[0], ' '))->first()->id;
+      echo "<br>";
+      DB::table('users')
+            ->where('id', $usr->id)
+            ->update([ 'address_code' => DB::table('regencies')->where('name',ltrim($alamat_kode[1], ' '))->first()->id ] );
+      echo $usr->email;
+      echo "<br>";
+
+
+    }
+  }
+});
 //
 // Route::get('rollback_company', function() {
 //   $user = DB::table('users')->get();
@@ -307,6 +307,7 @@ Route::get('parameter/addsoal', 'WebAdminController@addsoal');
 Route::get('parameter/editsoal/{id}', 'WebAdminController@editsoal');
 Route::put('parameter/edited/{id}','WebAdminController@updatesoal');
 Route::post('parameter/postAddSoal', 'WebAdminController@postAddSoal');
+Route::post('soal/delete','WebAdminController@deleteSoal');
 
 
 /*
@@ -364,6 +365,8 @@ Route::get('report/drones','AdminController@getReportDrones');
 Route::get('report/drones/json', 'AdminController@reportDroneJson')->name('report/drones/json');
 
 Route::post('nonaktifkan/perusahaan','AdminController@nonaktifkanPerusahaan');
+Route::post('savePKIdentitas','AdminController@savePKIdentitas');
+Route::post('savePKDrone','AdminController@savePKDrone');
 
 
 

@@ -322,6 +322,7 @@ class applicantController extends Controller
         $user->nama         = $request->nama;
         $user->phone        = $request->phone;
         $user->address      = $address;
+        $user->address_code = $request->regency;
         //todo : upload foto dokumen dan save.
         $user->save();
 
@@ -439,15 +440,28 @@ class applicantController extends Controller
     }
 
     public function companyDronesDataTB() {
-      $drones = DB::table('drones')
-            ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
-            ->join('users', function ($join) {
-                    $join->on('users.id', '=', 'drones.user_id')
-                         ->where('users.company', '=', Auth::User()->company)
-                         ->where('users.approved_company','=',1);
-            })
-            ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
-            ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
+      $drones= null;
+      if (Auth::User()->approved_company == 1) {
+        $drones = DB::table('drones')
+              ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+              ->join('users', function ($join) {
+                      $join->on('users.id', '=', 'drones.user_id')
+                           ->where('users.company', '=', Auth::User()->company)
+                           ->where('users.approved_company','=',1);
+              })
+              ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
+              ->where('registered_drone.company',Auth::User()->company)->where('drones.approved','=','1');
+      } else {
+        $drones = DB::table('drones')
+              ->join('registered_drone', 'drones.id', '=', 'registered_drone.drones_reg')
+              ->join('users', function ($join) {
+                      $join->on('users.id', '=', 'drones.user_id')
+                           ->where('users.company', '=', Auth::User()->company)
+                           ->where('users.approved_company','=',1);
+              })
+              ->select('drones.*', 'registered_drone.nomor_drone as nomor_drone', 'registered_drone.sertifikasi_drone as sertifikasi_drone')
+              ->where('drones.approved','=','99');
+      }
 
       return Datatables::of($drones)
             ->addColumn('action', function ($datatb) {

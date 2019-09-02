@@ -29,6 +29,9 @@
                         $status_text = 'Tidak Aktif';
                         break;
                       case 3:
+                        $status_text = 'Tidak Aktif Sementara';
+                        break;
+                      case 4:
                         $status_text = 'Sertifikat Di Cabut';
                         break;
                       default:
@@ -36,8 +39,14 @@
                         break;
                     }
                  ?>
-                <td align="left">{{$status_text}}</td>
+                <td align="left"> <b>{{$status_text}}</b> </td>
               </tr>
+              @if ($status != 1)
+                <tr>
+                  <td align="right">Keterangan : </td>
+                  <td align="left"> {{$remote_pilot->alasan_pk}} </td>
+                </tr>
+              @endif
               <tr>
                 <td align="right">Nama Remote Pilot : </td>
                 <td align="left">{{$remote_pilot->nama}}</td>

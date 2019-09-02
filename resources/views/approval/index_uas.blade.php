@@ -4,7 +4,7 @@
 @extends('layouts.dlayout')
 
 @section('title')
-  Approval Data
+  Assesment of UAS Registrant
 @endsection
 
 @section('css')
@@ -19,7 +19,7 @@
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Ready To Approve</h4>
+                      <h4 class="m-t-0 header-title">Pending Assesment</h4>
                       <p class="text-muted font-14 m-b-30">
                           Data yang siap untuk di cek dan di approve.
                       </p>
@@ -49,7 +49,7 @@
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Approval History</h4>
+                      <h4 class="m-t-0 header-title">Assesment History</h4>
                       <p class="text-muted font-14 m-b-30">
                           Data yang telah di approve
                       </p>

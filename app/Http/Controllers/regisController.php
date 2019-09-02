@@ -53,7 +53,7 @@ class regisController extends Controller
       if (Input::get('tipe') == 'bisnis') {
         $user->company = Input::get('perusahaan');
       } else {
-        $user->company = 'n/a';
+        $user->company = 4;
       }
       $user->save();
 

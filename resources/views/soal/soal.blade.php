@@ -52,27 +52,15 @@
         <h4 class="modal-title"></h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" role="form">
-          {{ csrf_field() }}
-          <div class="form-group">
-            <label class="control-label col-sm-2" for="id">ID:</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="fid" disabled>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-10" for="name">Roles Name:</label>
-            <div class="col-sm-10">
-              <input type="name" class="form-control" id="n">
-            </div>
-          </div>
-
-        </form>
+        <div class="deleteContent">
+          Are you sure to delete soal with id : <span class="hidden did"></span> ?
+            <input type="hidden" id="iddelete">
+        </div>
 
 
         <div class="modal-footer">
-          <button type="button" class="btn actionBtn" data-dismiss="modal">
+          <button type="button" class="btn actionBtn" data-dismiss="modal" >
             <span id="footer_action_button" class='glyphicon'> </span>
           </button>
           <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -85,6 +73,8 @@
     </div>
   </div>
 </div>
+
+
 @endsection
 
 
@@ -107,42 +97,43 @@ $(document).ready(function() {
 
 
   // ShowModals
-  $(document).on('click', '.edit-modal', function() {
-        $('#footer_action_button').text("Edit");
-        $('#footer_action_button').addClass('glyphicon-check');
-        $('#footer_action_button').removeClass('glyphicon-trash');
-        $('.actionBtn').addClass('btn-success');
-        $('.actionBtn').removeClass('btn-danger');
-        $('.actionBtn').addClass('edit');
-        $('.modal-title').text('Editing Roles');
-        $('.deleteContent').hide();
-        $('.form-horizontal').show();
-        $('#fid').val($(this).data('id'));
-        $('#n').val($(this).data('namarule'));
-        $('#myModal').modal('show');
-    });
+  $(document).on('click', '.delete-modal', function() {
+      $('#footer_action_button').text(" Delete");
+      $('#footer_action_button').removeClass('glyphicon-check');
+      $('#footer_action_button').addClass('glyphicon-trash');
+      $('.actionBtn').removeClass('btn-success');
+      $('.actionBtn').addClass('btn-danger');
+      $('.actionBtn').addClass('delete');
+      $('.modal-title').text('Delete');
+      $('.did').text($(this).data('id'));
+      $('.deleteContent').show();
+      $('.form-horizontal').hide();
+      $('#iddelete').val($(this).data('id'));
+      $('.dname').html($(this).data('name'));
+      $('#myModal').modal('show');
+  });
 
-    $('.modal-footer').on('click', '.edit', function() {
-        $.ajax({
-            type: "POST",
-            url: "/roles/edit",
-            dataType: "json",
-            data: {
-              '_token': $('input[name=_token]').val(),
-              id: $("#fid").val(),
-              namaRule: $("#n").val(),
-            },
-            success: function (data, status) {
-                $('.datatable').DataTable().ajax.reload(null, false);
-            },
-            error: function (request, status, error) {
-                console.log(request.responseJSON);
-                $.each(request.responseJSON.errors, function( index, value ) {
-                  alert( value );
-                });
-            }
-        });
-    });
+  $('.modal-footer').on('click', '.delete', function() {
+      $.ajax({
+          type: "POST",
+          url: "{{url('/')}}/soal/delete",
+          dataType: "json",
+          data: {
+            '_token': $('input[name=_token]').val(),
+            id: $("#iddelete").val(),
+          },
+          success: function (data, status) {
+              $('.datatable').DataTable().ajax.reload(null, false);
+          },
+          error: function (request, status, error) {
+              console.log($("#iddelete").val());
+              console.log(request.responseJSON);
+              $.each(request.responseJSON.errors, function( index, value ) {
+                alert( value );
+              });
+          }
+      });
+  });
 
 });
 </script>

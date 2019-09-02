@@ -49,19 +49,22 @@
       </div>
     </div>
 
-    <div class="col-6">
-      <div class="card-box">
-        <h4 class="header-title mb-4">Status Keanggotaan Perusahaan</h4>
-        @if (Auth::User()->approved_company == 1)
-          <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
-        @else
-          <div class="">
-             <p style="font-size:15px;">Pending Approval Perusahaan <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
-          </div>
+    @if (Auth::User()->company != 4)
+      <div class="col-6">
+        <div class="card-box">
+          <h4 class="header-title mb-4">Status Keanggotaan Perusahaan</h4>
+          @if (Auth::User()->approved_company == 1)
+            <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+          @else
+            <div class="">
+               <p style="font-size:15px;">Pending Approval Perusahaan <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
+            </div>
 
-        @endif
+          @endif
+        </div>
       </div>
-    </div>
+    @endif
+
 
     <div class="col-6">
       <div class="card-box">

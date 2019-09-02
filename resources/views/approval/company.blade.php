@@ -4,7 +4,7 @@
 @extends('layouts.dlayout')
 
 @section('title')
-  Approval Perusahaan
+  Approval and Data Management
 @endsection
 
 @section('css')
@@ -15,11 +15,10 @@
   <!-- Start Page content -->
   <div class="content">
       <div class="container-fluid">
-
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Ready To Approve</h4>
+                      <h4 class="m-t-0 header-title">Pending Approval</h4>
                       <p class="text-muted font-14 m-b-30">
                           Data yang siap untuk di cek dan di approve.
                       </p>
@@ -49,7 +48,7 @@
           <div class="row">
               <div class="col-12">
                   <div class="card-box table-responsive">
-                      <h4 class="m-t-0 header-title">Approval History</h4>
+                      <h4 class="m-t-0 header-title">Registered Company</h4>
                       <p class="text-muted font-14 m-b-30">
                           Data yang telah di approve
                       </p>
