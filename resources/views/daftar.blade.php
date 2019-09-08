@@ -67,8 +67,9 @@
                                               <option value="{{$row->id}}">{{$row->nama_perusahaan}}</option>
                                             @endforeach
                                         </select>
+                                        <br>
 
-                                        <a href="/daftar_perusahaan" class="text-muted float-right"><small>Perusahaan Belum Terdaftar?</small></a>
+                                        <a href="/daftar_perusahaan" style="margin-top:5px;" class="text-muted float-right">Perusahaan Belum Terdaftar?</a>
                                     </div>
                                 </div>
                               @endif

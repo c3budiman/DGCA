@@ -157,7 +157,21 @@
 
               <div class="col-sm-10">
                 @if (Auth::User()->approved == 1)
-                  <input type="text" class="form-control" name="" disabled value="Telah Berhasil di Verifikasi">
+                  <?php
+                    $remote_pilot = null;
+                    if (DB::table('remote_pilot')->where('user_id',Auth::User()->id)->count() > 0) {
+                      $remote_pilot = DB::table('remote_pilot')->where('user_id',Auth::User()->id)->first();
+                    }
+                   ?>
+                  @if ($remote_pilot)
+                    @if ($remote_pilot->status == 1)
+                      <input type="text" class="form-control" name="" disabled value="Telah Berhasil di Verifikasi">
+                    @else
+                      <input type="text" class="form-control" name="" disabled value="Nonaktif">
+                    @endif
+                  @else
+                    <input type="text" class="form-control" name="" disabled value="Sedang di Verifikasi">
+                  @endif
                 @else
                   <input type="text" class="form-control" name="" disabled value="Sedang di Verifikasi">
                 @endif

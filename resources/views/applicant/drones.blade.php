@@ -55,26 +55,30 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card-box table-responsive">
-            <h4 class="m-t-0 header-title">Company Drones</h4>
-            <br>
 
-            <table id="contoh3" class="table table-bordered table-hover datatable3">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Foto Drones</th>
-                        <th>Model</th>
-                        <th>Nomor Drone</th>
-                        <th colspan="10%">Action</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-</div>
+@if (Auth::User()->company != 4)
+  <div class="row">
+      <div class="col-12">
+          <div class="card-box table-responsive">
+              <h4 class="m-t-0 header-title">Company Drones</h4>
+              <br>
+
+              <table id="contoh3" class="table table-bordered table-hover datatable3">
+                  <thead>
+                      <tr>
+                          <th>No</th>
+                          <th>Foto Drones</th>
+                          <th>Model</th>
+                          <th>Nomor Drone</th>
+                          <th colspan="10%">Action</th>
+                      </tr>
+                  </thead>
+              </table>
+          </div>
+      </div>
+  </div>
+@endif
+
 
 </div>
 </div>
@@ -145,18 +149,22 @@ $(document).ready(function() {
       ]
   });
 
-  $('.datatable3').DataTable({
-      processing: true,
-      serverSide: true,
-      ajax: '{{ route('companyDrones/json') }}',
-      columns: [
-          {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
-          {data: 'pic_of_drones', name: 'pic_of_drones', orderable: false, searchable: false},
-          {data: 'model', name: 'model'},
-          {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
-          {data: 'action', name: 'action', orderable: false, searchable: false},
-      ]
-  });
+  
+  @if (Auth::User()->company != 4)
+    $('.datatable3').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route('companyDrones/json') }}',
+        columns: [
+            {data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
+            {data: 'pic_of_drones', name: 'pic_of_drones', orderable: false, searchable: false},
+            {data: 'model', name: 'model'},
+            {data: 'nomor_drone', name: 'registered_drone.nomor_drone'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+  @endif
+
   $(document).on('click', '.delete-modal', function() {
         $('#footer_action_button').text(" Delete");
         $('#footer_action_button').removeClass('glyphicon-check');

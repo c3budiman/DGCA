@@ -765,6 +765,14 @@ class applicantController extends Controller
       $user->approved_company = 0;
       $user->company = $request->perusahaan;
       $user->save();
+      if (RegisteredDrone::where('user_id',Auth::User()->id)->count() > 0) {
+        $drone_user = RegisteredDrone::where('user_id',Auth::User()->id)->get();
+        foreach ($drone_user as $reg_drone) {
+          $registered_drone = RegisteredDrone::find($reg_drone->id);
+          $registered_drone->company = $request->perusahaan;
+          $registered_drone->save();
+        }
+      }
       return redirect('dashboard')->with('status', 'Data telah terupdate!');
     }
 

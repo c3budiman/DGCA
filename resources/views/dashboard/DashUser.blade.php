@@ -98,7 +98,22 @@
         <h4 class="header-title mb-4">Status Remote Pilot</h4>
         @if (Auth::User()->ktp)
           @if (Auth::User()->approved == 1)
-            <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+            <?php
+              $remote_pilot = null;
+              if (DB::table('remote_pilot')->where('user_id',Auth::User()->id)->count() > 0) {
+                $remote_pilot = DB::table('remote_pilot')->where('user_id',Auth::User()->id)->first();
+              }
+             ?>
+             @if ($remote_pilot)
+               @if ($remote_pilot->status == 1)
+                 <p style="font-size:15px;">Terverifikasi <i style="color:green; font-size:15px;" class="fa fa-check"> </i> </p>
+               @else
+                 <a href="{{url('/')}}/remote_pilot/confirm/{{$remote_pilot->nomor_pilot}}"><p style="font-size:15px;">Peninjauan Kembali <i style="color:red; font-size:15px;" class="fa fa-times"> </i> </p></a>
+
+               @endif
+             @else
+               <p style="font-size:15px;">Sedang Di Nilai <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
+             @endif
           @elseif (Auth::User()->approved == '')
             <p style="font-size:15px;">Sedang Di Nilai <i style="color:blue; font-size:15px;" class="fa fa-hourglass-2"> </i> </p>
           @else

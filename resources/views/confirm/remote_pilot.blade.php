@@ -16,32 +16,35 @@
             </center>
 
             <table width="100%">
-              <tr>
-                <td align="right">Status Remote Pilot : </td>
-                <?php
-                    $status = $remote_pilot->status;
-                    $status_text = '';
-                    switch ($status) {
-                      case 1:
-                        $status_text = 'Aktif';
-                        break;
-                      case 2:
-                        $status_text = 'Tidak Aktif';
-                        break;
-                      case 3:
-                        $status_text = 'Tidak Aktif Sementara';
-                        break;
-                      case 4:
-                        $status_text = 'Sertifikat Di Cabut';
-                        break;
-                      default:
-                        $status_text = '';
-                        break;
-                    }
-                 ?>
-                <td align="left"> <b>{{$status_text}}</b> </td>
-              </tr>
-              @if ($status != 1)
+              <?php
+                  $status = $remote_pilot->status;
+                  $status_text = '';
+                  switch ($status) {
+                    case 1:
+                      $status_text = 'Aktif';
+                      break;
+                    case 2:
+                      $status_text = 'Tidak Aktif';
+                      break;
+                    case 3:
+                      $status_text = 'Tidak Aktif Sementara';
+                      break;
+                    case 4:
+                      $status_text = 'Sertifikat Di Cabut';
+                      break;
+                    default:
+                      $status_text = '';
+                      break;
+                  }
+               ?>
+             @if ($status_text)
+               <tr>
+                 <td align="right">Status Remote Pilot : </td>
+                 <td align="left"> <b>{{$status_text}}</b> </td>
+               </tr>
+             @endif
+
+              @if ($status_text)
                 <tr>
                   <td align="right">Keterangan : </td>
                   <td align="left"> {{$remote_pilot->alasan_pk}} </td>

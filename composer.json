@@ -13,7 +13,8 @@
         "dompdf/dompdf": "^0.8.3",
         "codeitnowin/barcode": "^3.0",
         "geoip/geoip": "~1.14",
-        "ramsey/uuid": "^3.8"
+        "ramsey/uuid": "^3.8",
+        "bartlett/umlwriter": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

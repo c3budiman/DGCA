@@ -28,6 +28,36 @@ class AdminPerusahaanController extends Controller
       return $rolesyangberhak;
     }
 
+    public function getManageAdminPerusahaan() {
+      return view('perusahaan.manageAdminPerusahaan');
+    }
+
+    public function userDataTB() {
+      $user = DB::table('users')
+            ->join('roles', 'users.roles_id', '=', 'roles.id')
+            ->select('users.*','roles.namaRule')
+            ->where('users.roles_id',4)->where('users.company',Auth::User()->company);
+
+      return Datatables::of($user)
+            ->addColumn('action', function ($datatb) {
+              $tambah_button='';
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+                $tambah_button = '<a href="'.$link.'/priviledge/'.$datatb->id.'" class="btn btn-xs btn-warning" type="submit"><i class="fa fa-edit"></i> Priviledge </a>'
+                .'<div style="padding-top:10px"></div>';
+                return
+                 '<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-roles_id="'.$datatb->roles_id.'" data-email="'.$datatb->email.'" data-avatar="'.$datatb->avatar.'"  class="edit-modal btn btn-xs btn-info" type="submit"><i class="fa fa-edit"></i> Edit</button>'
+                 .'<div style="padding-top:10px"></div>'.
+                 $tambah_button
+                .'<button data-id="'.$datatb->id.'" data-nama="'.$datatb->nama.'" data-roles_id="'.$datatb->roles_id.'" data-email="'.$datatb->email.'" data-avatar="'.$datatb->avatar.'"  class="delete-modal btn btn-xs btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>';
+            })
+            ->addIndexColumn()
+            ->addColumn('avatar_images', function($datatb) {
+              $link = DB::table('setting_situses')->where('id','=','1')->first()->alamatSitus;
+              return '<img src="'.$link.$datatb->avatar.'" alt="" height="50px">';
+            })
+             ->make(true);
+    }
+
     public function getDrones() {
       return view('perusahaan.drones');
     }

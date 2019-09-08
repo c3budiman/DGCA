@@ -340,6 +340,7 @@ Route::get('approval/detail/uas/{id}', 'AdminController@getUasApproval');
 Route::get('finish_assesment/{uas_regs}', 'AdminController@getFinishAssesment');
 Route::post('finish_assesment_fix', 'AdminController@FinishUasAssesmentFix');
 Route::get('detail/uas/finished/{id}', 'AdminController@UasApprovalFinished');
+Route::get('slide/json', 'AdminController@slideDataTB')->name('slide/json');
 //Route::get('approval/detail/uas/{uas_regs}','AdminController@ge')
 
 Route::get('approval/company', 'AdminController@getApprovalCompany');
@@ -412,6 +413,9 @@ Route::post('perusahaan/uploadPesawat', 'AdminPerusahaanController@uploadPesawat
 Route::post('perusahaan/uploadPenguasaan', 'AdminPerusahaanController@uploadPenguasaan');
 
 Route::get('detail/dronecompuser/{id}', 'AdminPerusahaanController@getdronesuser2');
+
+Route::get('perusahaan/admin_perusahaan','AdminPerusahaanController@getManageAdminPerusahaan');
+Route::get('perusahaan/user/json', 'AdminPerusahaanController@userDataTB')->name('perusahaan/user/json');
 
 
 
@@ -489,3 +493,13 @@ Route::resource('pendaftarans', 'pendaftaranController');
 Route::get('pendaftaran', 'pendaftaranController@getFront');
 Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
 Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+Route::resource('homes', 'homeController');
+Route::get('home', 'homeController@getFront');
+Route::get('home/json', 'homeController@dataTB');
+Route::get('home/{method}', 'homeController@viewSubmenu');
+
+Route::resource('pendaftarans', 'pendaftaranController');
+Route::get('pendaftaran', 'pendaftaranController@getFront');
+Route::get('pendaftaran/json', 'pendaftaranController@dataTB');
+Route::get('pendaftaran/{method}', 'pendaftaranController@viewSubmenu');
+
